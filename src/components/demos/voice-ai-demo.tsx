@@ -1,18 +1,17 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, Loader2, RotateCcw, Play, Pause, Square } from 'lucide-react';
+import { Volume2, RotateCcw, Play, Pause, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const VOICES = [
-  { id: 'kazi', label: 'Kazi', desc: 'Indian English · Clear', tag: 'Recommended' },
-  { id: 'jam', label: 'Jam', desc: 'British English · Gentleman' },
-  { id: 'tongtong', label: 'Tongtong', desc: 'Warm & friendly' },
-  { id: 'xiaochen', label: 'Xiaochen', desc: 'Professional' },
-  { id: 'douji', label: 'Douji', desc: 'Natural & smooth' },
-  { id: 'luodo', label: 'Luodo', desc: 'Expressive' },
-  { id: 'chuichui', label: 'Chuichui', desc: 'Playful & cute' },
+// Web Speech API voices mapped to friendly labels
+const VOICE_PRESETS = [
+  { id: 'en-US-f', label: 'Aria', desc: 'American English · Female', lang: 'en-US', gender: 'female' },
+  { id: 'en-GB-m', label: 'James', desc: 'British English · Male', lang: 'en-GB', gender: 'male', tag: 'Recommended' },
+  { id: 'en-AU-f', label: 'Zoe', desc: 'Australian English · Female', lang: 'en-AU', gender: 'female' },
+  { id: 'en-US-m', label: 'Ryan', desc: 'American English · Male', lang: 'en-US', gender: 'male' },
+  { id: 'en-IN-f', label: 'Priya', desc: 'Indian English · Female', lang: 'en-IN', gender: 'female' },
 ];
 
 const SAMPLE_TEXTS = [
@@ -24,106 +23,128 @@ const SAMPLE_TEXTS = [
 
 export default function VoiceAIDemo() {
   const [text, setText] = useState(SAMPLE_TEXTS[0]);
-  const [voice, setVoice] = useState('kazi');
+  const [voiceId, setVoiceId] = useState(VOICE_PRESETS[1].id);
   const [speed, setSpeed] = useState(1.0);
-  const [isGenerating, setIsGenerating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
   const [error, setError] = useState('');
   const [history, setHistory] = useState<{ text: string; voice: string; time: string }[]>([]);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [supported, setSupported] = useState(true);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  const generateSpeech = useCallback(async () => {
-    if (!text.trim() || isGenerating) return;
-
-    setIsGenerating(true);
-    setError('');
-
-    // Revoke previous URL
-    if (audioUrl) {
-      URL.revokeObjectURL(audioUrl);
-      setAudioUrl(null);
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      setSupported(false);
     }
-
-    try {
-      const res = await fetch('/api/text-to-speech', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: text.trim(), voice, speed }),
-      });
-
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        setError(errData.error || 'Speech generation failed');
-        setIsGenerating(false);
-        return;
-      }
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      setAudioUrl(url);
-
-      // Add to history
-      setHistory((prev) => [
-        { text: text.trim().slice(0, 80), voice, time: new Date().toLocaleTimeString() },
-        ...prev.slice(0, 4),
-      ]);
-    } catch {
-      setError('Network error. Please try again.');
-    } finally {
-      setIsGenerating(false);
-    }
-  }, [text, voice, speed, isGenerating, audioUrl]);
-
-  const togglePlayback = useCallback(() => {
-    if (!audioRef.current || !audioUrl) return;
-
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      audioRef.current.play();
-      setIsPlaying(true);
-    }
-  }, [isPlaying, audioUrl]);
-
-  const stopPlayback = useCallback(() => {
-    if (!audioRef.current) return;
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-    setIsPlaying(false);
   }, []);
 
-  const handleAudioEnded = useCallback(() => {
+  // Pick the best matching browser voice for the selected preset
+  const getBrowserVoice = useCallback((preset: typeof VOICE_PRESETS[0]): SpeechSynthesisVoice | null => {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return null;
+
+    // Try exact lang match first, then partial match
+    const langVoices = voices.filter((v) => v.lang.startsWith(preset.lang));
+    if (langVoices.length === 0) {
+      // Fallback to any English voice
+      return voices.find((v) => v.lang.startsWith('en')) ?? voices[0];
+    }
+    // Prefer voices with matching gender hints in the name
+    const genderHint = preset.gender === 'female'
+      ? ['female', 'woman', 'girl', 'aria', 'zira', 'hazel', 'susan', 'kate', 'samantha', 'victoria']
+      : ['male', 'man', 'david', 'james', 'daniel', 'alex', 'mark', 'ryan'];
+
+    const genderMatch = langVoices.find((v) =>
+      genderHint.some((hint) => v.name.toLowerCase().includes(hint))
+    );
+    return genderMatch ?? langVoices[0];
+  }, []);
+
+  const speak = useCallback(() => {
+    if (!supported || !text.trim()) return;
+
+    // Stop anything currently playing
+    window.speechSynthesis.cancel();
+    setIsPaused(false);
+
+    const preset = VOICE_PRESETS.find((v) => v.id === voiceId) ?? VOICE_PRESETS[0];
+    const utterance = new SpeechSynthesisUtterance(text.trim());
+    utterance.rate = speed;
+    utterance.pitch = 1;
+
+    // Voices may load async — wait for them
+    const assignVoice = () => {
+      const voice = getBrowserVoice(preset);
+      if (voice) utterance.voice = voice;
+    };
+
+    if (window.speechSynthesis.getVoices().length > 0) {
+      assignVoice();
+    } else {
+      window.speechSynthesis.onvoiceschanged = assignVoice;
+    }
+
+    utterance.onstart = () => setIsPlaying(true);
+    utterance.onend = () => { setIsPlaying(false); setIsPaused(false); };
+    utterance.onerror = (e) => {
+      setIsPlaying(false);
+      setIsPaused(false);
+      if (e.error !== 'interrupted') setError('Speech failed. Try a different voice or browser.');
+    };
+
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+
+    setHistory((prev) => [
+      { text: text.trim().slice(0, 80), voice: preset.label, time: new Date().toLocaleTimeString() },
+      ...prev.slice(0, 4),
+    ]);
+    setError('');
+  }, [supported, text, voiceId, speed, getBrowserVoice]);
+
+  const togglePause = useCallback(() => {
+    if (!window.speechSynthesis) return;
+    if (isPaused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+    } else {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+    }
+  }, [isPaused]);
+
+  const stop = useCallback(() => {
+    window.speechSynthesis?.cancel();
     setIsPlaying(false);
+    setIsPaused(false);
   }, []);
 
   const clearAll = useCallback(() => {
-    if (audioUrl) URL.revokeObjectURL(audioUrl);
-    setAudioUrl(null);
-    setIsPlaying(false);
+    stop();
     setError('');
     setHistory([]);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-  }, [audioUrl]);
+  }, [stop]);
 
   return (
     <div className="space-y-4">
+      {!supported && (
+        <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 px-4 py-3 text-sm text-yellow-400">
+          Your browser doesn&apos;t support the Web Speech API. Try Chrome or Edge.
+        </div>
+      )}
+
       {/* Voice Selection */}
       <div>
         <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2 block">
           Voice
         </label>
         <div className="flex flex-wrap gap-1.5">
-          {VOICES.map((v) => (
+          {VOICE_PRESETS.map((v) => (
             <button
               key={v.id}
-              onClick={() => setVoice(v.id)}
+              onClick={() => setVoiceId(v.id)}
               className={`relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-                voice === v.id
+                voiceId === v.id
                   ? 'bg-green-500/15 border border-green-500/30 text-green-400'
                   : 'bg-[var(--theme-active)] border border-border text-muted-foreground hover:border-foreground/15'
               }`}
@@ -138,6 +159,9 @@ export default function VoiceAIDemo() {
             </button>
           ))}
         </div>
+        <p className="text-[10px] text-muted-foreground/50 mt-1.5">
+          Powered by your browser&apos;s built-in voices — actual voice may vary by OS
+        </p>
       </div>
 
       {/* Text Input */}
@@ -178,36 +202,28 @@ export default function VoiceAIDemo() {
 
       {/* Action Buttons */}
       <div className="flex items-center gap-2">
-        <Button
-          onClick={generateSpeech}
-          disabled={!text.trim() || isGenerating}
-          className="bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 hover:text-green-300"
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 size={14} className="animate-spin mr-1.5" />
-              Generating...
-            </>
-          ) : (
-            <>
-              <Volume2 size={14} className="mr-1.5" />
-              Speak
-            </>
-          )}
-        </Button>
-        {audioUrl && (
+        {!isPlaying ? (
+          <Button
+            onClick={speak}
+            disabled={!text.trim() || !supported}
+            className="bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 hover:text-green-300"
+          >
+            <Volume2 size={14} className="mr-1.5" />
+            Speak
+          </Button>
+        ) : (
           <>
             <Button
-              onClick={togglePlayback}
+              onClick={togglePause}
               variant="outline"
               size="sm"
               className="bg-[var(--theme-active)] border-border hover:border-green-500/30 hover:text-green-400"
             >
-              {isPlaying ? <Pause size={14} /> : <Play size={14} />}
-              {isPlaying ? 'Pause' : 'Play'}
+              {isPaused ? <Play size={14} /> : <Pause size={14} />}
+              {isPaused ? 'Resume' : 'Pause'}
             </Button>
             <Button
-              onClick={stopPlayback}
+              onClick={stop}
               variant="outline"
               size="sm"
               className="bg-[var(--theme-active)] border-border hover:border-foreground/15"
@@ -228,7 +244,7 @@ export default function VoiceAIDemo() {
       </div>
 
       {/* Sample texts */}
-      {!audioUrl && !isGenerating && (
+      {!isPlaying && (
         <div>
           <span className="text-xs text-muted-foreground mb-2 block">Try a sample:</span>
           <div className="flex flex-wrap gap-2">
@@ -245,6 +261,35 @@ export default function VoiceAIDemo() {
         </div>
       )}
 
+      {/* Playing indicator */}
+      <AnimatePresence>
+        {isPlaying && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="rounded-xl border border-green-500/20 bg-green-500/[0.03] p-4"
+          >
+            <div className="flex items-center gap-3">
+              <motion.div
+                animate={!isPaused ? { scale: [1, 1.2, 1] } : {}}
+                transition={{ duration: 0.8, repeat: Infinity }}
+              >
+                <Volume2 size={18} className="text-green-400" />
+              </motion.div>
+              <div>
+                <p className="text-sm font-medium text-foreground/90">
+                  {isPaused ? 'Paused' : 'Speaking...'}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Voice: {VOICE_PRESETS.find((v) => v.id === voiceId)?.label} · Speed: {speed.toFixed(1)}x
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Error */}
       <AnimatePresence>
         {error && (
@@ -259,42 +304,10 @@ export default function VoiceAIDemo() {
         )}
       </AnimatePresence>
 
-      {/* Audio Player */}
-      {audioUrl && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl border border-green-500/20 bg-green-500/[0.03] p-4"
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <motion.div
-              animate={isPlaying ? { scale: [1, 1.2, 1] } : {}}
-              transition={{ duration: 0.8, repeat: Infinity }}
-            >
-              <Volume2 size={18} className="text-green-400" />
-            </motion.div>
-            <div className="flex-1">
-              <p className="text-sm font-medium text-foreground/90">Audio Generated</p>
-              <p className="text-xs text-muted-foreground">
-                Voice: {VOICES.find(v => v.id === voice)?.label} · Speed: {speed.toFixed(1)}x
-              </p>
-            </div>
-          </div>
-          <audio
-            ref={audioRef}
-            src={audioUrl}
-            onEnded={handleAudioEnded}
-            className="w-full h-10"
-            controls
-            preload="auto"
-          />
-        </motion.div>
-      )}
-
       {/* History */}
       {history.length > 0 && (
         <div className="space-y-1.5">
-          <span className="text-xs text-muted-foreground">Recent generations:</span>
+          <span className="text-xs text-muted-foreground">Recent:</span>
           {history.map((item, i) => (
             <div
               key={i}
@@ -308,8 +321,6 @@ export default function VoiceAIDemo() {
           ))}
         </div>
       )}
-
-      {/* Hidden audio element for play/pause control */}
     </div>
   );
 }
