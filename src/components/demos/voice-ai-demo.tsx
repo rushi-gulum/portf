@@ -6,13 +6,13 @@ import { Volume2, Loader2, RotateCcw, Play, Pause, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const VOICES = [
+  { id: 'kazi', label: 'Kazi', desc: 'Indian English · Clear', tag: 'Recommended' },
+  { id: 'jam', label: 'Jam', desc: 'British English · Gentleman' },
   { id: 'tongtong', label: 'Tongtong', desc: 'Warm & friendly' },
   { id: 'xiaochen', label: 'Xiaochen', desc: 'Professional' },
-  { id: 'jam', label: 'Jam', desc: 'British gentleman' },
-  { id: 'kazi', label: 'Kazi', desc: 'Clear & standard' },
-  { id: 'chuichui', label: 'Chuichui', desc: 'Playful & cute' },
   { id: 'douji', label: 'Douji', desc: 'Natural & smooth' },
   { id: 'luodo', label: 'Luodo', desc: 'Expressive' },
+  { id: 'chuichui', label: 'Chuichui', desc: 'Playful & cute' },
 ];
 
 const SAMPLE_TEXTS = [
@@ -24,7 +24,7 @@ const SAMPLE_TEXTS = [
 
 export default function VoiceAIDemo() {
   const [text, setText] = useState(SAMPLE_TEXTS[0]);
-  const [voice, setVoice] = useState('tongtong');
+  const [voice, setVoice] = useState('kazi');
   const [speed, setSpeed] = useState(1.0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -122,7 +122,7 @@ export default function VoiceAIDemo() {
             <button
               key={v.id}
               onClick={() => setVoice(v.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+              className={`relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                 voice === v.id
                   ? 'bg-green-500/15 border border-green-500/30 text-green-400'
                   : 'bg-white/[0.04] border border-white/[0.08] text-muted-foreground hover:border-white/20'
@@ -130,6 +130,11 @@ export default function VoiceAIDemo() {
               title={v.desc}
             >
               {v.label}
+              {v.tag && (
+                <span className="absolute -top-1.5 -right-1.5 text-[8px] font-semibold px-1.5 py-0 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 leading-none">
+                  {v.tag}
+                </span>
+              )}
             </button>
           ))}
         </div>
