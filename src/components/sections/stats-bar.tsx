@@ -151,7 +151,7 @@ export function StatsBar() {
       <div
         ref={ref}
         className="stats-container-border relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-border py-6"
-        style={{ backgroundColor: 'rgba(15,17,23,0.6)', backdropFilter: 'blur(24px)' }}
+        style={{ backgroundColor: 'var(--theme-glass-bg)', backdropFilter: 'blur(24px)' }}
       >
         {/* 2px gradient accent line at top */}
         <div
@@ -169,7 +169,7 @@ export function StatsBar() {
                   className="absolute right-0 top-1/2 h-12 w-px -translate-y-1/2"
                   style={{
                     background:
-                      'linear-gradient(180deg, transparent, rgba(255,255,255,0.08) 50%, transparent)',
+                      'linear-gradient(180deg, transparent, var(--theme-border-default) 50%, transparent)',
                   }}
                 />
               )}

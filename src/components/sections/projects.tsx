@@ -36,7 +36,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           'hover:-translate-y-1 hover:shadow-lg'
         )}
         style={{
-          borderColor: isHovered ? colors.border : 'rgba(255,255,255,0.06)',
+          borderColor: isHovered ? colors.border : 'var(--theme-border-subtle)',
           boxShadow: isHovered ? `0 8px 30px ${colors.glow}` : 'none',
         }}
       >

@@ -351,7 +351,7 @@ export default function AIPlayground() {
                     (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 30px ${colors.glow}, 0 0 60px ${colors.glow.replace('0.15', '0.05')}`;
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.06)';
+                    (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--theme-border-subtle)';
                     (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
                   }}
                 >

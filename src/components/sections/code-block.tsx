@@ -77,7 +77,7 @@ export default function CodeBlock({ code, language, filename }: CodeBlockProps) 
   return (
     <div
       className="rounded-xl border border-border overflow-hidden"
-      style={{ background: '#0D1117' }}
+      style={{ background: 'var(--theme-surface-code)' }}
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-border">

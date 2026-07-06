@@ -135,7 +135,7 @@ function TimelineCardContent({
     <div
       className="group bg-card border border-border rounded-2xl p-6
         transition-all duration-500
-        hover:border-foreground/10 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)]"
+        hover:border-foreground/10 hover:shadow-[0_0_30px_var(--theme-border-subtle)]"
     >
       {/* Top row: year badge + type */}
       <div className="flex items-center gap-2 mb-4 flex-wrap">
@@ -152,8 +152,8 @@ function TimelineCardContent({
         <span
           className="text-[10px] font-medium tracking-wider uppercase px-2.5 py-1 rounded-full flex items-center gap-1.5"
           style={{
-            background: 'rgba(255,255,255,0.04)',
-            color: 'rgba(255,255,255,0.5)',
+            background: 'var(--theme-hover)',
+            color: 'var(--theme-text-tertiary)',
           }}
         >
           <TypeIcon size={10} />

@@ -92,7 +92,7 @@ function TechPill({ item, categoryColor }: { item: TechItem; categoryColor: stri
           }}
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
-            (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.05)';
+            (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--theme-border-subtle)';
           }}
         >
           <div className="flex items-center gap-2.5">

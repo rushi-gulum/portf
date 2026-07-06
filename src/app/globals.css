@@ -3,6 +3,8 @@
 
 @source not "../tool-results/**";
 @source not "../../worklog.md";
+@source not "../../tool-results/**";
+@source not "../**/*.txt";
 
 @custom-variant dark (&:is(.dark *));
 

@@ -85,7 +85,7 @@ export default function LLMChatDemo() {
   return (
     <div
       className="rounded-2xl border border-border overflow-hidden"
-      style={{ background: '#0D1117' }}
+      style={{ background: 'var(--theme-surface-code)' }}
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border">

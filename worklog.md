@@ -534,8 +534,8 @@ Stage Summary:
 ## Round 8 — Light Mode CSS Fixes + Critical Compilation Bug Fix
 
 ### Critical CSS Compilation Bug (Root Cause Analysis)
-- **Problem**: Turbopack/Lightning CSS failed to parse Tailwind CSS 4 output with error at line 1435: `var(--theme-border-1/2)` — "Unexpected token Delim('/')"
-- **Root Cause**: Tailwind CSS 4's content scanner reads ALL files in the project (including `.md` and `.txt`). The `worklog.md` and `tool-results/` files contained literal text `border-[var(--theme-border-1/2)]` and `border-[var(--theme-border-X)]` from a previous debug description. Tailwind scanned these, generated CSS utilities for these phantom class names, and produced invalid CSS with `/` inside CSS variable names.
+- **Problem**: Turbopack/Lightning CSS failed to parse Tailwind CSS 4 output with "Unexpected token Delim('/')" due to phantom CSS variable names containing slashes
+- **Root Cause**: Tailwind CSS 4's content scanner reads ALL files in the project (including `.md` and `.txt`). The `worklog.md` and `tool-results/` files contained literal text matching Tailwind class patterns with CSS variables that had slashes in their names, causing Lightning CSS parser failures. Tailwind scanned these phantom patterns and produced invalid CSS output.
 - **Fix Applied**:
   1. Replaced problematic text in `worklog.md` and `tool-results/*.txt`
   2. Added `@source not` directives to `globals.css` to exclude non-source directories from Tailwind scanning
@@ -546,7 +546,7 @@ Stage Summary:
 - Renamed all `--theme-*-1/2/3` numeric-suffixed variables to semantic names:
   - `--theme-surface-1/2/3` → `--theme-surface-base/raised/elevated`
   - `--theme-text-1/2/3` → `--theme-text-primary/secondary/tertiary`
-  - `--theme-border-1/2` → `--theme-border-subtle/default`
+  - `--theme-border-1-slash-2` → `--theme-border-subtle/default`
 - Updated all 30+ component files with new variable names via global sed
 
 ### Custom Utility Class Migration

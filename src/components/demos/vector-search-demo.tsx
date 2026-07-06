@@ -146,7 +146,7 @@ export default function VectorSearchDemo() {
             return (
               <motion.div
                 key={doc.id}
-                className={`absolute w-2.5 h-2.5 rounded-full ${catColors[doc.category] || 'bg-white/40'} ${isResult ? 'ring-2 ring-amber-400 ring-offset-1 ring-offset-[#0D1117]' : 'opacity-40'}`}
+                className={`absolute w-2.5 h-2.5 rounded-full ${catColors[doc.category] || 'bg-white/40'} ${isResult ? 'ring-2 ring-amber-400 ring-offset-1 ring-offset-background' : 'opacity-40'}`}
                 style={{ left: `${x}%`, top: `${y}%` }}
                 animate={isResult ? { scale: [1, 1.4, 1] } : {}}
                 transition={{ duration: 1, repeat: isResult ? Infinity : 0 }}
