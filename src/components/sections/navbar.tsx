@@ -172,7 +172,7 @@ export function Navbar() {
 
             {/* Contact button - desktop */}
             <button
-              className="hidden h-8 px-4 text-xs font-medium text-cyan-400 border border-cyan-500/20 rounded-lg hover:bg-cyan-500/10 transition-all md:inline-flex items-center gap-1.5"
+              className="h-8 px-4 text-xs font-medium text-cyan-400 border border-cyan-500/20 rounded-lg hover:bg-cyan-500/10 transition-all inline-flex items-center gap-1.5 cursor-pointer"
               onClick={() => {
                 const target = document.querySelector('#contact');
                 if (target) target.scrollIntoView({ behavior: 'smooth' });

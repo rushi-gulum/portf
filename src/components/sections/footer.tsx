@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { personalInfo } from '@/lib/data';
-import { Github, Linkedin, Twitter, Heart, ArrowUp } from 'lucide-react';
+import { Github, Linkedin, Twitter, ArrowUp } from 'lucide-react';
 
 const socialLinks = [
   { icon: Github, href: personalInfo.github, label: 'GitHub' },
@@ -22,23 +22,6 @@ export default function Footer() {
           <div className="flex flex-col items-center gap-1 sm:items-start">
             <p className="text-sm text-slate-500">
               © 2024 {personalInfo.name}. All rights reserved.
-            </p>
-            <p className="flex items-center gap-1.5 text-xs text-slate-600">
-              Built with
-              <span className="inline-flex items-center gap-0.5 text-slate-500">
-                Next.js
-              </span>
-              <span className="text-slate-700">·</span>
-              <span className="inline-flex items-center gap-0.5 text-slate-500">
-                TypeScript
-              </span>
-              <span className="text-slate-700">·</span>
-              <span className="inline-flex items-center gap-0.5 text-slate-500">
-                Tailwind CSS
-              </span>
-            </p>
-            <p className="flex items-center gap-1 text-xs text-slate-600">
-              Made with <Heart className="inline size-3 text-red-500 fill-red-500" /> and lots of coffee
             </p>
           </div>
 
