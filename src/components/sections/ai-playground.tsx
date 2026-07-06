@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState, useCallback, useEffect, useRef, type ComponentType } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   MessageSquare,
   Search,
@@ -11,10 +12,18 @@ import {
   Code,
   ArrowRight,
   Sparkles,
+  X,
 } from 'lucide-react';
 import { playgroundDemos, colorMap } from '@/lib/data';
+import LLMChatDemo from '@/components/sections/llm-chat-demo';
+import RAGSearchDemo from '@/components/sections/rag-search-demo';
+import ImageGenDemo from '@/components/demos/image-gen-demo';
+import VoiceAIDemo from '@/components/demos/voice-ai-demo';
+import VectorSearchDemo from '@/components/demos/vector-search-demo';
+import AIAgentsDemo from '@/components/demos/ai-agents-demo';
+import PromptSandboxDemo from '@/components/demos/prompt-sandbox-demo';
 
-const iconMap: Record<string, React.ComponentType<{ className?: string; size?: number; style?: React.CSSProperties }>> = {
+const iconMap: Record<string, ComponentType<{ className?: string; size?: number; style?: React.CSSProperties }>> = {
   MessageSquare,
   Search,
   Image,
@@ -22,6 +31,16 @@ const iconMap: Record<string, React.ComponentType<{ className?: string; size?: n
   Database,
   Bot,
   Code,
+};
+
+const demoComponentMap: Record<string, ComponentType> = {
+  'demo-llm': LLMChatDemo,
+  'demo-rag': RAGSearchDemo,
+  'demo-image': ImageGenDemo,
+  'demo-voice': VoiceAIDemo,
+  'demo-vector': VectorSearchDemo,
+  'demo-agents': AIAgentsDemo,
+  'demo-prompt': PromptSandboxDemo,
 };
 
 const containerVariants = {
@@ -46,9 +65,113 @@ const cardVariants = {
   },
 };
 
+const overlayVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.2 } },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+const modalVariants = {
+  hidden: { opacity: 0, scale: 0.92, y: 20 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    y: 10,
+    transition: { duration: 0.15 },
+  },
+};
+
 export default function AIPlayground() {
+  const [activeDemo, setActiveDemo] = useState<string | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
   const featuredDemo = playgroundDemos[0];
   const otherDemos = playgroundDemos.slice(1);
+
+  const openDemo = useCallback((demoId: string) => {
+    previousFocusRef.current = document.activeElement as HTMLElement;
+    setActiveDemo(demoId);
+    document.body.style.overflow = 'hidden';
+  }, []);
+
+  const closeDemo = useCallback(() => {
+    setActiveDemo(null);
+    document.body.style.overflow = '';
+    // Restore focus to the element that opened the modal
+    if (previousFocusRef.current) {
+      previousFocusRef.current.focus();
+    }
+  }, []);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (activeDemo === null) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeDemo();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [activeDemo, closeDemo]);
+
+  // Trap focus inside modal
+  useEffect(() => {
+    if (activeDemo === null || !modalRef.current) return;
+
+    const modal = modalRef.current;
+    const focusableSelector =
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusableElements = modal.querySelectorAll<HTMLElement>(focusableSelector);
+
+    if (focusableElements.length > 0) {
+      focusableElements[0].focus();
+    }
+
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      if (focusableElements.length === 0) {
+        e.preventDefault();
+        return;
+      }
+
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    modal.addEventListener('keydown', handleTab);
+    return () => modal.removeEventListener('keydown', handleTab);
+  }, [activeDemo]);
+
+  const activeDemoData = activeDemo
+    ? playgroundDemos.find((d) => d.id === activeDemo)
+    : null;
+
+  const ActiveComponent = activeDemo ? demoComponentMap[activeDemo] : null;
+  const activeColors = activeDemoData ? colorMap[activeDemoData.color] : null;
 
   return (
     <section id="playground" className="pt-32 pb-20">
@@ -87,6 +210,16 @@ export default function AIPlayground() {
             className="group relative lg:row-span-2"
           >
             <div
+              role="button"
+              tabIndex={0}
+              aria-label={`Open ${featuredDemo.title} demo`}
+              onClick={() => openDemo(featuredDemo.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openDemo(featuredDemo.id);
+                }
+              }}
               className="relative h-full bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6
                 transition-all duration-500 cursor-pointer
                 hover:border-cyan-500/40
@@ -196,6 +329,16 @@ export default function AIPlayground() {
                 className="group relative"
               >
                 <div
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Open ${demo.title} demo`}
+                  onClick={() => openDemo(demo.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      openDemo(demo.id);
+                    }
+                  }}
                   className="relative bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6
                     transition-all duration-500 cursor-pointer h-full flex flex-col
                     hover:border-white/10"
@@ -262,6 +405,74 @@ export default function AIPlayground() {
           })}
         </motion.div>
       </div>
+
+      {/* Modal Overlay */}
+      <AnimatePresence>
+        {activeDemo && activeDemoData && ActiveComponent && activeColors && (
+          <motion.div
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 md:p-8"
+            onClick={closeDemo}
+            aria-modal="true"
+            role="dialog"
+            aria-label={`${activeDemoData.title} demo`}
+          >
+            <motion.div
+              ref={modalRef}
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="relative w-full max-w-4xl bg-[#0D1117] border border-white/[0.06] rounded-2xl overflow-hidden flex flex-col"
+              style={{ maxHeight: '85vh' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center"
+                    style={{
+                      background: activeColors.bg,
+                      border: `1px solid ${activeColors.border}`,
+                    }}
+                  >
+                    {(() => {
+                      const IconComp = iconMap[activeDemoData.icon];
+                      return IconComp ? (
+                        <IconComp size={18} style={{ color: activeColors.text }} />
+                      ) : null;
+                    })()}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-white">
+                      {activeDemoData.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {activeDemoData.description}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={closeDemo}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/[0.04] border border-white/[0.08] text-muted-foreground hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all cursor-pointer"
+                  aria-label="Close demo"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              {/* Modal Content (scrollable) */}
+              <div className="flex-1 overflow-y-auto p-6">
+                <ActiveComponent />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

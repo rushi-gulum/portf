@@ -1,0 +1,632 @@
+     1→/* deterministic seeded random for SSR hydration consistency */
+     2→function seededRandom(seed: number) {
+     3→  let s = seed;
+     4→  return () => {
+     5→    s = (s * 16807 + 0) % 2147483647;
+     6→    return (s - 1) / 2147483646;
+     7→  };
+     8→}
+     9→
+    10→function generateActivity(seed: number) {
+    11→  const rng = seededRandom(seed);
+    12→  return Array.from({ length: 52 }, () =>
+    13→    Array.from({ length: 7 }, () => Math.floor(rng() * 5))
+    14→  );
+    15→}
+    16→
+    17→export interface Project {
+    18→  id: string;
+    19→  title: string;
+    20→  description: string;
+    21→  longDescription: string;
+    22→  tags: string[];
+    23→  metrics: { label: string; value: string }[];
+    24→  architecture: string[];
+    25→  github: string;
+    26→  demo: string;
+    27→  article: string;
+    28→  color: 'cyan' | 'purple' | 'blue' | 'green' | 'amber';
+    29→  size: 'large' | 'medium' | 'small';
+    30→  image?: string;
+    31→}
+    32→
+    33→export interface CaseStudy {
+    34→  id: string;
+    35→  title: string;
+    36→  problem: string;
+    37→  dataset: string;
+    38→  architecture: string;
+    39→  modelSelection: string;
+    40→  trainingPipeline: string;
+    41→  infrastructure: string;
+    42→  tradeoffs: string;
+    43→  lessonsLearned: string;
+    44→  deployment: string;
+    45→  tags: string[];
+    46→  metrics: { label: string; value: string }[];
+    47→}
+    48→
+    49→export interface Repository {
+    50→  id: string;
+    51→  name: string;
+    52→  description: string;
+    53→  language: string;
+    54→  languageColor: string;
+    55→  stars: number;
+    56→  forks: number;
+    57→  commits: number;
+    58→  contributors: number;
+    59→  lastCommit: string;
+    60→  activity: number[][];
+    61→  topics: string[];
+    62→}
+    63→
+    64→export interface Article {
+    65→  id: string;
+    66→  title: string;
+    67→  excerpt: string;
+    68→  category: string;
+    69→  date: string;
+    70→  readTime: string;
+    71→  tags: string[];
+    72→  hasCode: boolean;
+    73→  hasDiagrams: boolean;
+    74→  hasEquations: boolean;
+    75→}
+    76→
+    77→export interface TimelineItem {
+    78→  id: string;
+    79→  year: string;
+    80→  role: string;
+    81→  company: string;
+    82→  description: string;
+    83→  highlights: string[];
+    84→  type: 'work' | 'research' | 'talk' | 'award' | 'publication';
+    85→  metrics?: string[];
+    86→}
+    87→
+    88→export interface TechItem {
+    89→  name: string;
+    90→  category: string;
+    91→  icon: string;
+    92→  connections: string[];
+    93→}
+    94→
+    95→export const personalInfo = {
+    96→  name: "Alex Chen",
+    97→  role: "AI Engineer",
+    98→  tagline: "Build • Research • Deploy",
+    99→  bio: "Building production AI systems at the intersection of research and engineering. Specializing in LLMs, RAG pipelines, AI agents, and scalable ML infrastructure.",
+   100→  currentlyBuilding: "Multi-agent orchestration framework",
+   101→  latestResearch: "Attention-efficient transformer architectures",
+   102→  latestRelease: "v2.4 — Agent Runtime SDK",
+   103→  email: "alex@alexchen.dev",
+   104→  github: "https://github.com/alexchen",
+   105→  linkedin: "https://linkedin.com/in/alexchen",
+   106→  twitter: "https://x.com/alexchen_ai",
+   107→  calendar: "https://cal.com/alexchen",
+   108→  avatarUrl: "",
+   109→};
+   110→
+   111→export const projects: Project[] = [
+   112→  {
+   113→    id: "nexus-rag",
+   114→    title: "Nexus RAG",
+   115→    description: "Production-grade retrieval-augmented generation pipeline with hybrid search, reranking, and adaptive chunking. Serving 50K+ queries/day.",
+   116→    longDescription: "A fully productionized RAG system handling document ingestion, chunking, embedding, hybrid search, reranking, and LLM generation with comprehensive observability.",
+   117→    tags: ["RAG", "LangChain", "Pinecone", "FastAPI", "Redis"],
+   118→    metrics: [
+   119→      { label: "Queries/Day", value: "50K+" },
+   120→      { label: "p95 Latency", value: "180ms" },
+   121→      { label: "Retrieval Acc.", value: "94.2%" },
+   122→      { label: "Cost/Query", value: "$0.002" },
+   123→    ],
+   124→    architecture: ["Document Ingestion", "Adaptive Chunking", "Hybrid Search", "Cross-Encoder Reranker", "LLM Generation", "Streaming Response"],
+   125→    github: "https://github.com/alexchen/nexus-rag",
+   126→    demo: "#",
+   127→    article: "#",
+   128→    color: "cyan",
+   129→    size: "large",
+   130→  },
+   131→  {
+   132→    id: "agent-runtime",
+   133→    title: "Agent Runtime",
+   134→    description: "Lightweight, composable framework for building multi-agent AI systems with tool use, memory, and structured output.",
+   135→    longDescription: "A runtime SDK for orchestrating multiple AI agents with shared memory, tool registries, and streaming. Designed for production workloads.",
+   136→    tags: ["AI Agents", "TypeScript", "Streaming", "Tools", "Memory"],
+   137→    metrics: [
+   138→      { label: "Downloads", value: "12K/mo" },
+   139→      { label: "GitHub Stars", value: "2.8K" },
+   140→      { label: "Agents Supported", value: "50+" },
+   141→      { label: "Uptime", value: "99.9%" },
+   142→    ],
+   143→    architecture: ["Agent Orchestrator", "Tool Registry", "Memory Store", "Streaming Pipeline", "Error Recovery", "Observability"],
+   144→    github: "https://github.com/alexchen/agent-runtime",
+   145→    demo: "#",
+   146→    article: "#",
+   147→    color: "purple",
+   148→    size: "large",
+   149→  },
+   150→  {
+   151→    id: "neural-search",
+   152→    title: "Neural Search",
+   153→    description: "Semantic search engine with real-time indexing, multimodal embeddings, and sub-second query latency.",
+   154→    longDescription: "A high-performance semantic search system supporting text, image, and audio queries with real-time indexing and intelligent caching.",
+   155→    tags: ["Vector Search", "Embeddings", "Qdrant", "Rust", "gRPC"],
+   156→    metrics: [
+   157→      { label: "Index Size", value: "10M+ vectors" },
+   158→      { label: "Query p99", value: "45ms" },
+   159→      { label: "Recall@10", value: "97.1%" },
+   160→      { label: "Throughput", value: "5K QPS" },
+   161→    ],
+   162→    architecture: ["Multi-modal Encoder", "Real-time Indexer", "HNSW Index", "Query Router", "Result Reranker", "Cache Layer"],
+   163→    github: "https://github.com/alexchen/neural-search",
+   164→    demo: "#",
+   165→    article: "#",
+   166→    color: "blue",
+   167→    size: "medium",
+   168→  },
+   169→  {
+   170→    id: "ml-infra",
+   171→    title: "ML Platform",
+   172→    description: "End-to-end ML platform with experiment tracking, model registry, automated training, and canary deployments.",
+   173→    longDescription: "Full lifecycle ML platform managing experiments, model versioning, training pipelines, and production deployments with monitoring.",
+   174→    tags: ["MLOps", "Kubernetes", "MLflow", "Terraform", "Prometheus"],
+   175→    metrics: [
+   176→      { label: "Models Deployed", value: "200+" },
+   177→      { label: "Training Jobs/mo", value: "1.2K" },
+   178→      { label: "GPU Utilization", value: "89%" },
+   179→      { label: "Deploy Time", value: "< 5min" },
+   180→    ],
+   181→    architecture: ["Experiment Tracker", "Model Registry", "Training Orchestrator", "Serving Engine", "Canary Deployer", "Monitoring"],
+   182→    github: "https://github.com/alexchen/ml-platform",
+   183→    demo: "#",
+   184→    article: "#",
+   185→    color: "green",
+   186→    size: "medium",
+   187→  },
+   188→  {
+   189→    id: "prompt-lab",
+   190→    title: "Prompt Lab",
+   191→    description: "Systematic prompt engineering toolkit with A/B testing, version control, and automated evaluation.",
+   192→    longDescription: "A development environment for prompt engineering with systematic testing, evaluation, and optimization capabilities.",
+   193→    tags: ["Prompt Engineering", "LLM", "Evaluation", "A/B Testing"],
+   194→    metrics: [
+   195→      { label: "Prompts Managed", value: "5K+" },
+   196→      { label: "Test Runs", value: "100K+" },
+   197→      { label: "Avg. Improvement", value: "+23%" },
+   198→      { label: "Models Tested", value: "15+" },
+   199→    ],
+   200→    architecture: ["Prompt Editor", "Version Control", "A/B Runner", "Auto Evaluator", "Analytics Dashboard", "Export Pipeline"],
+   201→    github: "https://github.com/alexchen/prompt-lab",
+   202→    demo: "#",
+   203→    article: "#",
+   204→    color: "amber",
+   205→    size: "small",
+   206→  },
+   207→  {
+   208→    id: "data-pipeline",
+   209→    title: "StreamForge",
+   210→    description: "Real-time data pipeline framework for ML training data with schema validation and quality gates.",
+   211→    longDescription: "A high-throughput data processing framework for preparing ML training data with built-in quality controls.",
+   212→    tags: ["Data Pipeline", "Kafka", "Spark", "Great Expectations"],
+   213→    metrics: [
+   214→      { label: "Throughput", value: "2M events/s" },
+   215→      { label: "Pipeline Uptime", value: "99.99%" },
+   216→      { label: "Data Quality", value: "99.7%" },
+   217→      { label: "Sources", value: "40+" },
+   218→    ],
+   219→    architecture: ["Ingestion Layer", "Schema Validator", "Transform Engine", "Quality Gates", "Output Sink", "Monitoring"],
+   220→    github: "https://github.com/alexchen/streamforge",
+   221→    demo: "#",
+   222→    article: "#",
+   223→    color: "cyan",
+   224→    size: "small",
+   225→  },
+   226→];
+   227→
+   228→export const caseStudies: CaseStudy[] = [
+   229→  {
+   230→    id: "cs-rag-production",
+   231→    title: "Scaling RAG to 50K Daily Queries",
+   232→    problem: "Enterprise knowledge base needed instant, accurate answers from 2M+ documents across multiple departments with strict latency requirements.",
+   233→    dataset: "2.1M documents, 47 departments, mixed formats (PDF, DOCX, HTML, Confluence)",
+   234→    architecture: "Multi-stage pipeline: Preprocessing → Adaptive Chunking (512-2048 tokens) → Hybrid Embedding (BGE-Large + ColBERT) → HNSW Index (Pinecone) → Cross-Encoder Reranker → LLM Synthesis",
+   235→    modelSelection: "BGE-large-en-v1.5 for embeddings (balance of quality/speed), Cohere Command R+ for generation, bge-reranker-large for reranking",
+   236→    trainingPipeline: "Fine-tuned embedding model on domain-specific pairs using LoRA. Evaluated retrieval with NDCG@10, MRR, and relevance annotations from domain experts.",
+   237→    infrastructure: "FastAPI on Kubernetes with HPA, Redis for caching, Pinecone pod-based index, Kafka for async processing, Grafana + Prometheus for observability",
+   238→    tradeoffs: "Chose Pinecone over self-hosted for faster time-to-production. Accepted 2x cost increase for managed service. Traded 1% retrieval accuracy for 3x latency improvement.",
+   239→    lessonsLearned: "Adaptive chunking based on document structure significantly outperformed fixed-size. Caching common queries reduced costs by 40%. Reranker was the highest-ROI addition.",
+   240→    deployment: "Blue-green deployment with automated canary analysis. Gradual rollout: 5% → 25% → 100% over 2 weeks. Automated rollback on latency spike.",
+   241→    tags: ["RAG", "Production", "Enterprise", "Search"],
+   242→    metrics: [
+   243→      { label: "Queries/Day", value: "50K+" },
+   244→      { label: "p95 Latency", value: "180ms" },
+   245→      { label: "User Satisfaction", value: "4.7/5" },
+   246→      { label: "Cost Reduction", value: "40%" },
+   247→    ],
+   248→  },
+   249→  {
+   250→    id: "cs-agents",
+   251→    title: "Building a Multi-Agent Customer Support System",
+   252→    problem: "Support team handling 10K tickets/week with 15-min SLA. Need intelligent routing, auto-resolution for common cases, and AI-assisted agents.",
+   253→    dataset: "3 years of support tickets (1.5M), resolution guides (800+), product documentation, Slack conversations",
+   254→    architecture: "Orchestrator Agent → Router (intent classification) → Specialist Agents (Billing, Technical, Account) → Tool Layer (CRM, Knowledge Base, Order System) → Response Generator",
+   255→    modelSelection: "GPT-4o for complex reasoning, GPT-4o-mini for classification/routing, fine-tuned Llama 3 8B for common patterns to reduce costs",
+   256→    trainingPipeline: "Fine-tuned classifier on 500K labeled tickets. Prompt engineering for specialist agents. A/B testing framework for continuous improvement.",
+   257→    infrastructure: "Agent Runtime SDK on EKS, DynamoDB for conversation state, SQS for async processing, CloudWatch for monitoring, custom evaluation pipeline",
+   258→    tradeoffs: "Hybrid model strategy (GPT-4o + fine-tuned Llama) reduced costs by 65% while maintaining quality. Accepted higher cold-start time for specialist agents.",
+   259→    lessonsLearned: "Clear agent boundaries are crucial. Overlapping responsibilities cause confusion. Tool-use reliability > model intelligence. Human-in-the-loop for edge cases is non-negotiable.",
+   260→    deployment: "Shadow mode for 1 week, then 20% traffic for 2 weeks. Automated quality scoring on every interaction. Gradual autonomy increase based on confidence thresholds.",
+   261→    tags: ["AI Agents", "Production", "Support", "Multi-Agent"],
+   262→    metrics: [
+   263→      { label: "Auto-Resolution", value: "62%" },
+   264→      { label: "Avg. Handle Time", value: "-45%" },
+   265→      { label: "CSAT Score", value: "+18%" },
+   266→      { label: "Cost/Ticket", value: "-65%" },
+   267→    ],
+   268→  },
+   269→];
+   270→
+   271→export const repositories: Repository[] = [
+   272→  {
+   273→    id: "repo-1",
+   274→    name: "agent-runtime",
+   275→    description: "Lightweight, composable framework for building multi-agent AI systems with tool use, memory, and streaming.",
+   276→    language: "TypeScript",
+   277→    languageColor: "#3178C6",
+   278→    stars: 2847,
+   279→    forks: 234,
+   280→    commits: 892,
+   281→    contributors: 47,
+   282→    lastCommit: "2 hours ago",
+   283→    activity: generateActivity(42),
+   284→    topics: ["ai-agents", "llm", "multi-agent", "tool-use", "streaming"],
+   285→  },
+   286→  {
+   287→    id: "repo-2",
+   288→    name: "nexus-rag",
+   289→    description: "Production-grade RAG pipeline with hybrid search, reranking, and adaptive chunking.",
+   290→    language: "Python",
+   291→    languageColor: "#3572A5",
+   292→    stars: 5621,
+   293→    forks: 612,
+   294→    commits: 1247,
+   295→    contributors: 83,
+   296→    lastCommit: "5 hours ago",
+   297→    activity: generateActivity(137),
+   298→    topics: ["rag", "search", "llm", "production", "embeddings"],
+   299→  },
+   300→  {
+   301→    id: "repo-3",
+   302→    name: "neural-search",
+   303→    description: "High-performance semantic search with real-time indexing and multimodal embeddings.",
+   304→    language: "Rust",
+   305→    languageColor: "#DEA584",
+   306→    stars: 3892,
+   307→    forks: 289,
+   308→    commits: 1563,
+   309→    contributors: 34,
+   310→    lastCommit: "1 day ago",
+   311→    activity: generateActivity(256),
+   312→    topics: ["search", "vector", "embeddings", "rust", "performance"],
+   313→  },
+   314→  {
+   315→    id: "repo-4",
+   316→    name: "prompt-lab",
+   317→    description: "Systematic prompt engineering toolkit with A/B testing and automated evaluation.",
+   318→    language: "Python",
+   319→    languageColor: "#3572A5",
+   320→    stars: 1956,
+   321→    forks: 178,
+   322→    commits: 634,
+   323→    contributors: 29,
+   324→    lastCommit: "3 days ago",
+   325→    activity: generateActivity(389),
+   326→    topics: ["prompt-engineering", "llm", "evaluation", "a-b-testing"],
+   327→  },
+   328→  {
+   329→    id: "repo-5",
+   330→    name: "ml-platform",
+   331→    description: "End-to-end ML platform with experiment tracking, model registry, and automated deployments.",
+   332→    language: "Python",
+   333→    languageColor: "#3572A5",
+   334→    stars: 4231,
+   335→    forks: 456,
+   336→    commits: 2100,
+   337→    contributors: 67,
+   338→    lastCommit: "12 hours ago",
+   339→    activity: generateActivity(512),
+   340→    topics: ["mlops", "ml-platform", "kubernetes", "experiment-tracking"],
+   341→  },
+   342→  {
+   343→    id: "repo-6",
+   344→    name: "streamforge",
+   345→    description: "Real-time data pipeline framework for ML training data with quality gates.",
+   346→    language: "Go",
+   347→    languageColor: "#00ADD8",
+   348→    stars: 1678,
+   349→    forks: 145,
+   350→    commits: 923,
+   351→    contributors: 21,
+   352→    lastCommit: "2 days ago",
+   353→    activity: generateActivity(777),
+   354→    topics: ["data-pipeline", "streaming", "ml-data", "quality"],
+   355→  },
+   356→];
+   357→
+   358→export const articles: Article[] = [
+   359→  {
+   360→    id: "art-1",
+   361→    title: "Attention Is All You Need: A Production Engineer's Guide",
+   362→    excerpt: "Deep dive into transformer attention mechanisms with practical optimization strategies for production deployment, including Flash Attention, KV caching, and PagedAttention.",
+   363→    category: "Deep Learning",
+   364→    date: "2024-12-15",
+   365→    readTime: "18 min",
+   366→    tags: ["Transformers", "Attention", "Optimization"],
+   367→    hasCode: true,
+   368→    hasDiagrams: true,
+   369→    hasEquations: true,
+   370→  },
+   371→  {
+   372→    id: "art-2",
+   373→    title: "Building RAG Systems That Actually Work at Scale",
+   374→    excerpt: "Lessons from deploying RAG to production: chunking strategies, retrieval evaluation, reranking pipelines, and the architectural decisions that matter.",
+   375→    category: "RAG",
+   376→    date: "2024-11-28",
+   377→    readTime: "22 min",
+   378→    tags: ["RAG", "Production", "Search"],
+   379→    hasCode: true,
+   380→    hasDiagrams: true,
+   381→    hasEquations: false,
+   382→  },
+   383→  {
+   384→    id: "art-3",
+   385→    title: "The Architecture of Multi-Agent AI Systems",
+   386→    excerpt: "Design patterns for building reliable multi-agent systems: orchestration strategies, tool use, memory management, and failure recovery.",
+   387→    category: "AI Agents",
+   388→    date: "2024-11-10",
+   389→    readTime: "25 min",
+   390→    tags: ["Agents", "Architecture", "Orchestration"],
+   391→    hasCode: true,
+   392→    hasDiagrams: true,
+   393→    hasEquations: false,
+   394→  },
+   395→  {
+   396→    id: "art-4",
+   397→    title: "Distributed Training at Scale: From 1 GPU to 1000",
+   398→    excerpt: "Practical guide to distributed training with PyTorch: DDP, FSDP, DeepSpeed, and the infrastructure decisions that determine training throughput.",
+   399→    category: "MLOps",
+   400→    date: "2024-10-22",
+   401→    readTime: "20 min",
+   402→    tags: ["Distributed", "Training", "PyTorch"],
+   403→    hasCode: true,
+   404→    hasDiagrams: true,
+   405→    hasEquations: true,
+   406→  },
+   407→  {
+   408→    id: "art-5",
+   409→    title: "Prompt Engineering Beyond Basics: Systematic Approaches",
+   410→    excerpt: "Moving beyond ad-hoc prompting: evaluation frameworks, automated optimization, prompt versioning, and building a prompt engineering practice.",
+   411→    category: "Prompt Engineering",
+   412→    date: "2024-10-05",
+   413→    readTime: "15 min",
+   414→    tags: ["Prompts", "Evaluation", "Optimization"],
+   415→    hasCode: true,
+   416→    hasDiagrams: false,
+   417→    hasEquations: false,
+   418→  },
+   419→  {
+   420→    id: "art-6",
+   421→    title: "LLM Infrastructure: Serving Models in Production",
+   422→    excerpt: "The complete guide to LLM serving: vLLM, TGI, model quantization, batching strategies, and achieving sub-100ms inference latency.",
+   423→    category: "LLM Engineering",
+   424→    date: "2024-09-18",
+   425→    readTime: "28 min",
+   426→    tags: ["LLM", "Serving", "Infrastructure"],
+   427→    hasCode: true,
+   428→    hasDiagrams: true,
+   429→    hasEquations: false,
+   430→  },
+   431→  {
+   432→    id: "art-7",
+   433→    title: "Vector Databases Compared: Pinecone vs Weaviate vs Qdrant",
+   434→    excerpt: "Benchmarking vector databases across 10M+ vectors: indexing speed, query latency, recall accuracy, and total cost of ownership.",
+   435→    category: "RAG",
+   436→    date: "2024-09-01",
+   437→    readTime: "16 min",
+   438→    tags: ["Vector DB", "Benchmarks", "Search"],
+   439→    hasCode: true,
+   440→    hasDiagrams: true,
+   441→    hasEquations: false,
+   442→  },
+   443→  {
+   444→    id: "art-8",
+   445→    title: "Building Reliable AI Products: Testing & Evaluation",
+   446→    excerpt: "A framework for testing AI systems: unit tests for prompts, integration tests for pipelines, and evaluation metrics that correlate with user satisfaction.",
+   447→    category: "Product Engineering",
+   448→    date: "2024-08-15",
+   449→    readTime: "19 min",
+   450→    tags: ["Testing", "Evaluation", "Quality"],
+   451→    hasCode: true,
+   452→    hasDiagrams: true,
+   453→    hasEquations: false,
+   454→  },
+   455→];
+   456→
+   457→export const timeline: TimelineItem[] = [
+   458→  {
+   459→    id: "tl-1",
+   460→    year: "2024",
+   461→    role: "Senior AI Engineer",
+   462→    company: "Nexus AI",
+   463→    description: "Leading the AI platform team, building production ML infrastructure serving 10M+ users.",
+   464→    highlights: ["Built multi-agent system handling 50K queries/day", "Reduced inference costs by 65%", "Published 3 research papers", "Grew team from 3 to 12 engineers"],
+   465→    type: "work",
+   466→    metrics: ["50K daily queries", "65% cost reduction", "12 team members"],
+   467→  },
+   468→  {
+   469→    id: "tl-2",
+   470→    year: "2024",
+   471→    role: "NeurIPS Workshop Paper",
+   472→    company: "Attention-Efficient Transformers for Production",
+   473→    description: "Presented novel attention mechanism reducing memory usage by 40% without quality degradation.",
+   474→    highlights: ["Accepted at NeurIPS 2024 Workshop", "Open-sourced implementation", "Adopted by 3 production systems"],
+   475→    type: "publication",
+   476→  },
+   477→  {
+   478→    id: "tl-3",
+   479→    year: "2023",
+   480→    role: "AI Engineer",
+   481→    company: "DataScale",
+   482→    description: "Built ML platform and deployed 50+ models to production across the organization.",
+   483→    highlights: ["Designed ML platform serving 200+ models", "Automated training pipeline reducing deploy time 80%", "Keynote at internal engineering summit"],
+   484→    type: "work",
+   485→    metrics: ["200+ models", "80% faster deploys", "99.9% uptime"],
+   486→  },
+   487→  {
+   488→    id: "tl-4",
+   489→    year: "2023",
+   490→    role: "Conference Talk",
+   491→    company: "MLOps Conf Europe",
+   492→    description: "Talk on 'Production RAG: Lessons from 1 Million Queries' — architectural patterns and anti-patterns.",
+   493→    highlights: ["500+ attendees", "Top-rated talk", "Led to 2 enterprise partnerships"],
+   494→    type: "talk",
+   495→  },
+   496→  {
+   497→    id: "tl-2b",
+   498→    year: "2022",
+   499→    role: "ML Engineer",
+   500→    company: "TechCorp",
+   501→    description: "Developed recommendation systems and NLP pipelines for the core product.",
+   502→    highlights: ["Improved recommendation CTR by 35%", "Built NLP pipeline processing 1M+ documents", "Mentored 5 junior engineers"],
+   503→    type: "work",
+   504→    metrics: ["35% CTR improvement", "1M+ documents processed"],
+   505→  },
+   506→  {
+   507→    id: "tl-5",
+   508→    year: "2022",
+   509→    role: "Best Paper Award",
+   510→    company: "ICML Workshop",
+   511→    description: "Awarded best paper for work on efficient fine-tuning methods for large language models.",
+   512→    highlights: ["Best Paper Award", "Cited 200+ times", "Method adopted by major companies"],
+   513→    type: "award",
+   514→  },
+   515→  {
+   516→    id: "tl-6",
+   517→    year: "2021",
+   518→    role: "ML Research Intern → ML Engineer",
+   519→    company: "TechCorp",
+   520→    description: "Started as research intern, transitioned to full-time ML engineering role.",
+   521→    highlights: ["Published first research paper", "Built prototype recommendation system", "Converted to full-time after 3 months"],
+   522→    type: "work",
+   523→  },
+   524→];
+   525→
+   526→export const techStack: TechItem[] = [
+   527→  // Languages
+   528→  { name: "Python", category: "Languages", icon: "🐍", connections: ["PyTorch", "FastAPI", "LangChain"] },
+   529→  { name: "TypeScript", category: "Languages", icon: "🔷", connections: ["Next.js", "Node.js", "React"] },
+   530→  { name: "Rust", category: "Languages", icon: "🦀", connections: ["Vector Search", "High Performance"] },
+   531→  { name: "Go", category: "Languages", icon: "🔵", connections: ["Kubernetes", "Microservices"] },
+   532→
+   533→  // Frameworks
+   534→  { name: "PyTorch", category: "Frameworks", icon: "🔥", connections: ["Python", "Transformers", "Distributed Training"] },
+   535→  { name: "FastAPI", category: "Frameworks", icon: "⚡", connections: ["Python", "REST APIs", "ML Serving"] },
+   536→  { name: "LangChain", category: "Frameworks", icon: "🔗", connections: ["Python", "LLMs", "RAG"] },
+   537→  { name: "Next.js", category: "Frameworks", icon: "▲", connections: ["TypeScript", "React", "Web"] },
+   538→
+   539→  // LLMs
+   540→  { name: "GPT-4o", category: "LLMs", icon: "🧠", connections: ["OpenAI", "Agents", "RAG"] },
+   541→  { name: "Claude", category: "LLMs", icon: "🤖", connections: ["Anthropic", "Agents", "Analysis"] },
+   542→  { name: "Llama 3", category: "LLMs", icon: "🦙", connections: ["Meta", "Fine-tuning", "Open Source"] },
+   543→  { name: "Gemini", category: "LLMs", icon: "💎", connections: ["Google", "Multimodal", "Agents"] },
+   544→
+   545→  // Cloud
+   546→  { name: "AWS", category: "Cloud", icon: "☁️", connections: ["EKS", "SageMaker", "S3"] },
+   547→  { name: "GCP", category: "Cloud", icon: "🌐", connections: ["Vertex AI", "GKE", "BigQuery"] },
+   548→  { name: "Vercel", category: "Cloud", icon: "▲", connections: ["Next.js", "Edge Functions", "Web"] },
+   549→
+   550→  // Databases
+   551→  { name: "PostgreSQL", category: "Databases", icon: "🐘", connections: ["Relational", "pgvector"] },
+   552→  { name: "Redis", category: "Databases", icon: "🔴", connections: ["Caching", "Queue", "Sessions"] },
+   553→  { name: "MongoDB", category: "Databases", icon: "🍃", connections: ["Document", "Flexibility"] },
+   554→
+   555→  // Vector DBs
+   556→  { name: "Pinecone", category: "Vector DBs", icon: "🌲", connections: ["Managed", "Scale", "RAG"] },
+   557→  { name: "Qdrant", category: "Vector DBs", icon: "🟡", connections: ["Open Source", "Rust", "Performance"] },
+   558→  { name: "Weaviate", category: "Vector DBs", icon: "🔵", connections: ["Multi-modal", "GraphQL"] },
+   559→
+   560→  // DevOps
+   561→  { name: "Docker", category: "DevOps", icon: "🐳", connections: ["Containers", "Kubernetes"] },
+   562→  { name: "Kubernetes", category: "DevOps", icon: "☸️", connections: ["Docker", "EKS", "GKE"] },
+   563→  { name: "Terraform", category: "DevOps", icon: "🏗️", connections: ["IaC", "AWS", "GCP"] },
+   564→
+   565→  // MLOps
+   566→  { name: "MLflow", category: "MLOps", icon: "📊", connections: ["Experiments", "Models", "Registry"] },
+   567→  { name: "Weights & Biases", category: "MLOps", icon: "📈", connections: ["Experiments", "Visualization", "Teams"] },
+   568→  { name: "vLLM", category: "MLOps", icon: "🚀", connections: ["Serving", "LLM", "Performance"] },
+   569→];
+   570→
+   571→export const newsletterTopics = [
+   572→  "Weekly AI Engineering Insights",
+   573→  "Production AI Lessons",
+   574→  "Architecture Breakdowns",
+   575→  "Open Source Updates",
+   576→  "New Research Summaries",
+   577→];
+   578→
+   579→export const playgroundDemos = [
+   580→  { id: "demo-llm", title: "LLM Chat", description: "Conversational AI with streaming responses", icon: "MessageSquare", color: "cyan" },
+   581→  { id: "demo-rag", title: "RAG Demo", description: "Retrieval-augmented generation with source citations", icon: "Search", color: "purple" },
+   582→  { id: "demo-image", title: "Image Generation", description: "Text-to-image with diffusion models", icon: "Image", color: "blue" },
+   583→  { id: "demo-voice", title: "Voice AI", description: "Speech-to-text and text-to-speech pipeline", icon: "Mic", color: "green" },
+   584→  { id: "demo-vector", title: "Vector Search", description: "Semantic search across documents", icon: "Database", color: "amber" },
+   585→  { id: "demo-agents", title: "AI Agents", description: "Multi-agent task orchestration", icon: "Bot", color: "purple" },
+   586→  { id: "demo-prompt", title: "Prompt Sandbox", description: "Experiment with prompt engineering", icon: "Code", color: "cyan" },
+   587→];
+   588→
+   589→export const blogCategories = [
+   590→  "All",
+   591→  "LLM Engineering",
+   592→  "AI Agents",
+   593→  "RAG",
+   594→  "MLOps",
+   595→  "Distributed Systems",
+   596→  "Deep Learning",
+   597→  "Prompt Engineering",
+   598→  "Product Engineering",
+   599→];
+   600→
+   601→export const colorMap = {
+   602→  cyan: {
+   603→    bg: "rgba(6, 182, 212, 0.1)",
+   604→    border: "rgba(6, 182, 212, 0.2)",
+   605→    text: "#06B6D4",
+   606→    glow: "rgba(6, 182, 212, 0.15)",
+   607→  },
+   608→  purple: {
+   609→    bg: "rgba(168, 85, 247, 0.1)",
+   610→    border: "rgba(168, 85, 247, 0.2)",
+   611→    text: "#A855F7",
+   612→    glow: "rgba(168, 85, 247, 0.15)",
+   613→  },
+   614→  blue: {
+   615→    bg: "rgba(59, 130, 246, 0.1)",
+   616→    border: "rgba(59, 130, 246, 0.2)",
+   617→    text: "#3B82F6",
+   618→    glow: "rgba(59, 130, 246, 0.15)",
+   619→  },
+   620→  green: {
+   621→    bg: "rgba(16, 185, 129, 0.1)",
+   622→    border: "rgba(16, 185, 129, 0.2)",
+   623→    text: "#10B981",
+   624→    glow: "rgba(16, 185, 129, 0.15)",
+   625→  },
+   626→  amber: {
+   627→    bg: "rgba(245, 158, 11, 0.1)",
+   628→    border: "rgba(245, 158, 11, 0.2)",
+   629→    text: "#F59E0B",
+   630→    glow: "rgba(245, 158, 11, 0.15)",
+   631→  },
+   632→};
