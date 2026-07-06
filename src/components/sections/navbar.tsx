@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-motion';
-import { Menu, Github, ArrowRight } from 'lucide-react';
+import { Menu, Github, ArrowRight, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,7 +20,11 @@ const NAV_LINKS = [
   { label: 'Open Source', href: '#opensource' },
   { label: 'Playground', href: '#playground' },
   { label: 'Blog', href: '#blog' },
+  { label: 'Experience', href: '#experience', mobileOnly: true },
+  { label: 'Contact', href: '#contact', mobileOnly: true },
 ];
+
+type NavLink = (typeof NAV_LINKS)[number];
 
 export function Navbar() {
   const [activeSection, setActiveSection] = useState('');
@@ -39,6 +43,12 @@ export function Navbar() {
     }
     lastScrollY.current = latest;
   });
+
+  const openCommandPalette = useCallback(() => {
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true })
+    );
+  }, []);
 
   // IntersectionObserver for active section tracking
   useEffect(() => {
@@ -102,7 +112,7 @@ export function Navbar() {
 
           {/* Desktop links */}
           <div className="hidden items-center gap-1 md:flex">
-            {NAV_LINKS.map((link) => {
+            {NAV_LINKS.filter((l) => !('mobileOnly' in l && l.mobileOnly)).map((link: NavLink) => {
               const sectionId = link.href.replace('#', '');
               const isActive = activeSection === sectionId;
               return (
@@ -147,11 +157,22 @@ export function Navbar() {
               <Github className="size-4" />
             </a>
 
+            {/* ⌘K command palette hint - desktop */}
+            <button
+              onClick={openCommandPalette}
+              className="hidden h-8 items-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2 text-[11px] text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-white md:inline-flex"
+              aria-label="Open command palette"
+            >
+              <Search className="size-3" />
+              <span className="hidden lg:inline">Search</span>
+              <kbd className="ml-1 hidden h-4 items-center rounded border border-white/[0.1] bg-white/[0.04] px-1 text-[10px] font-medium text-muted-foreground lg:inline-flex">
+                ⌘K
+              </kbd>
+            </button>
+
             {/* Contact button - desktop */}
-            <Button
-              size="sm"
-              variant="ghost"
-              className="hidden text-sm text-muted-foreground hover:text-white md:inline-flex"
+            <button
+              className="hidden h-8 px-4 text-xs font-medium text-cyan-400 border border-cyan-500/20 rounded-lg hover:bg-cyan-500/10 transition-all md:inline-flex items-center gap-1.5"
               onClick={() => {
                 const target = document.querySelector('#contact');
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -159,7 +180,7 @@ export function Navbar() {
             >
               Contact
               <ArrowRight className="size-3.5" />
-            </Button>
+            </button>
 
             {/* Mobile hamburger */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -183,7 +204,7 @@ export function Navbar() {
                   </SheetTitle>
                 </SheetHeader>
                 <div className="mt-6 flex flex-col gap-1 px-4">
-                  {NAV_LINKS.map((link) => {
+                  {NAV_LINKS.map((link: NavLink) => {
                     const sectionId = link.href.replace('#', '');
                     const isActive = activeSection === sectionId;
                     return (
@@ -205,20 +226,20 @@ export function Navbar() {
                   })}
                 </div>
                 <div className="mt-4 flex flex-col gap-2 px-4">
-                  <a
-                    href="https://github.com/alexchen"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-white"
-                  >
-                    <Github className="size-4" />
-                    GitHub
-                  </a>
                   <SheetClose asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full justify-start"
+                    <a
+                      href="https://github.com/alexchen"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-white"
+                    >
+                      <Github className="size-4" />
+                      GitHub
+                    </a>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <button
+                      className="flex w-full items-center justify-start gap-1.5 rounded-lg border border-cyan-500/20 bg-cyan-500/5 px-3 py-2.5 text-sm font-medium text-cyan-400 transition-colors hover:bg-cyan-500/10"
                       onClick={() => {
                         const target = document.querySelector('#contact');
                         if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -226,7 +247,7 @@ export function Navbar() {
                     >
                       Contact
                       <ArrowRight className="ml-auto size-3.5" />
-                    </Button>
+                    </button>
                   </SheetClose>
                 </div>
               </SheetContent>

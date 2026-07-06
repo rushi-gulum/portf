@@ -2,8 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Github, ExternalLink, FileText } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Github, ExternalLink, FileText, ArrowRight } from 'lucide-react';
 import { projects, colorMap } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import type { Project } from '@/lib/data';
@@ -33,7 +32,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     >
       <div
         className={cn(
-          'group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0F1117] transition-all duration-300',
+          'card-shimmer group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0F1117] transition-all duration-300',
           'hover:-translate-y-1 hover:shadow-lg'
         )}
         style={{
@@ -46,15 +45,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
         {/* Content */}
         <div className="p-6">
-          {/* Tags */}
+          {/* Tags — pill-shaped with border glow on hover */}
           <div className="flex flex-wrap gap-2">
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium"
+                className="tag-pill inline-flex items-center px-2.5 py-0.5 text-xs font-medium"
                 style={{
                   backgroundColor: colors.bg,
                   color: colors.text,
+                  opacity: 0.85,
                 }}
               >
                 {tag}
@@ -126,34 +126,53 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex items-center gap-1 border-t border-white/[0.06] px-6 py-3">
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.05] hover:text-white"
-          >
-            <Github className="h-3.5 w-3.5" />
-            <span>GitHub</span>
-          </a>
-          <a
+        <div className="flex items-center justify-between border-t border-white/[0.06] px-6 py-3">
+          <div className="flex items-center gap-1">
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.05] hover:text-white"
+            >
+              <Github className="h-3.5 w-3.5" />
+              <span>GitHub</span>
+            </a>
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.05] hover:text-white"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              <span>Demo</span>
+            </a>
+            <a
+              href={project.article}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.05] hover:text-white"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              <span>Article</span>
+            </a>
+          </div>
+
+          {/* "View →" link appears on hover */}
+          <motion.a
             href={project.demo}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.05] hover:text-white"
+            className="flex items-center gap-1 text-xs font-medium"
+            style={{ color: colors.text }}
+            initial={{ opacity: 0, x: 8 }}
+            animate={{
+              opacity: isHovered ? 1 : 0,
+              x: isHovered ? 0 : 8,
+            }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
           >
-            <ExternalLink className="h-3.5 w-3.5" />
-            <span>Demo</span>
-          </a>
-          <a
-            href={project.article}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.05] hover:text-white"
-          >
-            <FileText className="h-3.5 w-3.5" />
-            <span>Article</span>
-          </a>
+            View <ArrowRight className="size-3" />
+          </motion.a>
         </div>
       </div>
     </motion.div>

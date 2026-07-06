@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { articles, colorMap, type Article } from '@/lib/data';
 import { Calendar, Clock, ArrowRight, Code2, FileText, Sigma } from 'lucide-react';
 
@@ -17,6 +17,15 @@ const categoryColorMap: Record<string, keyof typeof colorMap> = {
 
 function getCategoryColor(category: string): keyof typeof colorMap {
   return categoryColorMap[category] || 'cyan';
+}
+
+// Deterministic "reading progress" based on article id for visual effect
+function getReadProgress(id: string): number {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = ((hash << 5) - hash + id.charCodeAt(i)) | 0;
+  }
+  return 40 + Math.abs(hash) % 55; // 40-94%
 }
 
 function CategoryBadge({ category }: { category: string }) {
@@ -153,16 +162,26 @@ function FeaturedArticle({ article }: { article: Article }) {
 }
 
 function ArticleCard({ article, index }: { article: Article; index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isCardInView = useInView(cardRef, { once: true, margin: '-50px' });
+  const [isHovered, setIsHovered] = useState(false);
+  const progress = getReadProgress(article.id);
+  const color = getCategoryColor(article.category);
+  const colors = colorMap[color];
+
   return (
     <motion.a
       href="#"
+      ref={cardRef}
       className="block group"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6 h-full flex flex-col transition-all duration-300 group-hover:border-white/[0.12] group-hover:shadow-lg group-hover:shadow-black/20 group-hover:-translate-y-1">
+      <div className="blog-card-lift bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6 h-full flex flex-col transition-colors duration-300 group-hover:border-white/[0.12]">
         <div className="space-y-3 flex-1">
           <div className="flex items-center justify-between">
             <CategoryBadge category={article.category} />
@@ -178,7 +197,19 @@ function ArticleCard({ article, index }: { article: Article; index: number }) {
           </p>
         </div>
 
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.05]">
+        {/* Reading progress bar — animates in when card enters viewport */}
+        <div className="mt-4 h-1 w-full rounded-full bg-white/[0.04] overflow-hidden">
+          <div
+            className={`blog-progress-bar h-full rounded-full ${isCardInView ? 'animate' : ''}`}
+            style={{
+              width: `${progress}%`,
+              background: `linear-gradient(90deg, ${colors.text}, ${colors.text}88)`,
+              animationDelay: `${index * 0.15 + 0.3}s`,
+            }}
+          />
+        </div>
+
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.05]">
           <div className="flex items-center gap-3 text-xs text-slate-500">
             <span className="flex items-center gap-1">
               <Calendar className="size-3" />
@@ -192,9 +223,18 @@ function ArticleCard({ article, index }: { article: Article; index: number }) {
               {article.readTime}
             </span>
           </div>
-          <span className="text-cyan-400 text-xs font-medium flex items-center gap-1 group-hover:gap-1.5 transition-all">
+          {/* "Read →" appears on hover */}
+          <motion.span
+            className="text-cyan-400 text-xs font-medium flex items-center gap-1"
+            initial={{ opacity: 0, x: 6 }}
+            animate={{
+              opacity: isHovered ? 1 : 0,
+              x: isHovered ? 0 : 6,
+            }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
             Read <ArrowRight className="size-3" />
-          </span>
+          </motion.span>
         </div>
       </div>
     </motion.a>

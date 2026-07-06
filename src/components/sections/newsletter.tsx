@@ -27,7 +27,7 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section ref={ref} className="pt-20 pb-20">
+    <section id="newsletter" ref={ref} className="pt-20 pb-20">
       <div className="max-w-3xl mx-auto px-6">
         <motion.div
           className="glass rounded-3xl p-8 md:p-12 text-center"

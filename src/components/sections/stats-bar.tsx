@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Clock, Star, Layers, GitFork, Zap } from 'lucide-react';
+import { Clock, Star, Layers, GitFork, Zap, Sparkles } from 'lucide-react';
 
 interface StatItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -11,6 +11,8 @@ interface StatItem {
   suffix: string;
   color: string;
   bgColor: string;
+  underlineClass: string;
+  sparkleColor: string;
   customDisplay?: string;
 }
 
@@ -22,6 +24,8 @@ const STATS: StatItem[] = [
     suffix: 'Years',
     color: 'text-cyan-400',
     bgColor: 'bg-cyan-500/10',
+    underlineClass: 'stat-underline-cyan',
+    sparkleColor: 'text-cyan-400',
   },
   {
     icon: Star,
@@ -30,6 +34,8 @@ const STATS: StatItem[] = [
     suffix: 'Stars',
     color: 'text-yellow-400',
     bgColor: 'bg-yellow-500/10',
+    underlineClass: 'stat-underline-yellow',
+    sparkleColor: 'text-yellow-400',
   },
   {
     icon: Layers,
@@ -38,6 +44,8 @@ const STATS: StatItem[] = [
     suffix: 'Systems',
     color: 'text-purple-400',
     bgColor: 'bg-purple-500/10',
+    underlineClass: 'stat-underline-purple',
+    sparkleColor: 'text-purple-400',
   },
   {
     icon: GitFork,
@@ -46,6 +54,8 @@ const STATS: StatItem[] = [
     suffix: 'Projects',
     color: 'text-emerald-400',
     bgColor: 'bg-emerald-500/10',
+    underlineClass: 'stat-underline-emerald',
+    sparkleColor: 'text-emerald-400',
   },
   {
     icon: Zap,
@@ -54,6 +64,8 @@ const STATS: StatItem[] = [
     suffix: 'API Calls/Day',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/10',
+    underlineClass: 'stat-underline-orange',
+    sparkleColor: 'text-orange-400',
     customDisplay: '1M+',
   },
 ];
@@ -95,6 +107,7 @@ function useCountUp(target: number, inView: boolean, duration: number = 2000) {
 
 function StatCard({ stat, index, inView }: { stat: StatItem; index: number; inView: boolean }) {
   const count = useCountUp(stat.target, inView);
+  const isCountingDone = inView && (stat.customDisplay ? true : count >= stat.target);
   const Icon = stat.icon;
 
   return (
@@ -109,10 +122,19 @@ function StatCard({ stat, index, inView }: { stat: StatItem; index: number; inVi
       }}
       className="flex flex-col items-center text-center"
     >
-      <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-full ${stat.bgColor}`}>
-        <Icon className={`h-5 w-5 ${stat.color}`} />
+      <div className="relative mb-3 flex h-10 w-10 items-center justify-center rounded-full">
+        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${stat.bgColor}`}>
+          <Icon className={`h-5 w-5 ${stat.color}`} />
+        </div>
+        {/* Sparkle indicator */}
+        <Sparkles
+          className={`stat-sparkle absolute -top-1.5 -right-1.5 size-3.5 ${stat.sparkleColor}`}
+          style={{ animationDelay: `${index * 0.5}s` }}
+        />
       </div>
-      <div className="text-2xl font-bold text-white tabular-nums sm:text-3xl">
+      <div
+        className={`stat-underline relative text-2xl font-bold text-white tabular-nums sm:text-3xl ${stat.underlineClass} ${isCountingDone ? 'active' : ''}`}
+      >
         {stat.customDisplay || `${count}+`}
       </div>
       <span className="mt-1 text-xs text-muted-foreground sm:text-sm">{stat.suffix}</span>
@@ -128,7 +150,7 @@ export function StatsBar() {
     <div className="mt-8 px-4">
       <div
         ref={ref}
-        className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-white/[0.06] py-6"
+        className="stats-container-border relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-white/[0.06] py-6"
         style={{ backgroundColor: 'rgba(15,17,23,0.6)', backdropFilter: 'blur(24px)' }}
       >
         {/* 2px gradient accent line at top */}
