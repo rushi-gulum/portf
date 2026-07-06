@@ -1,13 +1,14 @@
 # AI Engineer Portfolio - Development Worklog
 
 ## Current Project Status
-- **Phase**: Round 6 Complete — Style Polish + New Features + Bug Fixes
-- **Status**: Production-ready, 29+ components, zero errors, zero hydration warnings
+- **Phase**: Round 7 — Article Reader System + Content Enrichment
+- **Status**: Production-ready, 30+ components, zero errors, zero hydration warnings
 - **Stack**: Next.js 16, TypeScript, Tailwind CSS 4, shadcn/ui, Framer Motion
 - **Theme**: Dark (#0A0A0A), premium aesthetic (Stripe/Linear/Vercel/OpenAI/Anthropic/GitHub)
-- **Total Components**: 29 section/utility/demo components
+- **Total Components**: 30 section/utility/demo/modal components
 - **Hydration**: Fixed via `next/dynamic` with `ssr: false` — no browser extension mismatches
 - **AI Playground**: All 7 demos interactive with real AI backends (Image Gen + TTS use z-ai-web-dev-sdk)
+- **Article Reader**: Full immersive reading experience for all 8 articles in Research & Blog sections
 - **All 11 sections** have proper IDs for navigation: hero, projects, case-studies, opensource, research, playground, tech-stack, experience, blog, newsletter, contact
 
 ## Hydration Fix (Critical)
@@ -353,6 +354,78 @@ Stage Summary:
 - Round 6 worklog complete with 3 agent records
 - All changes verified via agent-browser QA
 - ESLint: zero errors, dev server clean
+
+## Unresolved Issues / Risks
+1. **Sandbox CORS warning**: allowedDevOrigins — dev-only, cosmetic
+2. **Server memory**: Dev server under sandbox pressure — environment constraint
+
+## Priority Recommendations for Next Phase
+1. Mobile responsiveness testing and improvements (critical)
+2. Add project screenshot images (via image-generation skill)
+3. Dark/light mode toggle
+4. Optimize neural network canvas for lower-end devices
+5. Keyboard navigation improvements (arrow keys for timeline, Escape to close)
+6. Skills & Expertise radar chart section
+7. Scroll-triggered animations on more elements
+8. Newsletter integration with actual email service
+9. Contact form backend (Prisma + email)
+
+---
+Task ID: 2b
+Agent: full-stack-developer
+Task: Add rich article content to articles 4-8 in data.ts
+
+Work Log:
+- Added content to art-4 (Distributed Training) with 6 sections
+- Added content to art-5 (Prompt Engineering) with 6 sections
+- Added content to art-6 (LLM Infrastructure) with 6 sections
+- Added content to art-7 (Vector Databases) with 6 sections
+- Added content to art-8 (AI Testing) with 6 sections
+
+Stage Summary:
+- All 8 articles now have full content
+- ESLint: zero errors
+---
+Task ID: 1
+Agent: main
+Task: Review project state, fix Research & Writing / Technical Deep Dives section, add Article Reader functionality
+
+Work Log:
+- Read worklog.md to understand current project state (Round 6 complete, 29 components)
+- Identified that Research section "Read Article" links pointed to "#" (non-functional)
+- Identified that Blog section "Read More" links showed a "coming soon" notification
+- Extended Article interface in data.ts with `content: ArticleContentSection[]` field
+- Added `ArticleContentSection` interface (id, heading, content[], codeBlock?, callout?, keyTakeaway?)
+- Wrote rich article content for articles 1-3 (Attention/RAG/Agents) — 6 sections each with code blocks, callouts, key takeaways
+- Delegated articles 4-8 content creation to subagent (Distributed Training, Prompt Engineering, LLM Infrastructure, Vector DBs, AI Testing)
+- Created `/src/components/article-reader-modal.tsx` — full-screen immersive article reader with:
+  - Reading progress bar (gradient, top of screen, scales with scroll)
+  - Sticky header with Back button, % read indicator, Close button
+  - Article header (category badge, date, read time, title, excerpt, content type indicators, tags)
+  - Table of Contents sidebar (desktop, sticky, active section highlighting)
+  - Rich article body (headings, paragraphs, code blocks with copy, callout boxes, key takeaway)
+  - Code blocks: macOS-style window chrome, language label, copy-to-clipboard with "Copied!" feedback, captions
+  - Callout boxes: 3 types (tip/warning/info) with colored icons and labels
+  - Key Takeaway: gradient-bordered card with Zap icon badge
+  - AnimatePresence open/close animations, Escape key close, body scroll lock, focus management
+- Rewrote `/src/components/sections/research.tsx` — added ArticleReaderModal, all cards clickable with keyboard support
+- Rewrote `/src/components/sections/blog.tsx` — replaced "coming soon" notification with ArticleReaderModal
+- Fixed ESLint error: avoided setState in useEffect by using lazy initializer + requestAnimationFrame
+- Agent-browser QA verified:
+  - Research section: 8 articles rendered, category filter works (RAG filter shows 2 RAG articles)
+  - Clicking article card opens full article reader modal
+  - Modal shows: reading progress bar, TOC sidebar, all 6 sections with headings, 3 code blocks, 2 callouts, 1 key takeaway
+  - Blog section: featured article and grid cards both open article reader
+  - RAG article opens from Blog with all content visible (Chunking, etc.)
+  - Escape key closes modal, no console errors
+  - ESLint: zero errors
+
+Stage Summary:
+- Created 1 new component (article-reader-modal.tsx)
+- Updated 2 sections (research.tsx, blog.tsx) — removed "coming soon" notification, wired real article reader
+- Extended data model (ArticleContentSection interface, content for all 8 articles)
+- All 8 articles now have full readable content with code blocks, callouts, and key takeaways
+- ESLint: zero errors, dev server clean, zero console errors
 
 ## Unresolved Issues / Risks
 1. **Sandbox CORS warning**: allowedDevOrigins — dev-only, cosmetic

@@ -3,7 +3,8 @@
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useCallback } from 'react';
 import { articles, colorMap, type Article } from '@/lib/data';
-import { Calendar, Clock, ArrowRight, Code2, FileText, Sigma, X } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, Code2, FileText, Sigma, BookOpen } from 'lucide-react';
+import ArticleReaderModal from '@/components/article-reader-modal';
 
 const categoryColorMap: Record<string, keyof typeof colorMap> = {
   'Deep Learning': 'purple',
@@ -56,237 +57,220 @@ function ArticleMetaIcons({ article }: { article: Article }) {
   );
 }
 
-// Simple inline notification
-function ArticleNotification({ title, onClose }: { title: string; onClose: () => void }) {
+function FeaturedArticle({
+  article,
+  onRead,
+}: {
+  article: Article;
+  onRead: (article: Article) => void;
+}) {
+  const color = getCategoryColor(article.category);
+  const colors = colorMap[color];
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-      transition={{ duration: 0.2 }}
-      className="fixed bottom-6 right-6 z-[60] max-w-sm bg-[#1a1a2e] border border-cyan-500/20 rounded-xl p-4 shadow-lg shadow-cyan-500/5"
+      className="block group cursor-pointer"
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3 }}
+      onClick={() => onRead(article)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onRead(article);
+        }
+      }}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-medium text-cyan-400 mb-1">📖 Article Preview</p>
-          <p className="text-sm text-white/80 line-clamp-2">{title}</p>
-          <p className="text-xs text-muted-foreground mt-2">Full article coming soon — stay tuned!</p>
+      <div className="bg-[#0F1117] border border-white/[0.06] rounded-2xl overflow-hidden group-hover:border-white/[0.12] transition-colors duration-300">
+        <div className="flex flex-col md:flex-row">
+          {/* Left content (60%) */}
+          <div className="w-full md:w-[60%] p-6 md:p-8 flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <CategoryBadge category={article.category} />
+                <ArticleMetaIcons article={article} />
+              </div>
+
+              <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors leading-tight">
+                {article.title}
+              </h3>
+
+              <p className="text-slate-400 text-sm leading-relaxed line-clamp-3">
+                {article.excerpt}
+              </p>
+
+              <div className="flex flex-wrap gap-2">
+                {article.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2 py-0.5 rounded text-[11px] font-medium text-slate-500 bg-white/[0.03] border border-white/[0.05]"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/[0.05]">
+              <div className="flex items-center gap-4 text-xs text-slate-500">
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="size-3" />
+                  {new Date(article.date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Clock className="size-3" />
+                  {article.readTime}
+                </span>
+              </div>
+              <span className="text-cyan-400 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                <BookOpen className="size-3.5" />
+                Read More <ArrowRight className="size-3.5" />
+              </span>
+            </div>
+          </div>
+
+          {/* Right gradient panel (40%) */}
+          <div
+            className="w-full md:w-[40%] min-h-[200px] md:min-h-0 relative overflow-hidden"
+            style={{
+              background: `linear-gradient(135deg, ${colors.glow} 0%, rgba(10, 10, 10, 0.95) 100%)`,
+            }}
+          >
+            <div
+              className="absolute inset-0 opacity-20"
+              style={{
+                background: `radial-gradient(ellipse at 30% 50%, ${colors.text}40 0%, transparent 70%)`,
+              }}
+            />
+            <div
+              className="absolute inset-0 opacity-10"
+              style={{
+                background: `radial-gradient(ellipse at 70% 30%, ${colors.text}30 0%, transparent 60%)`,
+              }}
+            />
+            {/* Decorative grid lines */}
+            <div
+              className="absolute inset-0 opacity-[0.04]"
+              style={{
+                backgroundImage: `linear-gradient(${colors.text} 1px, transparent 1px), linear-gradient(90deg, ${colors.text} 1px, transparent 1px)`,
+                backgroundSize: '40px 40px',
+              }}
+            />
+            {/* Category label centered */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span
+                className="text-6xl md:text-7xl font-black opacity-[0.08] tracking-wider uppercase select-none"
+                style={{ color: colors.text }}
+              >
+                {article.category.split(' ')[0]}
+              </span>
+            </div>
+          </div>
         </div>
-        <button
-          onClick={onClose}
-          className="flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
-        >
-          <X className="size-3.5" />
-        </button>
       </div>
     </motion.div>
   );
 }
 
-function FeaturedArticle({ article }: { article: Article }) {
-  const color = getCategoryColor(article.category);
-  const colors = colorMap[color];
-  const [showNotification, setShowNotification] = useState(false);
-
-  return (
-    <>
-      <motion.div
-        className="block group cursor-pointer"
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.3 }}
-        onClick={() => {
-          setShowNotification(true);
-          setTimeout(() => setShowNotification(false), 3000);
-        }}
-      >
-        <div className="bg-[#0F1117] border border-white/[0.06] rounded-2xl overflow-hidden">
-          <div className="flex flex-col md:flex-row">
-            {/* Left content (60%) */}
-            <div className="w-full md:w-[60%] p-6 md:p-8 flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <CategoryBadge category={article.category} />
-                  <ArticleMetaIcons article={article} />
-                </div>
-
-                <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors leading-tight">
-                  {article.title}
-                </h3>
-
-                <p className="text-slate-400 text-sm leading-relaxed line-clamp-3">
-                  {article.excerpt}
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  {article.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-0.5 rounded text-[11px] font-medium text-slate-500 bg-white/[0.03] border border-white/[0.05]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/[0.05]">
-                <div className="flex items-center gap-4 text-xs text-slate-500">
-                  <span className="flex items-center gap-1.5">
-                    <Calendar className="size-3" />
-                    {new Date(article.date).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="size-3" />
-                    {article.readTime}
-                  </span>
-                </div>
-                <span className="text-cyan-400 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                  Read More <ArrowRight className="size-3.5" />
-                </span>
-              </div>
-            </div>
-
-            {/* Right gradient panel (40%) */}
-            <div
-              className="w-full md:w-[40%] min-h-[200px] md:min-h-0 relative overflow-hidden"
-              style={{
-                background: `linear-gradient(135deg, ${colors.glow} 0%, rgba(10, 10, 10, 0.95) 100%)`,
-              }}
-            >
-              <div
-                className="absolute inset-0 opacity-20"
-                style={{
-                  background: `radial-gradient(ellipse at 30% 50%, ${colors.text}40 0%, transparent 70%)`,
-                }}
-              />
-              <div
-                className="absolute inset-0 opacity-10"
-                style={{
-                  background: `radial-gradient(ellipse at 70% 30%, ${colors.text}30 0%, transparent 60%)`,
-                }}
-              />
-              {/* Decorative grid lines */}
-              <div
-                className="absolute inset-0 opacity-[0.04]"
-                style={{
-                  backgroundImage: `linear-gradient(${colors.text} 1px, transparent 1px), linear-gradient(90deg, ${colors.text} 1px, transparent 1px)`,
-                  backgroundSize: '40px 40px',
-                }}
-              />
-              {/* Category label centered */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span
-                  className="text-6xl md:text-7xl font-black opacity-[0.08] tracking-wider uppercase select-none"
-                  style={{ color: colors.text }}
-                >
-                  {article.category.split(' ')[0]}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-      <AnimatePresence>
-        {showNotification && (
-          <ArticleNotification title={article.title} onClose={() => setShowNotification(false)} />
-        )}
-      </AnimatePresence>
-    </>
-  );
-}
-
-function ArticleCard({ article, index }: { article: Article; index: number }) {
+function ArticleCard({
+  article,
+  index,
+  onRead,
+}: {
+  article: Article;
+  index: number;
+  onRead: (article: Article) => void;
+}) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isCardInView = useInView(cardRef, { once: true, margin: '-50px' });
   const [isHovered, setIsHovered] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
   const progress = getReadProgress(article.id);
   const color = getCategoryColor(article.category);
   const colors = colorMap[color];
 
   return (
-    <>
-      <motion.div
-        ref={cardRef}
-        className="block group cursor-pointer"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-50px' }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onClick={() => {
-          setShowNotification(true);
-          setTimeout(() => setShowNotification(false), 3000);
-        }}
-      >
-        <div className="blog-card-lift bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6 h-full flex flex-col transition-colors duration-300 group-hover:border-white/[0.12]">
-          <div className="space-y-3 flex-1">
-            <div className="flex items-center justify-between">
-              <CategoryBadge category={article.category} />
-              <ArticleMetaIcons article={article} />
-            </div>
-
-            <h4 className="text-base font-semibold text-white group-hover:text-cyan-400 transition-colors leading-snug">
-              {article.title}
-            </h4>
-
-            <p className="text-slate-400 text-sm leading-relaxed line-clamp-2">
-              {article.excerpt}
-            </p>
+    <motion.div
+      ref={cardRef}
+      className="block group cursor-pointer"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => onRead(article)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onRead(article);
+        }
+      }}
+    >
+      <div className="blog-card-lift bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6 h-full flex flex-col transition-colors duration-300 group-hover:border-white/[0.12]">
+        <div className="space-y-3 flex-1">
+          <div className="flex items-center justify-between">
+            <CategoryBadge category={article.category} />
+            <ArticleMetaIcons article={article} />
           </div>
 
-          {/* Reading progress bar — animates in when card enters viewport */}
-          <div className="mt-4 h-1 w-full rounded-full bg-white/[0.04] overflow-hidden">
-            <div
-              className={`blog-progress-bar h-full rounded-full ${isCardInView ? 'animate' : ''}`}
-              style={{
-                width: `${progress}%`,
-                background: `linear-gradient(90deg, ${colors.text}, ${colors.text}88)`,
-                animationDelay: `${index * 0.15 + 0.3}s`,
-              }}
-            />
-          </div>
+          <h4 className="text-base font-semibold text-white group-hover:text-cyan-400 transition-colors leading-snug">
+            {article.title}
+          </h4>
 
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.05]">
-            <div className="flex items-center gap-3 text-xs text-slate-500">
-              <span className="flex items-center gap-1">
-                <Calendar className="size-3" />
-                {new Date(article.date).toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="size-3" />
-                {article.readTime}
-              </span>
-            </div>
-            {/* "Read →" appears on hover */}
-            <motion.span
-              className="text-cyan-400 text-xs font-medium flex items-center gap-1"
-              initial={{ opacity: 0, x: 6 }}
-              animate={{
-                opacity: isHovered ? 1 : 0,
-                x: isHovered ? 0 : 6,
-              }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-            >
-              Read <ArrowRight className="size-3" />
-            </motion.span>
-          </div>
+          <p className="text-slate-400 text-sm leading-relaxed line-clamp-2">
+            {article.excerpt}
+          </p>
         </div>
-      </motion.div>
-      <AnimatePresence>
-        {showNotification && (
-          <ArticleNotification title={article.title} onClose={() => setShowNotification(false)} />
-        )}
-      </AnimatePresence>
-    </>
+
+        {/* Reading progress bar */}
+        <div className="mt-4 h-1 w-full rounded-full bg-white/[0.04] overflow-hidden">
+          <div
+            className={`blog-progress-bar h-full rounded-full ${isCardInView ? 'animate' : ''}`}
+            style={{
+              width: `${progress}%`,
+              background: `linear-gradient(90deg, ${colors.text}, ${colors.text}88)`,
+              animationDelay: `${index * 0.15 + 0.3}s`,
+            }}
+          />
+        </div>
+
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.05]">
+          <div className="flex items-center gap-3 text-xs text-slate-500">
+            <span className="flex items-center gap-1">
+              <Calendar className="size-3" />
+              {new Date(article.date).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+              })}
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="size-3" />
+              {article.readTime}
+            </span>
+          </div>
+          {/* "Read →" appears on hover */}
+          <motion.span
+            className="text-cyan-400 text-xs font-medium flex items-center gap-1"
+            initial={{ opacity: 0, x: 6 }}
+            animate={{
+              opacity: isHovered ? 1 : 0,
+              x: isHovered ? 0 : 6,
+            }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
+            <BookOpen className="size-3" />
+            Read <ArrowRight className="size-3" />
+          </motion.span>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -294,8 +278,21 @@ export default function BlogSection() {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
+  const [activeArticle, setActiveArticle] = useState<Article | null>(null);
+  const [isReaderOpen, setIsReaderOpen] = useState(false);
+
   const featured = articles[0];
   const rest = articles.slice(1);
+
+  const handleReadArticle = useCallback((article: Article) => {
+    setActiveArticle(article);
+    setIsReaderOpen(true);
+  }, []);
+
+  const handleCloseReader = useCallback(() => {
+    setIsReaderOpen(false);
+    setTimeout(() => setActiveArticle(null), 300);
+  }, []);
 
   return (
     <section id="blog" ref={ref} className="pt-32 pb-20">
@@ -326,16 +323,28 @@ export default function BlogSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.15 }}
         >
-          <FeaturedArticle article={featured} />
+          <FeaturedArticle article={featured} onRead={handleReadArticle} />
         </motion.div>
 
         {/* Article Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {rest.map((article, index) => (
-            <ArticleCard key={article.id} article={article} index={index} />
+            <ArticleCard
+              key={article.id}
+              article={article}
+              index={index}
+              onRead={handleReadArticle}
+            />
           ))}
         </div>
       </div>
+
+      {/* Article Reader Modal */}
+      <ArticleReaderModal
+        article={activeArticle}
+        isOpen={isReaderOpen}
+        onClose={handleCloseReader}
+      />
     </section>
   );
 }

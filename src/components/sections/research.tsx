@@ -1,13 +1,20 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { motion, useInView, AnimatePresence, LayoutGroup } from 'framer-motion';
-import { Code, GitBranch, Sigma, ArrowRight } from 'lucide-react';
+import { Code, GitBranch, Sigma, ArrowRight, BookOpen } from 'lucide-react';
 import { articles, blogCategories } from '@/lib/data';
 import type { Article } from '@/lib/data';
+import ArticleReaderModal from '@/components/article-reader-modal';
 
 /* ─── article card ─── */
-function ArticleCard({ article }: { article: Article }) {
+function ArticleCard({
+  article,
+  onRead,
+}: {
+  article: Article;
+  onRead: (article: Article) => void;
+}) {
   return (
     <motion.article
       layout
@@ -15,7 +22,16 @@ function ArticleCard({ article }: { article: Article }) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
-      className="hover-lift rounded-2xl border border-white/[0.06] bg-[#0F1117] p-6"
+      className="group cursor-pointer rounded-2xl border border-white/[0.06] bg-[#0F1117] p-6 hover:border-white/[0.12] transition-colors duration-300"
+      onClick={() => onRead(article)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onRead(article);
+        }
+      }}
     >
       {/* Top row: category + date + read time */}
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -28,7 +44,7 @@ function ArticleCard({ article }: { article: Article }) {
       </div>
 
       {/* Title */}
-      <h3 className="mt-4 text-lg font-semibold leading-snug text-white">
+      <h3 className="mt-4 text-lg font-semibold leading-snug text-white group-hover:text-cyan-400 transition-colors">
         {article.title}
       </h3>
 
@@ -74,13 +90,11 @@ function ArticleCard({ article }: { article: Article }) {
         </div>
 
         {/* Read link */}
-        <a
-          href="#"
-          className="group mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-cyan-400 transition-colors hover:text-cyan-300"
-        >
-          Read Article
+        <div className="flex items-center gap-1.5 text-sm font-medium text-cyan-400 group-hover:text-cyan-300 transition-colors">
+          <BookOpen className="h-3.5 w-3.5" />
+          <span>Read Article</span>
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-        </a>
+        </div>
       </div>
     </motion.article>
   );
@@ -91,11 +105,24 @@ export default function Research() {
   const headerRef = useRef<HTMLDivElement>(null);
   const isHeaderInView = useInView(headerRef, { once: true, margin: '-80px' });
   const [activeCategory, setActiveCategory] = useState('All');
+  const [activeArticle, setActiveArticle] = useState<Article | null>(null);
+  const [isReaderOpen, setIsReaderOpen] = useState(false);
 
   const filteredArticles =
     activeCategory === 'All'
       ? articles
       : articles.filter((a) => a.category === activeCategory);
+
+  const handleReadArticle = useCallback((article: Article) => {
+    setActiveArticle(article);
+    setIsReaderOpen(true);
+  }, []);
+
+  const handleCloseReader = useCallback(() => {
+    setIsReaderOpen(false);
+    // Delay clearing article so close animation plays
+    setTimeout(() => setActiveArticle(null), 300);
+  }, []);
 
   return (
     <section id="research" className="pb-20 pt-32">
@@ -116,6 +143,10 @@ export default function Research() {
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
             Technical Deep Dives
           </h2>
+          <p className="mt-4 text-lg text-slate-400 max-w-2xl leading-relaxed">
+            In-depth technical articles covering production AI systems, from attention
+            optimization to multi-agent architecture. Click any article to read the full content.
+          </p>
         </motion.div>
 
         {/* Category filter bar */}
@@ -134,7 +165,7 @@ export default function Research() {
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`shrink-0 rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
+                  className={`shrink-0 rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-200 cursor-pointer ${
                     isActive
                       ? 'border-cyan-500/20 bg-cyan-500/10 text-cyan-400'
                       : 'border-transparent bg-white/[0.03] text-muted-foreground hover:bg-white/[0.06] hover:text-white'
@@ -156,7 +187,11 @@ export default function Research() {
           >
             <AnimatePresence mode="popLayout">
               {filteredArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
+                <ArticleCard
+                  key={article.id}
+                  article={article}
+                  onRead={handleReadArticle}
+                />
               ))}
             </AnimatePresence>
           </motion.div>
@@ -173,6 +208,13 @@ export default function Research() {
           </motion.div>
         )}
       </div>
+
+      {/* Article Reader Modal */}
+      <ArticleReaderModal
+        article={activeArticle}
+        isOpen={isReaderOpen}
+        onClose={handleCloseReader}
+      />
     </section>
   );
 }

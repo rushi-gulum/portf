@@ -1,0 +1,1046 @@
+     1→/* deterministic seeded random for SSR hydration consistency */
+     2→function seededRandom(seed: number) {
+     3→  let s = seed;
+     4→  return () => {
+     5→    s = (s * 16807 + 0) % 2147483647;
+     6→    return (s - 1) / 2147483646;
+     7→  };
+     8→}
+     9→
+    10→function generateActivity(seed: number) {
+    11→  const rng = seededRandom(seed);
+    12→  return Array.from({ length: 52 }, () =>
+    13→    Array.from({ length: 7 }, () => Math.floor(rng() * 5))
+    14→  );
+    15→}
+    16→
+    17→export interface Project {
+    18→  id: string;
+    19→  title: string;
+    20→  description: string;
+    21→  longDescription: string;
+    22→  tags: string[];
+    23→  metrics: { label: string; value: string }[];
+    24→  architecture: string[];
+    25→  github: string;
+    26→  demo: string;
+    27→  article: string;
+    28→  color: 'cyan' | 'purple' | 'blue' | 'green' | 'amber';
+    29→  size: 'large' | 'medium' | 'small';
+    30→  image?: string;
+    31→}
+    32→
+    33→export interface CaseStudy {
+    34→  id: string;
+    35→  title: string;
+    36→  problem: string;
+    37→  dataset: string;
+    38→  architecture: string;
+    39→  modelSelection: string;
+    40→  trainingPipeline: string;
+    41→  infrastructure: string;
+    42→  tradeoffs: string;
+    43→  lessonsLearned: string;
+    44→  deployment: string;
+    45→  tags: string[];
+    46→  metrics: { label: string; value: string }[];
+    47→}
+    48→
+    49→export interface Repository {
+    50→  id: string;
+    51→  name: string;
+    52→  description: string;
+    53→  language: string;
+    54→  languageColor: string;
+    55→  stars: number;
+    56→  forks: number;
+    57→  commits: number;
+    58→  contributors: number;
+    59→  lastCommit: string;
+    60→  activity: number[][];
+    61→  topics: string[];
+    62→}
+    63→
+    64→export interface ArticleContentSection {
+    65→  id: string;
+    66→  heading: string;
+    67→ content: string[];
+    68→  codeBlock?: { language: string; code: string; caption?: string };
+    69→  callout?: { type: 'tip' | 'warning' | 'info'; text: string };
+    70→  keyTakeaway?: string;
+    71→}
+    72→
+    73→export interface Article {
+    74→  id: string;
+    75→  title: string;
+    76→  excerpt: string;
+    77→  category: string;
+    78→  date: string;
+    79→  readTime: string;
+    80→  tags: string[];
+    81→  hasCode: boolean;
+    82→  hasDiagrams: boolean;
+    83→  hasEquations: boolean;
+    84→  content: ArticleContentSection[];
+    85→}
+    86→
+    87→export interface TimelineItem {
+    88→  id: string;
+    89→  year: string;
+    90→  role: string;
+    91→  company: string;
+    92→  description: string;
+    93→  highlights: string[];
+    94→  type: 'work' | 'research' | 'talk' | 'award' | 'publication';
+    95→  metrics?: string[];
+    96→}
+    97→
+    98→export interface TechItem {
+    99→  name: string;
+   100→  category: string;
+   101→  icon: string;
+   102→  connections: string[];
+   103→}
+   104→
+   105→export const personalInfo = {
+   106→  name: "Alex Chen",
+   107→  role: "AI Engineer",
+   108→  tagline: "Build • Research • Deploy",
+   109→  bio: "Building production AI systems at the intersection of research and engineering. Specializing in LLMs, RAG pipelines, AI agents, and scalable ML infrastructure.",
+   110→  currentlyBuilding: "Multi-agent orchestration framework",
+   111→  latestResearch: "Attention-efficient transformer architectures",
+   112→  latestRelease: "v2.4 — Agent Runtime SDK",
+   113→  email: "alex@alexchen.dev",
+   114→  github: "https://github.com/alexchen",
+   115→  linkedin: "https://linkedin.com/in/alexchen",
+   116→  twitter: "https://x.com/alexchen_ai",
+   117→  calendar: "https://cal.com/alexchen",
+   118→  avatarUrl: "",
+   119→};
+   120→
+   121→export const projects: Project[] = [
+   122→  {
+   123→    id: "nexus-rag",
+   124→    title: "Nexus RAG",
+   125→    description: "Production-grade retrieval-augmented generation pipeline with hybrid search, reranking, and adaptive chunking. Serving 50K+ queries/day.",
+   126→    longDescription: "A fully productionized RAG system handling document ingestion, chunking, embedding, hybrid search, reranking, and LLM generation with comprehensive observability.",
+   127→    tags: ["RAG", "LangChain", "Pinecone", "FastAPI", "Redis"],
+   128→    metrics: [
+   129→      { label: "Queries/Day", value: "50K+" },
+   130→      { label: "p95 Latency", value: "180ms" },
+   131→      { label: "Retrieval Acc.", value: "94.2%" },
+   132→      { label: "Cost/Query", value: "$0.002" },
+   133→    ],
+   134→    architecture: ["Document Ingestion", "Adaptive Chunking", "Hybrid Search", "Cross-Encoder Reranker", "LLM Generation", "Streaming Response"],
+   135→    github: "https://github.com/alexchen/nexus-rag",
+   136→    demo: "#",
+   137→    article: "#",
+   138→    color: "cyan",
+   139→    size: "large",
+   140→  },
+   141→  {
+   142→    id: "agent-runtime",
+   143→    title: "Agent Runtime",
+   144→    description: "Lightweight, composable framework for building multi-agent AI systems with tool use, memory, and structured output.",
+   145→    longDescription: "A runtime SDK for orchestrating multiple AI agents with shared memory, tool registries, and streaming. Designed for production workloads.",
+   146→    tags: ["AI Agents", "TypeScript", "Streaming", "Tools", "Memory"],
+   147→    metrics: [
+   148→      { label: "Downloads", value: "12K/mo" },
+   149→      { label: "GitHub Stars", value: "2.8K" },
+   150→      { label: "Agents Supported", value: "50+" },
+   151→      { label: "Uptime", value: "99.9%" },
+   152→    ],
+   153→    architecture: ["Agent Orchestrator", "Tool Registry", "Memory Store", "Streaming Pipeline", "Error Recovery", "Observability"],
+   154→    github: "https://github.com/alexchen/agent-runtime",
+   155→    demo: "#",
+   156→    article: "#",
+   157→    color: "purple",
+   158→    size: "large",
+   159→  },
+   160→  {
+   161→    id: "neural-search",
+   162→    title: "Neural Search",
+   163→    description: "Semantic search engine with real-time indexing, multimodal embeddings, and sub-second query latency.",
+   164→    longDescription: "A high-performance semantic search system supporting text, image, and audio queries with real-time indexing and intelligent caching.",
+   165→    tags: ["Vector Search", "Embeddings", "Qdrant", "Rust", "gRPC"],
+   166→    metrics: [
+   167→      { label: "Index Size", value: "10M+ vectors" },
+   168→      { label: "Query p99", value: "45ms" },
+   169→      { label: "Recall@10", value: "97.1%" },
+   170→      { label: "Throughput", value: "5K QPS" },
+   171→    ],
+   172→    architecture: ["Multi-modal Encoder", "Real-time Indexer", "HNSW Index", "Query Router", "Result Reranker", "Cache Layer"],
+   173→    github: "https://github.com/alexchen/neural-search",
+   174→    demo: "#",
+   175→    article: "#",
+   176→    color: "blue",
+   177→    size: "medium",
+   178→  },
+   179→  {
+   180→    id: "ml-infra",
+   181→    title: "ML Platform",
+   182→    description: "End-to-end ML platform with experiment tracking, model registry, automated training, and canary deployments.",
+   183→    longDescription: "Full lifecycle ML platform managing experiments, model versioning, training pipelines, and production deployments with monitoring.",
+   184→    tags: ["MLOps", "Kubernetes", "MLflow", "Terraform", "Prometheus"],
+   185→    metrics: [
+   186→      { label: "Models Deployed", value: "200+" },
+   187→      { label: "Training Jobs/mo", value: "1.2K" },
+   188→      { label: "GPU Utilization", value: "89%" },
+   189→      { label: "Deploy Time", value: "< 5min" },
+   190→    ],
+   191→    architecture: ["Experiment Tracker", "Model Registry", "Training Orchestrator", "Serving Engine", "Canary Deployer", "Monitoring"],
+   192→    github: "https://github.com/alexchen/ml-platform",
+   193→    demo: "#",
+   194→    article: "#",
+   195→    color: "green",
+   196→    size: "medium",
+   197→  },
+   198→  {
+   199→    id: "prompt-lab",
+   200→    title: "Prompt Lab",
+   201→    description: "Systematic prompt engineering toolkit with A/B testing, version control, and automated evaluation.",
+   202→    longDescription: "A development environment for prompt engineering with systematic testing, evaluation, and optimization capabilities.",
+   203→    tags: ["Prompt Engineering", "LLM", "Evaluation", "A/B Testing"],
+   204→    metrics: [
+   205→      { label: "Prompts Managed", value: "5K+" },
+   206→      { label: "Test Runs", value: "100K+" },
+   207→      { label: "Avg. Improvement", value: "+23%" },
+   208→      { label: "Models Tested", value: "15+" },
+   209→    ],
+   210→    architecture: ["Prompt Editor", "Version Control", "A/B Runner", "Auto Evaluator", "Analytics Dashboard", "Export Pipeline"],
+   211→    github: "https://github.com/alexchen/prompt-lab",
+   212→    demo: "#",
+   213→    article: "#",
+   214→    color: "amber",
+   215→    size: "small",
+   216→  },
+   217→  {
+   218→    id: "data-pipeline",
+   219→    title: "StreamForge",
+   220→    description: "Real-time data pipeline framework for ML training data with schema validation and quality gates.",
+   221→    longDescription: "A high-throughput data processing framework for preparing ML training data with built-in quality controls.",
+   222→    tags: ["Data Pipeline", "Kafka", "Spark", "Great Expectations"],
+   223→    metrics: [
+   224→      { label: "Throughput", value: "2M events/s" },
+   225→      { label: "Pipeline Uptime", value: "99.99%" },
+   226→      { label: "Data Quality", value: "99.7%" },
+   227→      { label: "Sources", value: "40+" },
+   228→    ],
+   229→    architecture: ["Ingestion Layer", "Schema Validator", "Transform Engine", "Quality Gates", "Output Sink", "Monitoring"],
+   230→    github: "https://github.com/alexchen/streamforge",
+   231→    demo: "#",
+   232→    article: "#",
+   233→    color: "cyan",
+   234→    size: "small",
+   235→  },
+   236→];
+   237→
+   238→export const caseStudies: CaseStudy[] = [
+   239→  {
+   240→    id: "cs-rag-production",
+   241→    title: "Scaling RAG to 50K Daily Queries",
+   242→    problem: "Enterprise knowledge base needed instant, accurate answers from 2M+ documents across multiple departments with strict latency requirements.",
+   243→    dataset: "2.1M documents, 47 departments, mixed formats (PDF, DOCX, HTML, Confluence)",
+   244→    architecture: "Multi-stage pipeline: Preprocessing → Adaptive Chunking (512-2048 tokens) → Hybrid Embedding (BGE-Large + ColBERT) → HNSW Index (Pinecone) → Cross-Encoder Reranker → LLM Synthesis",
+   245→    modelSelection: "BGE-large-en-v1.5 for embeddings (balance of quality/speed), Cohere Command R+ for generation, bge-reranker-large for reranking",
+   246→    trainingPipeline: "Fine-tuned embedding model on domain-specific pairs using LoRA. Evaluated retrieval with NDCG@10, MRR, and relevance annotations from domain experts.",
+   247→    infrastructure: "FastAPI on Kubernetes with HPA, Redis for caching, Pinecone pod-based index, Kafka for async processing, Grafana + Prometheus for observability",
+   248→    tradeoffs: "Chose Pinecone over self-hosted for faster time-to-production. Accepted 2x cost increase for managed service. Traded 1% retrieval accuracy for 3x latency improvement.",
+   249→    lessonsLearned: "Adaptive chunking based on document structure significantly outperformed fixed-size. Caching common queries reduced costs by 40%. Reranker was the highest-ROI addition.",
+   250→    deployment: "Blue-green deployment with automated canary analysis. Gradual rollout: 5% → 25% → 100% over 2 weeks. Automated rollback on latency spike.",
+   251→    tags: ["RAG", "Production", "Enterprise", "Search"],
+   252→    metrics: [
+   253→      { label: "Queries/Day", value: "50K+" },
+   254→      { label: "p95 Latency", value: "180ms" },
+   255→      { label: "User Satisfaction", value: "4.7/5" },
+   256→      { label: "Cost Reduction", value: "40%" },
+   257→    ],
+   258→  },
+   259→  {
+   260→    id: "cs-agents",
+   261→    title: "Building a Multi-Agent Customer Support System",
+   262→    problem: "Support team handling 10K tickets/week with 15-min SLA. Need intelligent routing, auto-resolution for common cases, and AI-assisted agents.",
+   263→    dataset: "3 years of support tickets (1.5M), resolution guides (800+), product documentation, Slack conversations",
+   264→    architecture: "Orchestrator Agent → Router (intent classification) → Specialist Agents (Billing, Technical, Account) → Tool Layer (CRM, Knowledge Base, Order System) → Response Generator",
+   265→    modelSelection: "GPT-4o for complex reasoning, GPT-4o-mini for classification/routing, fine-tuned Llama 3 8B for common patterns to reduce costs",
+   266→    trainingPipeline: "Fine-tuned classifier on 500K labeled tickets. Prompt engineering for specialist agents. A/B testing framework for continuous improvement.",
+   267→    infrastructure: "Agent Runtime SDK on EKS, DynamoDB for conversation state, SQS for async processing, CloudWatch for monitoring, custom evaluation pipeline",
+   268→    tradeoffs: "Hybrid model strategy (GPT-4o + fine-tuned Llama) reduced costs by 65% while maintaining quality. Accepted higher cold-start time for specialist agents.",
+   269→    lessonsLearned: "Clear agent boundaries are crucial. Overlapping responsibilities cause confusion. Tool-use reliability > model intelligence. Human-in-the-loop for edge cases is non-negotiable.",
+   270→    deployment: "Shadow mode for 1 week, then 20% traffic for 2 weeks. Automated quality scoring on every interaction. Gradual autonomy increase based on confidence thresholds.",
+   271→    tags: ["AI Agents", "Production", "Support", "Multi-Agent"],
+   272→    metrics: [
+   273→      { label: "Auto-Resolution", value: "62%" },
+   274→      { label: "Avg. Handle Time", value: "-45%" },
+   275→      { label: "CSAT Score", value: "+18%" },
+   276→      { label: "Cost/Ticket", value: "-65%" },
+   277→    ],
+   278→  },
+   279→];
+   280→
+   281→export const repositories: Repository[] = [
+   282→  {
+   283→    id: "repo-1",
+   284→    name: "agent-runtime",
+   285→    description: "Lightweight, composable framework for building multi-agent AI systems with tool use, memory, and streaming.",
+   286→    language: "TypeScript",
+   287→    languageColor: "#3178C6",
+   288→    stars: 2847,
+   289→    forks: 234,
+   290→    commits: 892,
+   291→    contributors: 47,
+   292→    lastCommit: "2 hours ago",
+   293→    activity: generateActivity(42),
+   294→    topics: ["ai-agents", "llm", "multi-agent", "tool-use", "streaming"],
+   295→  },
+   296→  {
+   297→    id: "repo-2",
+   298→    name: "nexus-rag",
+   299→    description: "Production-grade RAG pipeline with hybrid search, reranking, and adaptive chunking.",
+   300→    language: "Python",
+   301→    languageColor: "#3572A5",
+   302→    stars: 5621,
+   303→    forks: 612,
+   304→    commits: 1247,
+   305→    contributors: 83,
+   306→    lastCommit: "5 hours ago",
+   307→    activity: generateActivity(137),
+   308→    topics: ["rag", "search", "llm", "production", "embeddings"],
+   309→  },
+   310→  {
+   311→    id: "repo-3",
+   312→    name: "neural-search",
+   313→    description: "High-performance semantic search with real-time indexing and multimodal embeddings.",
+   314→    language: "Rust",
+   315→    languageColor: "#DEA584",
+   316→    stars: 3892,
+   317→    forks: 289,
+   318→    commits: 1563,
+   319→    contributors: 34,
+   320→    lastCommit: "1 day ago",
+   321→    activity: generateActivity(256),
+   322→    topics: ["search", "vector", "embeddings", "rust", "performance"],
+   323→  },
+   324→  {
+   325→    id: "repo-4",
+   326→    name: "prompt-lab",
+   327→    description: "Systematic prompt engineering toolkit with A/B testing and automated evaluation.",
+   328→    language: "Python",
+   329→    languageColor: "#3572A5",
+   330→    stars: 1956,
+   331→    forks: 178,
+   332→    commits: 634,
+   333→    contributors: 29,
+   334→    lastCommit: "3 days ago",
+   335→    activity: generateActivity(389),
+   336→    topics: ["prompt-engineering", "llm", "evaluation", "a-b-testing"],
+   337→  },
+   338→  {
+   339→    id: "repo-5",
+   340→    name: "ml-platform",
+   341→    description: "End-to-end ML platform with experiment tracking, model registry, and automated deployments.",
+   342→    language: "Python",
+   343→    languageColor: "#3572A5",
+   344→    stars: 4231,
+   345→    forks: 456,
+   346→    commits: 2100,
+   347→    contributors: 67,
+   348→    lastCommit: "12 hours ago",
+   349→    activity: generateActivity(512),
+   350→    topics: ["mlops", "ml-platform", "kubernetes", "experiment-tracking"],
+   351→  },
+   352→  {
+   353→    id: "repo-6",
+   354→    name: "streamforge",
+   355→    description: "Real-time data pipeline framework for ML training data with quality gates.",
+   356→    language: "Go",
+   357→    languageColor: "#00ADD8",
+   358→    stars: 1678,
+   359→    forks: 145,
+   360→    commits: 923,
+   361→    contributors: 21,
+   362→    lastCommit: "2 days ago",
+   363→    activity: generateActivity(777),
+   364→    topics: ["data-pipeline", "streaming", "ml-data", "quality"],
+   365→  },
+   366→];
+   367→
+   368→export const articles: Article[] = [
+   369→  {
+   370→    id: "art-1",
+   371→    title: "Attention Is All You Need: A Production Engineer's Guide",
+   372→    excerpt: "Deep dive into transformer attention mechanisms with practical optimization strategies for production deployment, including Flash Attention, KV caching, and PagedAttention.",
+   373→    category: "Deep Learning",
+   374→    date: "2024-12-15",
+   375→    readTime: "18 min",
+   376→    tags: ["Transformers", "Attention", "Optimization"],
+   377→    hasCode: true,
+   378→    hasDiagrams: true,
+   379→    hasEquations: true,
+   380→    content: [
+   381→      {
+   382→        id: "s1",
+   383→        heading: "Why Attention Matters in Production",
+   384→        content: [
+   385→          "The self-attention mechanism is the cornerstone of modern transformer architectures. While the original paper 'Attention Is All You Need' introduced the concept, production engineers face a different set of challenges than researchers. In production, we care about memory footprint, inference latency, and throughput — all of which are dominated by the quadratic cost of attention.",
+   386→          "For a sequence length N and hidden dimension d, standard attention requires O(N² · d) memory and compute. With modern LLMs processing 128K+ token contexts, this becomes the primary bottleneck. A 70B parameter model with 128K context requires over 120GB of memory just for the KV cache alone.",
+   387→          "This article bridges the gap between the theoretical understanding of attention and the practical optimization techniques that make production deployment feasible. We'll cover Flash Attention, KV caching, PagedAttention, and Grouped-Query Attention — the four pillars of production attention optimization."
+   388→        ],
+   389→        callout: { type: "info", text: "This guide focuses on inference-time optimization. For training-time attention efficiency, see our companion article on Ring Attention and Sequence Parallelism." },
+   390→      },
+   391→      {
+   392→        id: "s2",
+   393→        heading: "Standard Attention: The Baseline",
+   394→        content: [
+   395→          "Let's start with the mathematical formulation. For a query matrix Q, key matrix K, and value matrix V, the attention output is:",
+   396→          "Attention(Q, K, V) = softmax(QKᵀ / √d_k) · V",
+   397→          "The softmax computation over N tokens produces an N×N attention matrix. For each token, we compute a weighted sum over all V vectors. The memory bottleneck isn't the parameters — it's the intermediate attention scores.",
+   398→          "In production, this means a single forward pass through a 32-layer transformer with 128K context requires storing 32 separate N×N attention matrices during computation. Even with float16, this is prohibitive."
+   399→        ]
+   400→      },
+   401→      {
+   402→        id: "s3",
+   403→        heading: "Flash Attention: IO-Aware Exact Attention",
+   404→        content: [
+   405→          "Flash Attention (Dao et al., 2022) is perhaps the most impactful optimization for production attention. The key insight is that the standard attention implementation is memory-bandwidth bound, not compute bound. By reorganizing the computation to be IO-aware, Flash Attention achieves 2-4× speedups with exact results.",
+   406→          "The technique works by tiling the Q, K, V matrices and computing attention in blocks stored in SRAM (fast on-chip memory) rather than HBM (slow GPU memory). This reduces the number of HBM reads/writes from O(N²) to O(N²/M) where M is the tile size.",
+   407→          "Flash Attention 2 (2023) further improves this by parallelizing the attention computation across the sequence length dimension and better utilizing GPU warps. In our benchmarks, Flash Attention 2 achieves 2.3× speedup over Flash Attention 1 on A100 GPUs."
+   408→        ],
+   409→        codeBlock: {
+   410→          language: "python",
+   411→          code: `# Standard attention (memory-inefficient)
+   412→def standard_attention(Q, K, V):
+   413→    scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)
+   414→    attn_weights = F.softmax(scores, dim=-1)
+   415→    return torch.matmul(attn_weights, V)
+   416→
+   417→# Flash Attention (memory-efficient, exact)
+   418→from flash_attn import flash_attn_func
+   419→output = flash_attn_func(q, k, v, causal=True)`,
+   420→          caption: "Flash Attention drops in as a simple replacement with 2-4× speedup"
+   421→        },
+   422→      },
+   423→      {
+   424→        id: "s4",
+   425→        heading: "KV Cache: Avoiding Redundant Computation",
+   426→        content: [
+   427→          "In autoregressive generation, each new token only needs to attend to previous tokens. Without caching, we'd recompute attention for all previous positions at each step. The KV cache stores the key and value projections from all previous positions.",
+   428→          "However, the KV cache grows linearly with sequence length. For a 70B model with 128K context, the KV cache alone requires approximately 120GB of memory. This is often the binding constraint on maximum context length.",
+   429→          "Multi-Query Attention (MQA) and Grouped-Query Attention (GQA) address this by sharing K and V heads across multiple Q heads. Llama 2 uses GQA with 8 KV heads for 64 Q heads, reducing KV cache size by 8× with minimal quality loss."
+   430→        ],
+   431→        codeBlock: {
+   432→          language: "python",
+   433→          code: `# KV Cache memory calculation
+   434→def kv_cache_memory(
+   435→    num_layers: int,
+   436→    num_kv_heads: int,
+   437→    head_dim: int,
+   438→    seq_len: int,
+   439→    batch_size: int = 1,
+   440→    bytes_per_param: int = 2,  # fp16
+   441→) -> float:
+   442→    return (
+   443→        num_layers * num_kv_heads * head_dim
+   444→        * seq_len * batch_size * bytes_per_param
+   445→    ) / (1024 ** 3)  # in GB
+   446→
+   447→# Llama 2 70B: 32 layers, 8 KV heads, 128 dim
+   448→# At 128K context: ~120 GB
+   449→print(f"KV Cache: {kv_cache_memory(32, 8, 128, 128_000):.1f} GB")`,
+   450→          caption: "KV cache memory scales linearly with sequence length"
+   451→        },
+   452→        callout: { type: "tip", text: "Use GQA (8 KV heads for 64 Q heads) to reduce KV cache by 8×. Llama 2, Mistral, and most modern models use this approach." },
+   453→      },
+   454→      {
+   455→        id: "s5",
+   456→        heading: "PagedAttention: Virtual Memory for KV Cache",
+   457→        content: [
+   458→          "PagedAttention, implemented in vLLM, applies the concept of virtual memory paging to the KV cache. Instead of pre-allocating contiguous memory for the maximum sequence length, it divides the KV cache into fixed-size blocks and allocates them on demand.",
+   459→          "This eliminates memory fragmentation and enables dynamic batching — serving multiple requests with different sequence lengths efficiently. In production, vLLM with PagedAttention achieves 2-4× higher throughput compared to naive continuous batching.",
+   460→          "The key insight is that most requests have highly variable sequence lengths. Pre-allocating for worst-case wastes memory; PagedAttention allocates exactly what's needed and reclaims blocks when requests complete."
+   461→        ],
+   462→        codeBlock: {
+   463→          language: "python",
+   464→          code: `# vLLM with PagedAttention
+   465→from vllm import LLM, SamplingParams
+   466→
+   467→llm = LLM(
+   468→    model="meta-llama/Llama-2-70b-chat-hf",
+   469→    tensor_parallel_size=4,
+   470→    gpu_memory_utilization=0.90,
+   471→    max_model_len=8192,
+   472→)
+   473→
+   474→params = SamplingParams(temperature=0.0, max_tokens=256)
+   475→outputs = llm.generate(["Explain RAG in 3 steps"], params)`,
+   476→          caption: "vLLM uses PagedAttention for efficient KV cache management"
+   477→        },
+   478→      },
+   479→      {
+   480→        id: "s6",
+   481→        heading: "Putting It All Together: Production Recommendations",
+   482→        content: [
+   483→          "Based on our experience deploying models serving 10M+ requests per day, here are the practical recommendations for production attention optimization:",
+   484→          "1. Always use Flash Attention 2 — it's a drop-in replacement with zero quality loss and 2-4× speedup.",
+   485→          "2. Use GQA models when available — they reduce KV cache by 4-8× with minimal quality impact.",
+   486→          "3. Use vLLM or TensorRT-LLM for serving — both implement PagedAttention and continuous batching.",
+   487→          "4. Profile your actual context length distribution — most production queries use much shorter contexts than the maximum.",
+   488→          "5. Consider speculative decoding for latency-sensitive applications — it can reduce decoding latency by 2-3×."
+   489→        ],
+   490→        keyTakeaway: "The combination of Flash Attention + GQA + PagedAttention reduces memory by 8× and increases throughput by 3-4× compared to baseline attention, making 128K+ context feasible in production."
+   491→      },
+   492→    ],
+   493→  },
+   494→  {
+   495→    id: "art-2",
+   496→    title: "Building RAG Systems That Actually Work at Scale",
+   497→    excerpt: "Lessons from deploying RAG to production: chunking strategies, retrieval evaluation, reranking pipelines, and the architectural decisions that matter.",
+   498→    category: "RAG",
+   499→    date: "2024-11-28",
+   500→    readTime: "22 min",
+   501→    tags: ["RAG", "Production", "Search"],
+   502→    hasCode: true,
+   503→    hasDiagrams: true,
+   504→    hasEquations: false,
+   505→    content: [
+   506→      {
+   507→        id: "s1",
+   508→        heading: "The Gap Between Prototype and Production",
+   509→        content: [
+   510→          "Every AI engineer has experienced it: the RAG demo that works perfectly on 10 documents falls apart on 10,000. Retrieval accuracy drops, latency spikes, costs explode, and the system that was 'almost ready' needs months of engineering work.",
+   511→          "After deploying RAG systems serving 50K+ queries/day across enterprise knowledge bases with 2M+ documents, I've learned that the gap between prototype and production comes down to a handful of critical decisions — most of which have nothing to do with the LLM itself.",
+   512→          "This article distills those lessons into actionable guidance. We'll cover the decisions that actually matter: chunking strategies, retrieval evaluation frameworks, reranking pipelines, and the architectural patterns that scale."
+   513→        ],
+   514→      },
+   515→      {
+   516→        id: "s2",
+   517→        heading: "Chunking: The Most Underrated Decision",
+   518→        content: [
+   519→          "Chunking is often treated as an afterthought — set a fixed window of 512 tokens and move on. In practice, chunking strategy has an outsized impact on retrieval quality. We've seen 20-40% improvements in retrieval accuracy just from better chunking.",
+   520→          "The key insight is that documents have structure, and respecting that structure produces better chunks than naive splitting. A code document should be split at function boundaries. A legal document at clause boundaries. A research paper at section boundaries."
+   521→        ],
+   522→        codeBlock: {
+   523→          language: "python",
+   524→          code: `import re
+   525→from typing import List
+   526→
+   527→def structural_chunking(
+   528→    text: str,
+   529→    max_chunk_size: int = 1000,
+   530→    overlap: int = 100
+   531→) -> List[str]:
+   532→    """Split text at natural boundaries."""
+   533→    # Try section headers first
+   534→    sections = re.split(r'\n(?=#{1,3}\\s)', text)
+   535→    chunks = []
+   536→    
+   537→    for section in sections:
+   538→        if len(section) <= max_chunk_size:
+   539→            chunks.append(section)
+   540→        else:
+   541→            # Fall back to paragraph splitting
+   542→            paragraphs = section.split('\n\n')
+   543→            current = ""
+   544→            for p in paragraphs:
+   545→                if len(current) + len(p) > max_chunk_size:
+   546→                    if current:
+   547→                        chunks.append(current)
+   548→                    current = p
+   549→                else:
+   550→                    current = current + "\n\n" + p if current else p
+   551→            if current:
+   552→                chunks.append(current)
+   553→    
+   554→    # Add overlap between chunks
+   555→    final = []
+   556→    for i, chunk in enumerate(chunks):
+   557→        if i > 0:
+   558→            prev_tail = chunks[i-1][-overlap:]
+   559→            chunk = prev_tail + "\n" + chunk
+   560→        final.append(chunk)
+   561→    
+   562→    return final`,
+   563→          caption: "Structural chunking respects document boundaries for better retrieval"
+   564→        },
+   565→        callout: { type: "tip", text: "Always test multiple chunking strategies on your specific data. The 'best' chunking depends entirely on your document types and query patterns." },
+   566→      },
+   567→      {
+   568→        id: "s3",
+   569→        heading: "Retrieval Evaluation: What to Measure and How",
+   570→        content: [
+   571→          "You can't improve what you don't measure. Most teams skip retrieval evaluation and jump straight to end-to-end metrics. This is a mistake — if retrieval fails, no amount of LLM prompting can fix it.",
+   572→          "The three metrics that matter most for retrieval quality are: NDCG@10 (normalized discounted cumulative gain), MRR (mean reciprocal rank), and Recall@K (fraction of relevant documents in top K). Each captures a different aspect of quality.",
+   573→          "We recommend building a golden evaluation set of 200-500 query-document pairs annotated by domain experts. This set serves as your north star for all retrieval experiments."
+   574→        ],
+   575→        codeBlock: {
+   576→          language: "python",
+   577→          code: `from typing import List, Dict
+   578→
+   579→def evaluate_retrieval(
+   580→    queries: List[Dict],
+   581→    retrieved: List[List[str]],
+   582→    k: int = 10
+   583→) -> Dict[str, float]:
+   584→    """Evaluate retrieval quality."""
+   585→    ndcg_scores = []
+   586→    mrr_scores = []
+   587→    recall_scores = []
+   588→    
+   589→    for q, docs in zip(queries, retrieved):
+   590→        relevant = set(q['relevant_ids'])
+   591→        
+   592→        # NDCG@K
+   593→        dcg = sum(1/np.log2(i+2) for i, d in enumerate(docs[:k]) 
+   594→                  if d in relevant)
+   595→        idcg = sum(1/np.log2(i+2) for i in range(min(len(relevant), k)))
+   596→        ndcg_scores.append(dcg/idcg if idcg > 0 else 0)
+   597→        
+   598→        # MRR
+   599→        for i, d in enumerate(docs):
+   600→            if d in relevant:
+   601→                mrr_scores.append(1/(i+1))
+   602→                break
+   603→        
+   604→        # Recall@K
+   605→        recall_scores.append(len(set(docs[:k]) & relevant) / len(relevant))
+   606→    
+   607→    return {
+   608→        'ndcg@10': np.mean(ndcg_scores),
+   609→        'mrr': np.mean(mrr_scores),
+   610→        f'recall@{k}': np.mean(recall_scores),
+   611→    }`,
+   612→          caption: "Retrieval evaluation framework measuring NDCG, MRR, and Recall"
+   613→        },
+   614→      },
+   615→      {
+   616→        id: "s4",
+   617→        heading: "Reranking: The Highest-ROI Addition",
+   618→        content: [
+   619→          "If there's one thing I'd recommend to every RAG team, it's adding a reranker. In our benchmarks, adding a cross-encoder reranker after initial retrieval improved end-to-end answer quality by 25-35% with only 50ms additional latency.",
+   620→          "The reason is simple: bi-encoder retrieval (embeddings + cosine similarity) is fast but coarse. Cross-encoder reranking is slower but much more precise. By using both, you get the best of both worlds — broad recall from embeddings, precise ranking from cross-encoders.",
+   621→          "We use bge-reranker-large as our default. It's fast (~50ms per query on CPU), accurate, and open-source. For specialized domains, fine-tuning on 1K-5K domain-specific query-document pairs can further improve accuracy by 10-15%."
+   622→        ],
+   623→        callout: { type: "info", text: "The reranker is the single highest-ROI component in a RAG pipeline. It consistently provides 25-35% quality improvement for <5% of total latency budget." },
+   624→      },
+   625→      {
+   626→        id: "s5",
+   627→        heading: "Architecture: The Pipeline That Scales",
+   628→        content: [
+   629→          "A production RAG system needs more than retrieval + generation. Here's the architecture we've evolved to after 18 months of production:",
+   630→          "Query Understanding → Hybrid Search (Dense + Sparse) → Candidate Pool → Cross-Encoder Reranker → Context Window Assembly → LLM Generation → Response Validation",
+   631→          "Each stage is independently scalable and observable. We can swap components, A/B test alternatives, and identify exactly where quality degrades."
+   632→        ],
+   633→        codeBlock: {
+   634→          language: "python",
+   635→          code: `# Production RAG pipeline
+   636→async def rag_pipeline(query: str) -> dict:
+   637→    # Stage 1: Query understanding
+   638→    expanded = await query_expander.expand(query)
+   639→    
+   640→    # Stage 2: Hybrid search (dense + sparse)
+   641→    dense_results = await vector_store.search(expanded, k=50)
+   642→    sparse_results = await bm25.search(expanded, k=50)
+   643→    candidates = reciprocal_rank_fusion(dense_results, sparse_results)
+   644→    
+   645→    # Stage 3: Rerank
+   646→    reranked = await reranker.rerank(query, candidates, k=5)
+   647→    
+   648→    # Stage 4: Assemble context
+   649→    context = context_assembler.assemble(reranked, max_tokens=4000)
+   650→    
+   651→    # Stage 5: Generate
+   652→    response = await llm.generate(query, context=context)
+   653→    
+   654→    # Stage 6: Validate
+   655→    validated = await response_validator.validate(response, context)
+   656→    
+   657→    return {"answer": validated.text, "sources": reranked}`,
+   658→          caption: "6-stage production RAG pipeline with full observability"
+   659→        },
+   660→      },
+   661→      {
+   662→        id: "s6",
+   663→        heading: "Key Lessons from 50K Queries/Day",
+   664→        content: [
+   665→          "After handling over 50K queries/day in production for 6 months, here are the lessons that surprised us most:",
+   666→          "1. Caching common queries reduced costs by 40% with no quality impact — 30% of queries are near-duplicates.",
+   667→          "2. The reranker was more important than the embedding model — a good reranker with average embeddings outperformed great embeddings with no reranker.",
+   668→          "3. Adaptive chunking based on document structure significantly outperformed fixed-size chunking across all document types.",
+   669→          "4. Query expansion (generating related queries) helped for vague queries but hurt for specific ones — we now use it conditionally based on query confidence scoring."
+   670→        ],
+   671→        keyTakeaway: "The biggest RAG quality improvements come not from better LLMs but from better retrieval: structural chunking, hybrid search, and cross-encoder reranking together deliver 40-60% improvement in answer quality."
+   672→      },
+   673→    ],
+   674→  },
+   675→  {
+   676→    id: "art-3",
+   677→    title: "The Architecture of Multi-Agent AI Systems",
+   678→    excerpt: "Design patterns for building reliable multi-agent systems: orchestration strategies, tool use, memory management, and failure recovery.",
+   679→    category: "AI Agents",
+   680→    date: "2024-11-10",
+   681→    readTime: "25 min",
+   682→    tags: ["Agents", "Architecture", "Orchestration"],
+   683→    hasCode: true,
+   684→    hasDiagrams: true,
+   685→    hasEquations: false,
+   686→    content: [
+   687→      {
+   688→        id: "s1",
+   689→        heading: "Beyond Single-Agent Systems",
+   690→        content: [
+   691→          "Single-agent systems work well for simple tasks: answer a question, summarize a document, translate text. But complex real-world workflows require multiple specialized agents working together — each with its own instructions, tools, and context.",
+   692→          "The challenge isn't making agents communicate — it's making them communicate reliably. Production multi-agent systems must handle partial failures, conflicting information, circular dependencies, and graceful degradation when one agent fails.",
+   693→          "After building multi-agent systems for customer support, research automation, and content pipelines, I've identified five architectural patterns that consistently produce reliable, maintainable systems."
+   694→        ],
+   695→      },
+   696→      {
+   697→        id: "s2",
+   698→        heading: "Pattern 1: Orchestrator-Worker",
+   699→        content: [
+   700→          "The most common and reliable pattern. A central orchestrator agent decomposes tasks, assigns them to specialist workers, and synthesizes results. The orchestrator maintains the global state and makes routing decisions.",
+   701→          "This pattern works well when tasks can be decomposed into relatively independent subtasks. The key design decision is how much autonomy to give the orchestrator versus hardcoding the workflow."
+   702→        ],
+   703→        codeBlock: {
+   704→          language: "python",
+   705→          code: `class OrchestratorAgent:
+   706→    def __init__(self, workers: Dict[str, WorkerAgent]):
+   707→        self.workers = workers
+   708→        self.memory = ConversationMemory()
+   709→    
+   710→    async def execute(self, task: str) -> str:
+   711→        # Plan: decompose task into subtasks
+   712→        plan = await self.plan(task)
+   713→        
+   714→        results = []
+   715→        for step in plan.steps:
+   716→            worker = self.workers[step.agent_type]
+   717→            
+   718→            # Execute with retry and timeout
+   719→            result = await self._safe_execute(
+   720→                worker, step.prompt, 
+   721→                max_retries=3, timeout=30
+   722→            )
+   723→            results.append(result)
+   724→        
+   725→        # Synthesize final output
+   726→        return await self.synthesize(task, results)
+   727→    
+   728→    async def _safe_execute(self, worker, prompt, **kwargs):
+   729→        for attempt in range(kwargs['max_retries']):
+   730→            try:
+   731→                return await asyncio.wait_for(
+   732→                    worker.execute(prompt), 
+   733→                    timeout=kwargs['timeout']
+   734→                )
+   735→            except (TimeoutError, AgentError) as e:
+   736→                if attempt == kwargs['max_retries'] - 1:
+   737→                    return f"[Agent failed: {e}]"
+   738→                await asyncio.sleep(2 ** attempt)`,
+   739→          caption: "Orchestrator agent with retry logic and timeout handling"
+   740→        },
+   741→        callout: { type: "warning", text: "Avoid giving the orchestrator too much autonomy. Unconstrained agent-to-agent routing leads to unpredictable behavior. Define clear routing rules based on task type." },
+   742→      },
+   743→      {
+   744→        id: "s3",
+   745→        heading: "Pattern 2: Pipeline / Sequential",
+   746→        content: [
+   747→          "For deterministic workflows, a sequential pipeline is the most predictable pattern. Each agent processes the output of the previous one. This is ideal for content pipelines: Research → Outline → Draft → Edit → Publish.",
+   748→          "The advantage is predictability — you always know which agent is running and what data flows between them. The disadvantage is rigidity — you can't easily handle branching logic or dynamic routing."
+   749→        ],
+   750→      },
+   751→      {
+   752→        id: "s4",
+   753→        heading: "Tool Use: The Real Differentiator",
+   754→        content: [
+   755→          "Agent intelligence is determined more by available tools than by the underlying LLM. A GPT-4o agent with no tools is less useful than a GPT-4o-mini agent with well-designed tools for its domain.",
+   756→          "Tool design follows the same principles as API design: clear interfaces, good error messages, idempotent operations, and comprehensive documentation (in the tool description that the agent sees)."
+   757→        ],
+   758→        codeBlock: {
+   759→          language: "python",
+   760→          code: `@tool
+   761→async def search_knowledge_base(
+   762→    query: str, 
+   763→    top_k: int = 5,
+   764→    filters: dict = None
+   765→) -> List[SearchResult]:
+   766→    """Search the internal knowledge base.
+   767→    
+   768→    Use this tool when you need factual information from 
+   769→    company documents, policies, or procedures.
+   770→    
+   771→    Args:
+   772→        query: Natural language search query. Be specific.
+   773→        top_k: Number of results to return (1-20).
+   774→        filters: Optional filters like {"department": "engineering"}
+   775→    
+   776→    Returns:
+   777→        List of relevant document chunks with relevance scores.
+   778→    """
+   779→    return await vector_store.search(
+   780→        query, top_k=top_k, filters=filters
+   781→    )`,
+   782→          caption: "Well-documented tools with clear descriptions improve agent reliability dramatically"
+   783→        },
+   784→      },
+   785→      {
+   786→        id: "s5",
+   787→        heading: "Memory Management",
+   788→        content: [
+   789→          "Agent memory is a spectrum from short-term (conversation context) to long-term (persistent knowledge). Production systems typically need both, plus shared memory between agents.",
+   790→          "Short-term memory is the conversation buffer — typically the last N turns. Long-term memory is a vector store of past interactions that can be searched. Shared memory is what makes multi-agent systems more than the sum of their parts.",
+   791→          "The critical insight: agents should pass structured intermediate results, not raw conversation. When Agent A hands off to Agent B, it should pass a structured summary with key findings, not the full conversation transcript."
+   792→        ],
+   793→      },
+   794→      {
+   795→        id: "s6",
+   796→        heading: "Production Hard Truths",
+   797→        content: [
+   798→          "After deploying multi-agent systems in production, here's what I wish I knew earlier:",
+   799→          "1. Clear agent boundaries are more important than agent intelligence. Overlapping responsibilities cause confusion and inconsistent behavior.",
+   800→          "2. Tool-use reliability matters more than model intelligence. A flaky tool API will cause more problems than a less capable model.",
+   801→          "3. Human-in-the-loop is non-negotiable for edge cases. Design your system so agents can escalate to humans gracefully.",
+   802→          "4. Observability is critical. You need to trace every decision, tool call, and data flow to debug issues.",
+   803→          "5. Start with 2-3 agents, not 10. Complexity grows super-linearly with agent count."  
+   804→        ],
+   805→        keyTakeaway: "The most reliable multi-agent systems use an Orchestrator-Worker pattern with clear boundaries, well-designed tools, structured inter-agent communication, and human-in-the-loop for edge cases."
+   806→      },
+   807→    ],
+   808→  },
+   809→  {
+   810→    id: "art-4",
+   811→    title: "Distributed Training at Scale: From 1 GPU to 1000",
+   812→    excerpt: "Practical guide to distributed training with PyTorch: DDP, FSDP, DeepSpeed, and the infrastructure decisions that determine training throughput.",
+   813→    category: "MLOps",
+   814→    date: "2024-10-22",
+   815→    readTime: "20 min",
+   816→    tags: ["Distributed", "Training", "PyTorch"],
+   817→    hasCode: true,
+   818→    hasDiagrams: true,
+   819→    hasEquations: true,
+   820→  },
+   821→  {
+   822→    id: "art-5",
+   823→    title: "Prompt Engineering Beyond Basics: Systematic Approaches",
+   824→    excerpt: "Moving beyond ad-hoc prompting: evaluation frameworks, automated optimization, prompt versioning, and building a prompt engineering practice.",
+   825→    category: "Prompt Engineering",
+   826→    date: "2024-10-05",
+   827→    readTime: "15 min",
+   828→    tags: ["Prompts", "Evaluation", "Optimization"],
+   829→    hasCode: true,
+   830→    hasDiagrams: false,
+   831→    hasEquations: false,
+   832→  },
+   833→  {
+   834→    id: "art-6",
+   835→    title: "LLM Infrastructure: Serving Models in Production",
+   836→    excerpt: "The complete guide to LLM serving: vLLM, TGI, model quantization, batching strategies, and achieving sub-100ms inference latency.",
+   837→    category: "LLM Engineering",
+   838→    date: "2024-09-18",
+   839→    readTime: "28 min",
+   840→    tags: ["LLM", "Serving", "Infrastructure"],
+   841→    hasCode: true,
+   842→    hasDiagrams: true,
+   843→    hasEquations: false,
+   844→  },
+   845→  {
+   846→    id: "art-7",
+   847→    title: "Vector Databases Compared: Pinecone vs Weaviate vs Qdrant",
+   848→    excerpt: "Benchmarking vector databases across 10M+ vectors: indexing speed, query latency, recall accuracy, and total cost of ownership.",
+   849→    category: "RAG",
+   850→    date: "2024-09-01",
+   851→    readTime: "16 min",
+   852→    tags: ["Vector DB", "Benchmarks", "Search"],
+   853→    hasCode: true,
+   854→    hasDiagrams: true,
+   855→    hasEquations: false,
+   856→  },
+   857→  {
+   858→    id: "art-8",
+   859→    title: "Building Reliable AI Products: Testing & Evaluation",
+   860→    excerpt: "A framework for testing AI systems: unit tests for prompts, integration tests for pipelines, and evaluation metrics that correlate with user satisfaction.",
+   861→    category: "Product Engineering",
+   862→    date: "2024-08-15",
+   863→    readTime: "19 min",
+   864→    tags: ["Testing", "Evaluation", "Quality"],
+   865→    hasCode: true,
+   866→    hasDiagrams: true,
+   867→    hasEquations: false,
+   868→  },
+   869→];
+   870→
+   871→export const timeline: TimelineItem[] = [
+   872→  {
+   873→    id: "tl-1",
+   874→    year: "2024",
+   875→    role: "Senior AI Engineer",
+   876→    company: "Nexus AI",
+   877→    description: "Leading the AI platform team, building production ML infrastructure serving 10M+ users.",
+   878→    highlights: ["Built multi-agent system handling 50K queries/day", "Reduced inference costs by 65%", "Published 3 research papers", "Grew team from 3 to 12 engineers"],
+   879→    type: "work",
+   880→    metrics: ["50K daily queries", "65% cost reduction", "12 team members"],
+   881→  },
+   882→  {
+   883→    id: "tl-2",
+   884→    year: "2024",
+   885→    role: "NeurIPS Workshop Paper",
+   886→    company: "Attention-Efficient Transformers for Production",
+   887→    description: "Presented novel attention mechanism reducing memory usage by 40% without quality degradation.",
+   888→    highlights: ["Accepted at NeurIPS 2024 Workshop", "Open-sourced implementation", "Adopted by 3 production systems"],
+   889→    type: "publication",
+   890→  },
+   891→  {
+   892→    id: "tl-3",
+   893→    year: "2023",
+   894→    role: "AI Engineer",
+   895→    company: "DataScale",
+   896→    description: "Built ML platform and deployed 50+ models to production across the organization.",
+   897→    highlights: ["Designed ML platform serving 200+ models", "Automated training pipeline reducing deploy time 80%", "Keynote at internal engineering summit"],
+   898→    type: "work",
+   899→    metrics: ["200+ models", "80% faster deploys", "99.9% uptime"],
+   900→  },
+   901→  {
+   902→    id: "tl-4",
+   903→    year: "2023",
+   904→    role: "Conference Talk",
+   905→    company: "MLOps Conf Europe",
+   906→    description: "Talk on 'Production RAG: Lessons from 1 Million Queries' — architectural patterns and anti-patterns.",
+   907→    highlights: ["500+ attendees", "Top-rated talk", "Led to 2 enterprise partnerships"],
+   908→    type: "talk",
+   909→  },
+   910→  {
+   911→    id: "tl-2b",
+   912→    year: "2022",
+   913→    role: "ML Engineer",
+   914→    company: "TechCorp",
+   915→    description: "Developed recommendation systems and NLP pipelines for the core product.",
+   916→    highlights: ["Improved recommendation CTR by 35%", "Built NLP pipeline processing 1M+ documents", "Mentored 5 junior engineers"],
+   917→    type: "work",
+   918→    metrics: ["35% CTR improvement", "1M+ documents processed"],
+   919→  },
+   920→  {
+   921→    id: "tl-5",
+   922→    year: "2022",
+   923→    role: "Best Paper Award",
+   924→    company: "ICML Workshop",
+   925→    description: "Awarded best paper for work on efficient fine-tuning methods for large language models.",
+   926→    highlights: ["Best Paper Award", "Cited 200+ times", "Method adopted by major companies"],
+   927→    type: "award",
+   928→  },
+   929→  {
+   930→    id: "tl-6",
+   931→    year: "2021",
+   932→    role: "ML Research Intern → ML Engineer",
+   933→    company: "TechCorp",
+   934→    description: "Started as research intern, transitioned to full-time ML engineering role.",
+   935→    highlights: ["Published first research paper", "Built prototype recommendation system", "Converted to full-time after 3 months"],
+   936→    type: "work",
+   937→  },
+   938→];
+   939→
+   940→export const techStack: TechItem[] = [
+   941→  // Languages
+   942→  { name: "Python", category: "Languages", icon: "🐍", connections: ["PyTorch", "FastAPI", "LangChain"] },
+   943→  { name: "TypeScript", category: "Languages", icon: "🔷", connections: ["Next.js", "Node.js", "React"] },
+   944→  { name: "Rust", category: "Languages", icon: "🦀", connections: ["Vector Search", "High Performance"] },
+   945→  { name: "Go", category: "Languages", icon: "🔵", connections: ["Kubernetes", "Microservices"] },
+   946→
+   947→  // Frameworks
+   948→  { name: "PyTorch", category: "Frameworks", icon: "🔥", connections: ["Python", "Transformers", "Distributed Training"] },
+   949→  { name: "FastAPI", category: "Frameworks", icon: "⚡", connections: ["Python", "REST APIs", "ML Serving"] },
+   950→  { name: "LangChain", category: "Frameworks", icon: "🔗", connections: ["Python", "LLMs", "RAG"] },
+   951→  { name: "Next.js", category: "Frameworks", icon: "▲", connections: ["TypeScript", "React", "Web"] },
+   952→
+   953→  // LLMs
+   954→  { name: "GPT-4o", category: "LLMs", icon: "🧠", connections: ["OpenAI", "Agents", "RAG"] },
+   955→  { name: "Claude", category: "LLMs", icon: "🤖", connections: ["Anthropic", "Agents", "Analysis"] },
+   956→  { name: "Llama 3", category: "LLMs", icon: "🦙", connections: ["Meta", "Fine-tuning", "Open Source"] },
+   957→  { name: "Gemini", category: "LLMs", icon: "💎", connections: ["Google", "Multimodal", "Agents"] },
+   958→
+   959→  // Cloud
+   960→  { name: "AWS", category: "Cloud", icon: "☁️", connections: ["EKS", "SageMaker", "S3"] },
+   961→  { name: "GCP", category: "Cloud", icon: "🌐", connections: ["Vertex AI", "GKE", "BigQuery"] },
+   962→  { name: "Vercel", category: "Cloud", icon: "▲", connections: ["Next.js", "Edge Functions", "Web"] },
+   963→
+   964→  // Databases
+   965→  { name: "PostgreSQL", category: "Databases", icon: "🐘", connections: ["Relational", "pgvector"] },
+   966→  { name: "Redis", category: "Databases", icon: "🔴", connections: ["Caching", "Queue", "Sessions"] },
+   967→  { name: "MongoDB", category: "Databases", icon: "🍃", connections: ["Document", "Flexibility"] },
+   968→
+   969→  // Vector DBs
+   970→  { name: "Pinecone", category: "Vector DBs", icon: "🌲", connections: ["Managed", "Scale", "RAG"] },
+   971→  { name: "Qdrant", category: "Vector DBs", icon: "🟡", connections: ["Open Source", "Rust", "Performance"] },
+   972→  { name: "Weaviate", category: "Vector DBs", icon: "🔵", connections: ["Multi-modal", "GraphQL"] },
+   973→
+   974→  // DevOps
+   975→  { name: "Docker", category: "DevOps", icon: "🐳", connections: ["Containers", "Kubernetes"] },
+   976→  { name: "Kubernetes", category: "DevOps", icon: "☸️", connections: ["Docker", "EKS", "GKE"] },
+   977→  { name: "Terraform", category: "DevOps", icon: "🏗️", connections: ["IaC", "AWS", "GCP"] },
+   978→
+   979→  // MLOps
+   980→  { name: "MLflow", category: "MLOps", icon: "📊", connections: ["Experiments", "Models", "Registry"] },
+   981→  { name: "Weights & Biases", category: "MLOps", icon: "📈", connections: ["Experiments", "Visualization", "Teams"] },
+   982→  { name: "vLLM", category: "MLOps", icon: "🚀", connections: ["Serving", "LLM", "Performance"] },
+   983→];
+   984→
+   985→export const newsletterTopics = [
+   986→  "Weekly AI Engineering Insights",
+   987→  "Production AI Lessons",
+   988→  "Architecture Breakdowns",
+   989→  "Open Source Updates",
+   990→  "New Research Summaries",
+   991→];
+   992→
+   993→export const playgroundDemos = [
+   994→  { id: "demo-llm", title: "LLM Chat", description: "Conversational AI with streaming responses", icon: "MessageSquare", color: "cyan" },
+   995→  { id: "demo-rag", title: "RAG Demo", description: "Retrieval-augmented generation with source citations", icon: "Search", color: "purple" },
+   996→  { id: "demo-image", title: "Image Generation", description: "Text-to-image with diffusion models", icon: "Image", color: "blue" },
+   997→  { id: "demo-voice", title: "Voice AI", description: "Speech-to-text and text-to-speech pipeline", icon: "Mic", color: "green" },
+   998→  { id: "demo-vector", title: "Vector Search", description: "Semantic search across documents", icon: "Database", color: "amber" },
+   999→  { id: "demo-agents", title: "AI Agents", description: "Multi-agent task orchestration", icon: "Bot", color: "purple" },
+  1000→  { id: "demo-prompt", title: "Prompt Sandbox", description: "Experiment with prompt engineering", icon: "Code", color: "cyan" },
+  1001→];
+  1002→
+  1003→export const blogCategories = [
+  1004→  "All",
+  1005→  "LLM Engineering",
+  1006→  "AI Agents",
+  1007→  "RAG",
+  1008→  "MLOps",
+  1009→  "Distributed Systems",
+  1010→  "Deep Learning",
+  1011→  "Prompt Engineering",
+  1012→  "Product Engineering",
+  1013→];
+  1014→
+  1015→export const colorMap = {
+  1016→  cyan: {
+  1017→    bg: "rgba(6, 182, 212, 0.1)",
+  1018→    border: "rgba(6, 182, 212, 0.2)",
+  1019→    text: "#06B6D4",
+  1020→    glow: "rgba(6, 182, 212, 0.15)",
+  1021→  },
+  1022→  purple: {
+  1023→    bg: "rgba(168, 85, 247, 0.1)",
+  1024→    border: "rgba(168, 85, 247, 0.2)",
+  1025→    text: "#A855F7",
+  1026→    glow: "rgba(168, 85, 247, 0.15)",
+  1027→  },
+  1028→  blue: {
+  1029→    bg: "rgba(59, 130, 246, 0.1)",
+  1030→    border: "rgba(59, 130, 246, 0.2)",
+  1031→    text: "#3B82F6",
+  1032→    glow: "rgba(59, 130, 246, 0.15)",
+  1033→  },
+  1034→  green: {
+  1035→    bg: "rgba(16, 185, 129, 0.1)",
+  1036→    border: "rgba(16, 185, 129, 0.2)",
+  1037→    text: "#10B981",
+  1038→    glow: "rgba(16, 185, 129, 0.15)",
+  1039→  },
+  1040→  amber: {
+  1041→    bg: "rgba(245, 158, 11, 0.1)",
+  1042→    border: "rgba(245, 158, 11, 0.2)",
+  1043→    text: "#F59E0B",
+  1044→    glow: "rgba(245, 158, 11, 0.15)",
+  1045→  },
+  1046→};
