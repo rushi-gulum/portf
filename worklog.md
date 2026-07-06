@@ -1,61 +1,111 @@
 # AI Engineer Portfolio - Development Worklog
 
 ## Current Project Status
-- **Phase**: Initial Build Complete
-- **Status**: All 13 sections built and verified
+- **Phase**: Round 4 Complete + Hydration Fix Applied
+- **Status**: Production-ready, 24 components, zero errors, zero hydration warnings
 - **Stack**: Next.js 16, TypeScript, Tailwind CSS 4, shadcn/ui, Framer Motion
-- **Theme**: Dark (#0A0A0A), premium aesthetic (Stripe/Linear/Vercel/OpenAI blend)
+- **Theme**: Dark (#0A0A0A), premium aesthetic (Stripe/Linear/Vercel/OpenAI/Anthropic/GitHub)
+- **Total Components**: 24 section/utility components
+- **Hydration**: Fixed via `next/dynamic` with `ssr: false` — no browser extension mismatches
 
-## Current Goals / Completed Modifications
+## Hydration Fix (Critical)
+- **Problem**: Firefox's form autofill extension injected `fdprocessedid` attributes into SSR'd HTML before React hydrated, causing hydration mismatch warnings
+- **Solution**: Split page into `page.tsx` (client component with `dynamic(ssr:false)`) + `home-page-content.tsx` (all content)
+- **Result**: Zero SSR HTML for page content = zero hydration mismatch possible
+- **Files**: `src/app/page.tsx`, `src/components/home-page-content.tsx`
 
-### Foundation
-- [x] Global CSS with dark theme, custom animations, glassmorphism, glow effects, animated grid, scrollbar styling
-- [x] Layout with proper metadata, dark class, Geist fonts, noise overlay
-- [x] Data layer with projects, case studies, repositories, articles, timeline, tech stack, playground demos
-- [x] Seeded random for SSR hydration consistency (heatmap data)
-- [x] Next.js config with allowedDevOrigins
+## All Components (24 total)
 
-### Sections Built (13 components)
-1. **Neural Network Background** (`neural-network-bg.tsx`) - Canvas-based animated neural network with 50 nodes, 40 particles, mouse reactivity, radial gradient glow
-2. **Navbar** (`navbar.tsx`) - Glassmorphism fixed nav, scroll-hide/show, IntersectionObserver active tracking, mobile Sheet menu, animated active indicator
-3. **Hero** (`hero.tsx`) - Full-screen with neural network bg, staggered framer-motion animations, status indicators, gradient text, CTA buttons
-4. **Projects** (`projects.tsx`) - Bento grid (12-col), 6 project cards with metrics, architecture pipeline hover reveal, color-coded accents
-5. **Case Studies** (`case-studies.tsx`) - Accordion-based expandable cards with 9 editorial subsections each, staggered entrance
-6. **Open Source** (`open-source.tsx`) - GitHub-inspired grid, animated counters, activity heatmaps, topic badges
-7. **Research** (`research.tsx`) - Category filter bar, animated layout transitions, article cards with content-type icons
-8. **AI Playground** (`ai-playground.tsx`) - Demo grid with featured card, animated border effects, color-coded icons
-9. **Tech Stack** (`tech-stack.tsx`) - Categorized tech pills, tooltips for connections, animated grid background
-10. **Timeline** (`timeline.tsx`) - Vertical timeline with alternating left/right cards, type-based colors and icons
-11. **Blog** (`blog.tsx`) - Featured hero card + grid layout, category-colored accents
-12. **Newsletter** (`newsletter.tsx`) - Rotating topic text, glass card, email input
-13. **Contact** (`contact.tsx`) - 5 glass card links with hover effects
-14. **Footer** (`footer.tsx`) - Animated gradient border, social links, mt-auto sticky
+### Core Sections (14)
+1. `navbar.tsx` — Glassmorphism nav, scroll hide/show, IntersectionObserver active state, mobile Sheet
+2. `hero.tsx` — Full-screen with neural network canvas, orbiting particles, typing effect, status cards
+3. `projects.tsx` — Bento grid, 3D tilt, glare effect, rotating conic border, sparklines, Featured badge
+4. `case-studies.tsx` — Accordion expand, code blocks, visual metric bars, key takeaway callouts
+5. `open-source.tsx` — Heatmap with labels, animated counters, sparkline, trending badges, hover tilt
+6. `research.tsx` — Category filters, animated gradient borders, interest bubbles, citation badges
+7. `ai-playground.tsx` — LLM Chat demo + RAG Search demo, pipeline visualization
+8. `tech-stack.tsx` — Interactive constellation, category cards with icons, connection highlighting
+9. `timeline.tsx` — Alternating cards, flowing light, pulsing nodes, Download Resume button
+10. `blog.tsx` — Category filters with counts, reading progress bars, Featured article
+11. `newsletter.tsx` — Rotating text, working subscribe with toast
+12. `contact.tsx` — Working form with validation, ripple cards, availability indicator
+13. `footer.tsx` — Rotating gradient border, tech badges, social links with glow, Back to Top
+14. `neural-network-bg.tsx` — Canvas animation with 50 nodes + 40 particles + mouse response
+
+### Utility Components (7)
+15. `scroll-progress.tsx` — 2px gradient bar (cyan→purple→blue) with spring animation
+16. `scroll-to-top.tsx` — Floating arrow button, AnimatePresence, appears after 500px
+17. `section-divider.tsx` — 3 variants (gradient+glowing dot, dots, line)
+18. `cursor-glow.tsx` — 400px radial cyan glow following cursor, desktop only
+19. `llm-chat-demo.tsx` — Interactive chat with typing indicator, keyword responses
+20. `code-block.tsx` — GitHub-dark theme, syntax highlighting, copy button, line numbers
+21. `rag-search-demo.tsx` — 5-stage pipeline viz, 10 documents, relevance bars, suggested chips
+
+### New Feature Components (3)
+22. `stats-bar.tsx` — 5 animated metrics with count-up, glass container, gradient accent
+23. `command-palette.tsx` — Cmd+K navigation, 11 items, arrow keys, search filtering
+24. `home-page-content.tsx` — Client wrapper for all content (enables ssr:false)
+
+### API Routes (1)
+25. `api/chat/route.ts` — Simulated AI responses with keyword matching
 
 ## Verification Results
-- [x] ESLint passes with zero errors
-- [x] TypeScript compiles successfully
-- [x] HTTP 200 response with full 386KB HTML
-- [x] All 13 sections render in browser (verified via agent-browser snapshot)
+- [x] ESLint: zero errors
+- [x] TypeScript: compiles successfully
+- [x] HTTP 200 response
 - [x] Zero JavaScript console errors
-- [x] Zero hydration warnings (fixed seeded random)
-- [x] All section IDs present: projects, research, opensource, playground, tech-stack, experience, case-studies, blog, contact
+- [x] Zero hydration warnings (fixed with ssr:false)
+- [x] Zero fdprocessedid attributes
+- [x] All 12 sections render correctly
+- [x] Command palette opens with Ctrl+K
+- [x] RAG Search demo: pipeline animation + result display
+- [x] Stats bar count-up animation
+- [x] Blog category filters
+- [x] Contact form with validation
 
 ## Unresolved Issues / Risks
-1. **Server stability**: Next.js dev server occasionally dies under sandbox memory pressure (kata-agent drop_caches). Not a code issue - sandbox resource constraint.
-2. **Potential enhancements**:
-   - Add real API integration for newsletter signup
-   - Add actual demo functionality to AI Playground
-   - Add smooth scroll animation for nav links (currently CSS-based)
-   - Add dark/light mode toggle
-   - Add loading skeleton states for initial page load
-   - Optimize neural network canvas for lower-end devices
-   - Add image generation for project screenshots
-   - Add search/filter functionality across all sections
+1. **Sandbox CORS warning**: allowedDevOrigins — dev-only, cosmetic
+2. **Server memory**: Dev server under sandbox pressure — environment constraint
 
 ## Priority Recommendations for Next Phase
-1. Fix server stability if possible (reduce memory usage of canvas component)
-2. Add interactive functionality to AI Playground demos (LLM chat, RAG demo)
-3. Add real content images/screenshots for projects
-4. Implement smooth scroll with section snap
-5. Add more micro-interactions and polish
-6. Add responsive testing and mobile optimization
+1. Mobile responsiveness testing and improvements
+2. Add project screenshot images (via image-generation skill)
+3. Add more AI Playground demos (Image gen, Voice AI)
+4. Dark/light mode toggle
+5. Optimize neural network canvas for lower-end devices
+6. Keyboard navigation (arrow keys for timeline, Escape to close)
+7. Global search across all sections
+8. Skills & Expertise radar chart section
+9. Newsletter rotating testimonials
+10. Scroll-triggered animations on more elements
+
+---
+Task ID: fix-2
+Agent: full-stack-developer
+Task: Recreate missing Round 2 utility components
+
+Work Log:
+- Recreated scroll-progress.tsx with gradient scroll indicator
+- Recreated scroll-to-top.tsx with floating arrow button
+- Recreated section-divider.tsx with 3 variants
+- Recreated cursor-glow.tsx with mouse-following radial glow
+- Recreated llm-chat-demo.tsx with interactive chat UI
+- Recreated code-block.tsx with syntax highlighting
+- Recreated api/chat/route.ts with simulated AI responses
+
+Stage Summary:
+- All 7 Round 2 components recreated and verified
+
+---
+Task ID: fix-3
+Agent: full-stack-developer
+Task: Recreate missing Round 3+4 components
+
+Work Log:
+- Recreated stats-bar.tsx with 5 animated metrics and count-up
+- Recreated command-palette.tsx with Cmd+K navigation and 11 items
+- Recreated rag-search-demo.tsx with full RAG pipeline simulation
+
+Stage Summary:
+- All 3 missing new components recreated and verified
+- Full feature parity with previous rounds restored
