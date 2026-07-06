@@ -137,7 +137,7 @@ While LLM-assisted diagnostics show significant accuracy improvements in healthc
 
 function TerminalHeader({ title }: { title: string }) {
   return (
-    <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-3">
+    <div className="flex items-center gap-2 border-b t-border-subtle px-4 py-3">
       <div className="flex gap-1.5">
         <div className="h-3 w-3 rounded-full bg-red-500/70" />
         <div className="h-3 w-3 rounded-full bg-yellow-500/70" />
@@ -226,7 +226,7 @@ export default function PromptSandboxDemo() {
   const displayResponse = currentTemplate.response;
 
   return (
-    <div className="flex h-full flex-col bg-[#0D1117] rounded-lg overflow-hidden">
+    <div className="flex h-full flex-col bg-[var(--theme-surface-code)] rounded-lg overflow-hidden">
       <TerminalHeader title="Prompt Sandbox — prompt engineering" />
 
       <div className="flex flex-1 flex-col gap-4 p-4 sm:p-6 overflow-y-auto">
@@ -237,12 +237,12 @@ export default function PromptSandboxDemo() {
               Template
             </label>
             <Select value={templateId} onValueChange={handleTemplateChange}>
-              <SelectTrigger className="h-10 w-full border-white/[0.06] bg-white/[0.03] text-white">
+              <SelectTrigger className="h-10 w-full t-border-subtle bg-[var(--theme-hover)] text-foreground">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-[#0D1117] border-white/[0.06]">
+              <SelectContent className="bg-[var(--theme-surface-code)] t-border-subtle">
                 {TEMPLATES.map((t) => (
-                  <SelectItem key={t.id} value={t.id} className="text-white focus:bg-white/[0.06]">
+                  <SelectItem key={t.id} value={t.id} className="text-foreground focus:bg-[var(--theme-active)]">
                     {t.label}
                   </SelectItem>
                 ))}
@@ -279,7 +279,7 @@ export default function PromptSandboxDemo() {
             <Textarea
               value={systemPrompt}
               onChange={(e) => setSystemPrompt(e.target.value)}
-              className="min-h-[140px] resize-none border-white/[0.06] bg-white/[0.03] text-white text-sm placeholder:text-muted-foreground focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/50"
+              className="min-h-[140px] resize-none t-border-subtle bg-[var(--theme-hover)] text-foreground text-sm placeholder:text-muted-foreground focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/50"
             />
           </div>
           <div>
@@ -289,7 +289,7 @@ export default function PromptSandboxDemo() {
             <Textarea
               value={userMessage}
               onChange={(e) => setUserMessage(e.target.value)}
-              className="min-h-[140px] resize-none border-white/[0.06] bg-white/[0.03] text-white text-sm placeholder:text-muted-foreground focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/50"
+              className="min-h-[140px] resize-none t-border-subtle bg-[var(--theme-hover)] text-foreground text-sm placeholder:text-muted-foreground focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/50"
             />
           </div>
         </div>
@@ -298,7 +298,7 @@ export default function PromptSandboxDemo() {
         <Button
           onClick={handleRun}
           disabled={isRunning}
-          className="h-11 bg-cyan-600 hover:bg-cyan-500 text-white font-medium gap-2 transition-all"
+          className="h-11 bg-cyan-600 hover:bg-cyan-500 text-foreground font-medium gap-2 transition-all"
         >
           {isRunning ? (
             <>
@@ -321,10 +321,10 @@ export default function PromptSandboxDemo() {
             className="rounded-lg border border-cyan-500/20 bg-[#080B10] overflow-hidden"
           >
             {/* Output Header */}
-            <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-2.5">
+            <div className="flex items-center justify-between border-b t-border-subtle px-4 py-2.5">
               <div className="flex items-center gap-2">
                 <Sparkles className="size-4 text-cyan-400" />
-                <span className="text-sm font-medium text-white">AI Output</span>
+                <span className="text-sm font-medium text-foreground">AI Output</span>
               </div>
               <div className="flex items-center gap-3">
                 {/* Token counts */}
@@ -343,7 +343,7 @@ export default function PromptSandboxDemo() {
                   size="sm"
                   variant="ghost"
                   onClick={handleCopy}
-                  className="h-7 gap-1.5 text-muted-foreground hover:text-white"
+                  className="h-7 gap-1.5 text-muted-foreground hover:text-foreground"
                 >
                   {copied ? <Check className="size-3.5 text-green-400" /> : <Copy className="size-3.5" />}
                   {copied ? 'Copied!' : 'Copy'}
@@ -352,7 +352,7 @@ export default function PromptSandboxDemo() {
             </div>
             {/* Output Content */}
             <div className="p-4 max-h-80 overflow-y-auto">
-              <div className="text-sm text-white/85 leading-relaxed font-mono">
+              <div className="text-sm text-foreground/85 leading-relaxed font-mono">
                 {isRunning ? (
                   <TypingOutput key={templateId} text={displayResponse} onDone={handleOutputDone} />
                 ) : (
@@ -368,7 +368,7 @@ export default function PromptSandboxDemo() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-white/[0.06] min-h-[160px]"
+            className="flex flex-1 items-center justify-center rounded-lg border border-dashed t-border-subtle min-h-[160px]"
           >
             <div className="text-center p-6">
               <Sparkles className="mx-auto mb-3 size-10 text-muted-foreground/40" />

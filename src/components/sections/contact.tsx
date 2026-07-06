@@ -73,11 +73,11 @@ export default function ContactSection() {
           <span className="text-xs font-semibold tracking-[0.2em] uppercase text-cyan-400 mb-4 block">
             GET IN TOUCH
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Let&apos;s Build{' '}
             <span className="gradient-text">Something</span>
           </h2>
-          <p className="text-slate-400 text-lg max-w-lg mx-auto leading-relaxed">
+          <p className="text-[var(--theme-text-2)] text-lg max-w-lg mx-auto leading-relaxed">
             Open to collaboration, consulting, and interesting conversations
             about AI engineering.
           </p>
@@ -102,18 +102,18 @@ export default function ContactSection() {
                 variants={itemVariants}
               >
                 <div className="glass rounded-xl p-4 flex items-center gap-4 transition-all duration-300 group-hover:border-cyan-500/30 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.08)]">
-                  <div className="size-10 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0 transition-colors duration-300 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/20">
-                    <Icon className="size-4 text-slate-400 transition-colors duration-300 group-hover:text-cyan-400" />
+                  <div className="size-10 rounded-lg bg-[var(--theme-active)] border t-border-subtle flex items-center justify-center shrink-0 transition-colors duration-300 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/20">
+                    <Icon className="size-4 text-[var(--theme-text-2)] transition-colors duration-300 group-hover:text-cyan-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-slate-500 font-medium mb-0.5">
+                    <p className="text-xs text-muted-foreground font-medium mb-0.5">
                       {link.label}
                     </p>
-                    <p className="text-sm text-white font-medium truncate group-hover:text-cyan-400 transition-colors duration-300">
+                    <p className="text-sm text-foreground font-medium truncate group-hover:text-cyan-400 transition-colors duration-300">
                       {link.value}
                     </p>
                   </div>
-                  <ArrowUpRight className="size-4 text-slate-600 transition-all duration-300 group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 opacity-0 group-hover:opacity-100" />
+                  <ArrowUpRight className="size-4 text-muted-foreground transition-all duration-300 group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 opacity-0 group-hover:opacity-100" />
                 </div>
               </motion.a>
             );

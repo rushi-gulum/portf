@@ -45,7 +45,7 @@ function AnimatedCounter({
 
 /* ─── heatmap cell colors ─── */
 const heatmapColors = [
-  'bg-white/[0.03]',      // 0
+  'bg-[var(--theme-hover)]',      // 0
   'bg-emerald-900/40',    // 1
   'bg-emerald-700/50',    // 2
   'bg-emerald-500/60',    // 3
@@ -96,17 +96,17 @@ function RepoCard({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`rounded-2xl border bg-[#0F1117] p-6 transition-all duration-300 ${
+        className={`rounded-2xl border bg-card p-6 transition-all duration-300 ${
           isHovered
             ? 'border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.08)]'
-            : 'border-white/[0.06]'
+            : 't-border-subtle'
         }`}
       >
         {/* Top row: name + language */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Github className="h-4 w-4 text-muted-foreground" />
-            <h3 className="font-mono text-lg text-white">{repo.name}</h3>
+            <h3 className="font-mono text-lg text-foreground">{repo.name}</h3>
           </div>
           <div className="flex items-center gap-1.5">
             <span
@@ -129,7 +129,7 @@ function RepoCard({
           {repo.topics.map((topic) => (
             <span
               key={topic}
-              className="rounded-full bg-white/[0.05] px-2.5 py-0.5 text-xs text-muted-foreground"
+              className="rounded-full bg-[var(--theme-hover)] px-2.5 py-0.5 text-xs text-muted-foreground"
             >
               {topic}
             </span>
@@ -142,7 +142,7 @@ function RepoCard({
         </div>
 
         {/* Bottom stats row */}
-        <div className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-3">
+        <div className="mt-4 flex items-center justify-between border-t t-border-subtle pt-3">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <Star className="h-3.5 w-3.5" />
@@ -200,7 +200,7 @@ export default function OpenSource() {
           <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
             OPEN SOURCE
           </span>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Building in Public
           </h2>
         </motion.div>
@@ -225,7 +225,7 @@ export default function OpenSource() {
                   <Icon className="h-5 w-5 text-cyan-400" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-white">
+                  <div className="text-2xl font-bold text-foreground">
                     <AnimatedCounter
                       value={stat.value}
                       isInView={isHeaderInView}

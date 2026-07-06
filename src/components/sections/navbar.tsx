@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-
 import { Menu, Github, ArrowRight, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme-toggle';
 import {
   Sheet,
   SheetTrigger,
@@ -104,7 +105,7 @@ export function Navbar() {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="relative text-sm font-semibold tracking-tight text-white transition-opacity hover:opacity-80"
+            className="relative text-sm font-semibold tracking-tight text-foreground transition-opacity hover:opacity-80"
           >
             Alex
             <span className="gradient-text">Chen</span>
@@ -123,14 +124,14 @@ export function Navbar() {
                   className={cn(
                     'relative rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
                     isActive
-                      ? 'text-white'
-                      : 'text-muted-foreground hover:text-white'
+                      ? 'text-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="navbar-active"
-                      className="absolute inset-0 rounded-lg bg-white/[0.06]"
+                      className="absolute inset-0 rounded-lg bg-[var(--theme-active)]"
                       transition={{
                         type: 'spring',
                         stiffness: 380,
@@ -151,21 +152,26 @@ export function Navbar() {
               href="https://github.com/alexchen"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden text-muted-foreground transition-colors hover:text-white md:block"
+              className="hidden text-muted-foreground transition-colors hover:text-foreground md:block"
               aria-label="GitHub"
             >
               <Github className="size-4" />
             </a>
 
+            {/* Theme toggle */}
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+
             {/* ⌘K command palette hint - desktop */}
             <button
               onClick={openCommandPalette}
-              className="hidden h-8 items-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2 text-[11px] text-muted-foreground transition-colors hover:bg-white/[0.06] hover:text-white md:inline-flex"
+              className="hidden h-8 items-center gap-1.5 rounded-lg border t-border-subtle bg-[var(--theme-hover)] px-2 text-[11px] text-muted-foreground transition-colors hover:bg-[var(--theme-active)] hover:text-foreground md:inline-flex"
               aria-label="Open command palette"
             >
               <Search className="size-3" />
               <span className="hidden lg:inline">Search</span>
-              <kbd className="ml-1 hidden h-4 items-center rounded border border-white/[0.1] bg-white/[0.04] px-1 text-[10px] font-medium text-muted-foreground lg:inline-flex">
+              <kbd className="ml-1 hidden h-4 items-center rounded border t-border-subtle bg-[var(--theme-hover)] px-1 text-[10px] font-medium text-muted-foreground lg:inline-flex">
                 ⌘K
               </kbd>
             </button>
@@ -196,10 +202,10 @@ export function Navbar() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-72 border-white/[0.06] bg-[#0A0A0A]/95 backdrop-blur-xl"
+                className="w-72 t-border-subtle bg-[var(--theme-surface-2)]/95 backdrop-blur-xl"
               >
                 <SheetHeader className="mt-8">
-                  <SheetTitle className="text-left text-white">
+                  <SheetTitle className="text-left text-foreground">
                     Alex<span className="gradient-text">Chen</span>
                   </SheetTitle>
                 </SheetHeader>
@@ -215,8 +221,8 @@ export function Navbar() {
                           className={cn(
                             'rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                             isActive
-                              ? 'bg-white/[0.06] text-white'
-                              : 'text-muted-foreground hover:bg-white/[0.04] hover:text-white'
+                              ? 'bg-[var(--theme-active)] text-foreground'
+                              : 'text-muted-foreground hover:bg-[var(--theme-hover)] hover:text-foreground'
                           )}
                         >
                           {link.label}
@@ -231,12 +237,16 @@ export function Navbar() {
                       href="https://github.com/alexchen"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-white"
+                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-[var(--theme-hover)] hover:text-foreground"
                     >
                       <Github className="size-4" />
                       GitHub
                     </a>
                   </SheetClose>
+                  <div className="flex items-center justify-between px-3 py-2.5">
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Theme</span>
+                    <ThemeToggle />
+                  </div>
                   <SheetClose asChild>
                     <button
                       className="flex w-full items-center justify-start gap-1.5 rounded-lg border border-cyan-500/20 bg-cyan-500/5 px-3 py-2.5 text-sm font-medium text-cyan-400 transition-colors hover:bg-cyan-500/10"

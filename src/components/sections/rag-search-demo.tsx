@@ -130,7 +130,7 @@ const SUGGESTED_QUERIES = [
 
 function getStageStyle(stage: number, currentIndex: number) {
   if (currentIndex < stage) {
-    return 'border-white/[0.06] text-muted-foreground';
+    return 't-border-subtle text-muted-foreground';
   }
   if (currentIndex === stage) {
     return 'border-cyan-500/50 text-cyan-400 bg-cyan-500/10 scale-105';
@@ -231,15 +231,15 @@ export default function RAGSearchDemo() {
       : null;
 
   return (
-    <div className="bg-[#0D1117] rounded-xl border border-white/[0.06] overflow-hidden">
+    <div className="bg-[var(--theme-surface-code)] rounded-xl border t-border-subtle overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-white/[0.06] px-4 py-3">
+      <div className="flex items-center gap-3 border-b t-border-subtle px-4 py-3">
         <div className="flex items-center gap-1.5">
           <span className="h-3 w-3 rounded-full bg-red-500" />
           <span className="h-3 w-3 rounded-full bg-yellow-500" />
           <span className="h-3 w-3 rounded-full bg-green-500" />
         </div>
-        <span className="text-sm font-medium text-white">RAG Search Pipeline</span>
+        <span className="text-sm font-medium text-foreground">RAG Search Pipeline</span>
         <Search className="h-4 w-4 text-muted-foreground ml-auto" />
       </div>
 
@@ -256,7 +256,7 @@ export default function RAGSearchDemo() {
               if (e.key === 'Enter') handleSubmit();
             }}
             placeholder="Search knowledge base..."
-            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-muted-foreground outline-none transition-colors focus:border-cyan-500/40"
+            className="w-full bg-[var(--theme-active)] border border-border rounded-lg pl-10 pr-4 py-2.5 text-sm text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-cyan-500/40"
           />
         </div>
 
@@ -267,7 +267,7 @@ export default function RAGSearchDemo() {
               <button
                 key={suggestion}
                 onClick={() => handleSuggestionClick(suggestion)}
-                className="rounded-full border border-white/[0.08] px-3 py-1 text-xs text-muted-foreground cursor-pointer hover:border-cyan-500/30 hover:text-cyan-400 hover:bg-cyan-500/5 transition-all"
+                className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground cursor-pointer hover:border-cyan-500/30 hover:text-cyan-400 hover:bg-cyan-500/5 transition-all"
               >
                 {suggestion}
               </button>
@@ -324,14 +324,14 @@ export default function RAGSearchDemo() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1, duration: 0.3 }}
-                    className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3"
+                    className="rounded-lg border t-border-subtle bg-white/[0.02] p-3"
                   >
                     {/* Top row: score + bar */}
                     <div className="mb-2 flex items-center gap-3">
                       <span className={`text-xs font-medium ${scoreColor}`}>
                         {(doc.score * 100).toFixed(0)}%
                       </span>
-                      <div className="flex-1 h-[3px] rounded bg-white/[0.04]">
+                      <div className="flex-1 h-[3px] rounded bg-[var(--theme-active)]">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${doc.score * 100}%` }}
@@ -342,7 +342,7 @@ export default function RAGSearchDemo() {
                     </div>
 
                     {/* Title */}
-                    <h4 className="text-sm font-semibold text-white mb-1">
+                    <h4 className="text-sm font-semibold text-foreground mb-1">
                       {doc.title}
                     </h4>
 
@@ -362,7 +362,7 @@ export default function RAGSearchDemo() {
                         {doc.source}
                         <ExternalLink className="h-3 w-3" />
                       </a>
-                      <span className="text-[10px] text-muted-foreground bg-white/[0.04] px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] text-muted-foreground bg-[var(--theme-active)] px-2 py-0.5 rounded-full">
                         {doc.chunk}
                       </span>
                     </div>

@@ -85,7 +85,7 @@ export default function VectorSearchDemo() {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
             placeholder="Search by semantic meaning..."
-            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-amber-500/40"
+            className="w-full bg-[var(--theme-active)] border border-border rounded-lg pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-amber-500/40"
           />
         </div>
         <button
@@ -106,7 +106,7 @@ export default function VectorSearchDemo() {
             className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
               selectedCategory === cat
                 ? 'bg-amber-500/15 border border-amber-500/30 text-amber-400'
-                : 'bg-white/[0.04] border border-white/[0.08] text-muted-foreground hover:border-white/20'
+                : 'bg-[var(--theme-active)] border border-border text-muted-foreground hover:border-white/20'
             }`}
           >
             {cat}
@@ -118,10 +118,10 @@ export default function VectorSearchDemo() {
       </div>
 
       {/* Vector Space Visualization */}
-      <div className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-4">
+      <div className="bg-white/[0.02] border t-border-subtle rounded-xl p-4">
         <div className="flex items-center gap-2 mb-3">
           <Database size={14} className="text-amber-400" />
-          <span className="text-xs font-medium text-white/80">Vector Space (5D projected)</span>
+          <span className="text-xs font-medium text-foreground/80">Vector Space (5D projected)</span>
         </div>
         <div className="relative h-32 bg-black/20 rounded-lg overflow-hidden">
           {/* Grid lines */}
@@ -191,7 +191,7 @@ export default function VectorSearchDemo() {
           >
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>Found {results.length} similar documents</span>
-              <span className="text-white/10">|</span>
+              <span className="text-foreground/10">|</span>
               <span>Sorted by cosine similarity</span>
             </div>
             {results.map((doc, i) => (
@@ -200,13 +200,13 @@ export default function VectorSearchDemo() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.08 }}
-                className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3"
+                className="rounded-lg border t-border-subtle bg-white/[0.02] p-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-white/90 mb-1 line-clamp-2">{doc.text}</p>
+                    <p className="text-sm text-foreground/90 mb-1 line-clamp-2">{doc.text}</p>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.06] text-muted-foreground">{doc.category}</span>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--theme-active)] text-muted-foreground">{doc.category}</span>
                       <span className="text-[10px] text-muted-foreground">ID: {doc.id}</span>
                     </div>
                   </div>
@@ -214,7 +214,7 @@ export default function VectorSearchDemo() {
                     <span className={`text-sm font-mono font-medium ${doc.score > 0.95 ? 'text-amber-400' : doc.score > 0.85 ? 'text-yellow-400' : 'text-muted-foreground'}`}>
                       {(doc.score * 100).toFixed(1)}%
                     </span>
-                    <div className="w-16 h-1.5 rounded bg-white/[0.06]">
+                    <div className="w-16 h-1.5 rounded bg-[var(--theme-active)]">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${doc.score * 100}%` }}
@@ -233,7 +233,7 @@ export default function VectorSearchDemo() {
       {/* Empty State */}
       {results.length === 0 && !isSearching && (
         <div className="text-center py-6">
-          <Hash size={24} className="text-white/20 mx-auto mb-2" />
+          <Hash size={24} className="text-foreground/20 mx-auto mb-2" />
           <p className="text-sm text-muted-foreground">Enter a query to search the vector space</p>
         </div>
       )}

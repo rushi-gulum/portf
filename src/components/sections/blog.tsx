@@ -49,7 +49,7 @@ function CategoryBadge({ category }: { category: string }) {
 
 function ArticleMetaIcons({ article }: { article: Article }) {
   return (
-    <div className="flex items-center gap-3 text-xs text-slate-500">
+    <div className="flex items-center gap-3 text-xs text-muted-foreground">
       {article.hasCode && <Code2 className="size-3" />}
       {article.hasDiagrams && <FileText className="size-3" />}
       {article.hasEquations && <Sigma className="size-3" />}
@@ -82,7 +82,7 @@ function FeaturedArticle({
         }
       }}
     >
-      <div className="bg-[#0F1117] border border-white/[0.06] rounded-2xl overflow-hidden group-hover:border-white/[0.12] transition-colors duration-300">
+      <div className="bg-card border t-border-subtle rounded-2xl overflow-hidden group-hover:t-border-default transition-colors duration-300">
         <div className="flex flex-col md:flex-row">
           {/* Left content (60%) */}
           <div className="w-full md:w-[60%] p-6 md:p-8 flex flex-col justify-between">
@@ -92,11 +92,11 @@ function FeaturedArticle({
                 <ArticleMetaIcons article={article} />
               </div>
 
-              <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors leading-tight">
+              <h3 className="text-2xl font-bold text-foreground group-hover:text-cyan-400 transition-colors leading-tight">
                 {article.title}
               </h3>
 
-              <p className="text-slate-400 text-sm leading-relaxed line-clamp-3">
+              <p className="text-[var(--theme-text-2)] text-sm leading-relaxed line-clamp-3">
                 {article.excerpt}
               </p>
 
@@ -104,7 +104,7 @@ function FeaturedArticle({
                 {article.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2 py-0.5 rounded text-[11px] font-medium text-slate-500 bg-white/[0.03] border border-white/[0.05]"
+                    className="px-2 py-0.5 rounded text-[11px] font-medium text-muted-foreground bg-[var(--theme-hover)] border border-white/[0.05]"
                   >
                     {tag}
                   </span>
@@ -113,7 +113,7 @@ function FeaturedArticle({
             </div>
 
             <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/[0.05]">
-              <div className="flex items-center gap-4 text-xs text-slate-500">
+              <div className="flex items-center gap-4 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="size-3" />
                   {new Date(article.date).toLocaleDateString('en-US', {
@@ -213,24 +213,24 @@ function ArticleCard({
         }
       }}
     >
-      <div className="blog-card-lift bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6 h-full flex flex-col transition-colors duration-300 group-hover:border-white/[0.12]">
+      <div className="blog-card-lift bg-card border t-border-subtle rounded-2xl p-6 h-full flex flex-col transition-colors duration-300 group-hover:t-border-default">
         <div className="space-y-3 flex-1">
           <div className="flex items-center justify-between">
             <CategoryBadge category={article.category} />
             <ArticleMetaIcons article={article} />
           </div>
 
-          <h4 className="text-base font-semibold text-white group-hover:text-cyan-400 transition-colors leading-snug">
+          <h4 className="text-base font-semibold text-foreground group-hover:text-cyan-400 transition-colors leading-snug">
             {article.title}
           </h4>
 
-          <p className="text-slate-400 text-sm leading-relaxed line-clamp-2">
+          <p className="text-[var(--theme-text-2)] text-sm leading-relaxed line-clamp-2">
             {article.excerpt}
           </p>
         </div>
 
         {/* Reading progress bar */}
-        <div className="mt-4 h-1 w-full rounded-full bg-white/[0.04] overflow-hidden">
+        <div className="mt-4 h-1 w-full rounded-full bg-[var(--theme-active)] overflow-hidden">
           <div
             className={`blog-progress-bar h-full rounded-full ${isCardInView ? 'animate' : ''}`}
             style={{
@@ -242,7 +242,7 @@ function ArticleCard({
         </div>
 
         <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.05]">
-          <div className="flex items-center gap-3 text-xs text-slate-500">
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <Calendar className="size-3" />
               {new Date(article.date).toLocaleDateString('en-US', {
@@ -307,10 +307,10 @@ export default function BlogSection() {
           <span className="text-xs font-semibold tracking-[0.2em] uppercase text-cyan-400 mb-4 block">
             BLOG
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Technical Writing
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl leading-relaxed">
+          <p className="text-[var(--theme-text-2)] text-lg max-w-2xl leading-relaxed">
             In-depth articles on AI engineering, from production architecture to
             research insights. Writing that bridges theory and practice.
           </p>

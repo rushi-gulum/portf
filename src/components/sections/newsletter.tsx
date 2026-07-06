@@ -53,7 +53,7 @@ export default function NewsletterSection() {
 
           {/* Heading */}
           <motion.h2
-            className="text-3xl font-bold text-white mb-4"
+            className="text-3xl font-bold text-foreground mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
@@ -63,7 +63,7 @@ export default function NewsletterSection() {
 
           {/* Subtitle */}
           <motion.p
-            className="text-slate-400 text-base mb-8 max-w-md mx-auto leading-relaxed"
+            className="text-[var(--theme-text-2)] text-base mb-8 max-w-md mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -86,11 +86,11 @@ export default function NewsletterSection() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="flex-1 h-11 rounded-xl bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-500 focus-visible:border-cyan-500/50 focus-visible:ring-cyan-500/20 text-sm"
+              className="flex-1 h-11 rounded-xl bg-[var(--theme-active)] border-border text-foreground placeholder:text-muted-foreground focus-visible:border-cyan-500/50 focus-visible:ring-cyan-500/20 text-sm"
             />
             <Button
               type="submit"
-              className="h-11 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white font-semibold px-6 text-sm transition-colors"
+              className="h-11 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-foreground font-semibold px-6 text-sm transition-colors"
             >
               Subscribe
               <Send className="size-4 ml-1.5" />
@@ -99,7 +99,7 @@ export default function NewsletterSection() {
 
           {/* Small text */}
           <motion.p
-            className="text-slate-600 text-xs mt-4"
+            className="text-muted-foreground text-xs mt-4"
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.4 }}

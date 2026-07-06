@@ -99,17 +99,17 @@ export default function ImageGenDemo() {
             onKeyDown={(e) => { if (e.key === 'Enter') generateImage(); }}
             placeholder="Describe the image you want to generate..."
             maxLength={500}
-            className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-blue-500/40"
+            className="w-full bg-[var(--theme-active)] border border-border rounded-lg pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-blue-500/40"
           />
         </div>
         <div className="flex gap-2">
           <select
             value={size}
             onChange={(e) => setSize(e.target.value)}
-            className="h-10 px-3 bg-white/[0.04] border border-white/[0.08] rounded-lg text-xs text-white outline-none cursor-pointer focus:border-blue-500/40"
+            className="h-10 px-3 bg-[var(--theme-active)] border border-border rounded-lg text-xs text-foreground outline-none cursor-pointer focus:border-blue-500/40"
           >
             {SIZES.map((s) => (
-              <option key={s.value} value={s.value} className="bg-[#0D1117]">
+              <option key={s.value} value={s.value} className="bg-[var(--theme-surface-code)]">
                 {s.label} ({s.value})
               </option>
             ))}
@@ -136,7 +136,7 @@ export default function ImageGenDemo() {
             key={preset}
             onClick={() => handlePreset(preset)}
             disabled={isGenerating}
-            className="rounded-full border border-white/[0.08] px-3 py-1 text-xs text-muted-foreground cursor-pointer hover:border-blue-500/30 hover:text-blue-400 hover:bg-blue-500/5 transition-all disabled:opacity-50"
+            className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground cursor-pointer hover:border-blue-500/30 hover:text-blue-400 hover:bg-blue-500/5 transition-all disabled:opacity-50"
           >
             {preset}
           </button>
@@ -171,7 +171,7 @@ export default function ImageGenDemo() {
                 <Loader2 size={36} className="text-blue-400 animate-spin" />
                 <Sparkles size={14} className="text-blue-300 absolute -top-1 -right-1 animate-pulse" />
               </div>
-              <p className="text-sm text-white/80">Generating your image with AI...</p>
+              <p className="text-sm text-foreground/80">Generating your image with AI...</p>
               <p className="text-xs text-muted-foreground">This may take 10-30 seconds</p>
             </div>
           </motion.div>
@@ -187,7 +187,7 @@ export default function ImageGenDemo() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            className="relative group rounded-xl overflow-hidden border border-white/[0.06] hover:border-blue-500/30 transition-all cursor-pointer"
+            className="relative group rounded-xl overflow-hidden border t-border-subtle hover:border-blue-500/30 transition-all cursor-pointer"
             onClick={() => setSelectedImage(img)}
           >
             <img
@@ -198,7 +198,7 @@ export default function ImageGenDemo() {
             {/* Hover overlay with actions */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
               <div className="absolute bottom-0 left-0 right-0 p-4">
-                <p className="text-xs text-white/80 line-clamp-2 mb-3">{img.prompt}</p>
+                <p className="text-xs text-foreground/80 line-clamp-2 mb-3">{img.prompt}</p>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={(e) => { e.stopPropagation(); downloadImage(img); }}
@@ -207,7 +207,7 @@ export default function ImageGenDemo() {
                     <Download size={12} className="inline mr-1.5" />
                     Download
                   </button>
-                  <span className="text-[10px] text-white/40 ml-auto">{img.size}</span>
+                  <span className="text-[10px] text-foreground/40 ml-auto">{img.size}</span>
                 </div>
               </div>
             </div>
@@ -217,10 +217,10 @@ export default function ImageGenDemo() {
 
       {/* Empty State */}
       {images.length === 0 && !isGenerating && (
-        <div className="text-center py-10 border border-dashed border-white/[0.06] rounded-xl">
-          <ImageIcon size={36} className="text-white/15 mx-auto mb-3" />
+        <div className="text-center py-10 border border-dashed t-border-subtle rounded-xl">
+          <ImageIcon size={36} className="text-foreground/15 mx-auto mb-3" />
           <p className="text-sm text-muted-foreground">Enter a prompt or click a preset to generate</p>
-          <p className="text-xs text-white/20 mt-1">Powered by AI diffusion models</p>
+          <p className="text-xs text-foreground/20 mt-1">Powered by AI diffusion models</p>
         </div>
       )}
 
@@ -238,13 +238,13 @@ export default function ImageGenDemo() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-3xl w-full bg-[#0D1117] border border-white/[0.06] rounded-2xl overflow-hidden"
+              className="relative max-w-3xl w-full bg-[var(--theme-surface-code)] border t-border-subtle rounded-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close button */}
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-lg bg-black/50 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all cursor-pointer"
+                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-lg bg-black/50 border border-white/10 flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-black/70 transition-all cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -253,8 +253,8 @@ export default function ImageGenDemo() {
                 alt={selectedImage.prompt}
                 className="w-full h-auto max-h-[70vh] object-contain bg-black/40"
               />
-              <div className="p-4 border-t border-white/[0.06]">
-                <p className="text-sm text-white/80 mb-2">{selectedImage.prompt}</p>
+              <div className="p-4 border-t t-border-subtle">
+                <p className="text-sm text-foreground/80 mb-2">{selectedImage.prompt}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">{selectedImage.size}</span>
                   <button

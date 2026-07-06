@@ -35,10 +35,10 @@ function Subsection({ icon, title, children }: SubsectionProps) {
   return (
     <div className="glass-light rounded-xl p-5 sm:p-6">
       <div className="flex items-center gap-3">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/[0.06]">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--theme-active)]">
           {icon}
         </div>
-        <h4 className="text-sm font-semibold uppercase tracking-wider text-white">
+        <h4 className="text-sm font-semibold uppercase tracking-wider text-foreground">
           {title}
         </h4>
       </div>
@@ -84,8 +84,8 @@ function CaseStudyAccordionItem({
       <AccordionItem
         value={caseStudy.id}
         className={cn(
-          'mb-4 overflow-hidden rounded-2xl border bg-[#0F1117] transition-colors duration-300',
-          'border-white/[0.06]',
+          'mb-4 overflow-hidden rounded-2xl border bg-card transition-colors duration-300',
+          't-border-subtle',
           'data-[state=open]:border-white/10'
         )}
       >
@@ -105,7 +105,7 @@ function CaseStudyAccordionItem({
                   style={{ background: colors.text }}
                 />
                 <div>
-                  <h3 className="text-lg font-semibold text-white sm:text-xl lg:text-2xl">
+                  <h3 className="text-lg font-semibold text-foreground sm:text-xl lg:text-2xl">
                     {caseStudy.title}
                   </h3>
                   {/* Tags */}
@@ -128,7 +128,7 @@ function CaseStudyAccordionItem({
             </div>
 
             {/* Animated chevron */}
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.05] transition-colors group-data-[state=open]:bg-white/[0.1]">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--theme-hover)] transition-colors group-data-[state=open]:bg-[var(--theme-active)]">
               <ChevronDown className="h-5 w-5 text-muted-foreground transition-transform duration-300 group-data-[state=open]:rotate-180" />
             </div>
           </div>
@@ -138,12 +138,12 @@ function CaseStudyAccordionItem({
             {caseStudy.metrics.map((metric) => (
               <div
                 key={metric.label}
-                className="rounded-lg bg-white/[0.03] p-3"
+                className="rounded-lg bg-[var(--theme-hover)] p-3"
               >
                 <div className="text-xs text-muted-foreground">
                   {metric.label}
                 </div>
-                <div className="mt-0.5 text-lg font-bold text-white">
+                <div className="mt-0.5 text-lg font-bold text-foreground">
                   {metric.value}
                 </div>
               </div>

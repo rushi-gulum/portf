@@ -32,7 +32,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     >
       <div
         className={cn(
-          'card-shimmer group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0F1117] transition-all duration-300',
+          'card-shimmer group relative overflow-hidden rounded-2xl border t-border-subtle bg-card transition-all duration-300',
           'hover:-translate-y-1 hover:shadow-lg'
         )}
         style={{
@@ -63,7 +63,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
 
           {/* Title */}
-          <h3 className="mt-4 text-xl font-semibold text-white">
+          <h3 className="mt-4 text-xl font-semibold text-foreground">
             {project.title}
           </h3>
 
@@ -77,12 +77,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {project.metrics.map((metric) => (
               <div
                 key={metric.label}
-                className="rounded-lg bg-white/[0.03] p-3"
+                className="rounded-lg bg-[var(--theme-hover)] p-3"
               >
                 <div className="text-xs text-muted-foreground">
                   {metric.label}
                 </div>
-                <div className="mt-1 text-lg font-bold text-white">
+                <div className="mt-1 text-lg font-bold text-foreground">
                   {metric.value}
                 </div>
               </div>
@@ -99,7 +99,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="mt-4 border-t border-white/[0.06] pt-4">
+            <div className="mt-4 border-t t-border-subtle pt-4">
               <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Architecture Pipeline
               </p>
@@ -116,7 +116,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                       {stage}
                     </span>
                     {i < project.architecture.length - 1 && (
-                      <span className="text-white/20">→</span>
+                      <span className="text-foreground/20">→</span>
                     )}
                   </span>
                 ))}
@@ -126,13 +126,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex items-center justify-between border-t border-white/[0.06] px-6 py-3">
+        <div className="flex items-center justify-between border-t t-border-subtle px-6 py-3">
           <div className="flex items-center gap-1">
             <a
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.05] hover:text-white"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-[var(--theme-hover)] hover:text-foreground"
             >
               <Github className="h-3.5 w-3.5" />
               <span>GitHub</span>
@@ -141,7 +141,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.05] hover:text-white"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-[var(--theme-hover)] hover:text-foreground"
             >
               <ExternalLink className="h-3.5 w-3.5" />
               <span>Demo</span>
@@ -150,7 +150,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               href={project.article}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.05] hover:text-white"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-[var(--theme-hover)] hover:text-foreground"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>Article</span>

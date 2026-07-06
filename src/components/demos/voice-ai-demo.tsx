@@ -125,7 +125,7 @@ export default function VoiceAIDemo() {
               className={`relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                 voice === v.id
                   ? 'bg-green-500/15 border border-green-500/30 text-green-400'
-                  : 'bg-white/[0.04] border border-white/[0.08] text-muted-foreground hover:border-white/20'
+                  : 'bg-[var(--theme-active)] border border-border text-muted-foreground hover:border-white/20'
               }`}
               title={v.desc}
             >
@@ -155,7 +155,7 @@ export default function VoiceAIDemo() {
           onChange={(e) => setText(e.target.value.slice(0, 1024))}
           rows={3}
           placeholder="Enter text to convert to speech..."
-          className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-green-500/40 resize-none"
+          className="w-full bg-[var(--theme-active)] border border-border rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-green-500/40 resize-none"
         />
       </div>
 
@@ -171,7 +171,7 @@ export default function VoiceAIDemo() {
           step="0.1"
           value={speed}
           onChange={(e) => setSpeed(Number(e.target.value))}
-          className="flex-1 h-1.5 bg-white/[0.08] rounded-full appearance-none cursor-pointer accent-green-500"
+          className="flex-1 h-1.5 bg-[var(--theme-active)] rounded-full appearance-none cursor-pointer accent-green-500"
         />
         <span className="text-xs font-mono text-green-400 w-8 text-right">{speed.toFixed(1)}x</span>
       </div>
@@ -201,7 +201,7 @@ export default function VoiceAIDemo() {
               onClick={togglePlayback}
               variant="outline"
               size="sm"
-              className="bg-white/[0.04] border-white/[0.08] hover:border-green-500/30 hover:text-green-400"
+              className="bg-[var(--theme-active)] border-border hover:border-green-500/30 hover:text-green-400"
             >
               {isPlaying ? <Pause size={14} /> : <Play size={14} />}
               {isPlaying ? 'Pause' : 'Play'}
@@ -210,7 +210,7 @@ export default function VoiceAIDemo() {
               onClick={stopPlayback}
               variant="outline"
               size="sm"
-              className="bg-white/[0.04] border-white/[0.08] hover:border-white/20"
+              className="bg-[var(--theme-active)] border-border hover:border-white/20"
             >
               <Square size={12} />
             </Button>
@@ -220,7 +220,7 @@ export default function VoiceAIDemo() {
           onClick={clearAll}
           variant="outline"
           size="sm"
-          className="ml-auto bg-white/[0.04] border-white/[0.08] hover:border-white/20"
+          className="ml-auto bg-[var(--theme-active)] border-border hover:border-white/20"
         >
           <RotateCcw size={14} className="mr-1.5" />
           Reset
@@ -236,7 +236,7 @@ export default function VoiceAIDemo() {
               <button
                 key={i}
                 onClick={() => setText(sample)}
-                className="rounded-full border border-white/[0.08] px-3 py-1 text-xs text-muted-foreground cursor-pointer hover:border-green-500/30 hover:text-green-400 hover:bg-green-500/5 transition-all"
+                className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground cursor-pointer hover:border-green-500/30 hover:text-green-400 hover:bg-green-500/5 transition-all"
               >
                 {sample.slice(0, 40)}...
               </button>
@@ -274,7 +274,7 @@ export default function VoiceAIDemo() {
               <Volume2 size={18} className="text-green-400" />
             </motion.div>
             <div className="flex-1">
-              <p className="text-sm font-medium text-white/90">Audio Generated</p>
+              <p className="text-sm font-medium text-foreground/90">Audio Generated</p>
               <p className="text-xs text-muted-foreground">
                 Voice: {VOICES.find(v => v.id === voice)?.label} · Speed: {speed.toFixed(1)}x
               </p>
@@ -301,9 +301,9 @@ export default function VoiceAIDemo() {
               className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04]"
             >
               <Volume2 size={10} className="text-green-400/60" />
-              <span className="text-white/50 flex-1 truncate">{item.text}...</span>
-              <span className="text-white/20">{item.voice}</span>
-              <span className="text-white/15">{item.time}</span>
+              <span className="text-foreground/50 flex-1 truncate">{item.text}...</span>
+              <span className="text-foreground/20">{item.voice}</span>
+              <span className="text-foreground/15">{item.time}</span>
             </div>
           ))}
         </div>

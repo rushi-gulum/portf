@@ -76,15 +76,15 @@ export default function CodeBlock({ code, language, filename }: CodeBlockProps) 
 
   return (
     <div
-      className="rounded-xl border border-white/[0.06] overflow-hidden"
+      className="rounded-xl border t-border-subtle overflow-hidden"
       style={{ background: '#0D1117' }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b t-border-subtle">
         <div className="flex items-center gap-2">
-          <FileCode size={14} className="text-white/40" />
+          <FileCode size={14} className="text-foreground/40" />
           {filename && (
-            <span className="text-xs text-white/60 font-mono">{filename}</span>
+            <span className="text-xs text-foreground/60 font-mono">{filename}</span>
           )}
           {language && (
             <span className="text-[10px] font-medium text-cyan-400/70 bg-cyan-500/10 px-1.5 py-0.5 rounded">
@@ -94,7 +94,7 @@ export default function CodeBlock({ code, language, filename }: CodeBlockProps) 
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1 text-xs text-white/40 hover:text-white/70 transition-colors cursor-pointer"
+          className="flex items-center gap-1 text-xs text-foreground/40 hover:text-foreground/70 transition-colors cursor-pointer"
           aria-label="Copy code"
         >
           {copied ? (
@@ -116,10 +116,10 @@ export default function CodeBlock({ code, language, filename }: CodeBlockProps) 
         <pre className="p-4 text-sm font-mono leading-relaxed">
           {highlightedLines.map((line, i) => (
             <div key={i} className="flex">
-              <span className="select-none text-white/20 w-8 text-right pr-4 flex-shrink-0">
+              <span className="select-none text-foreground/20 w-8 text-right pr-4 flex-shrink-0">
                 {i + 1}
               </span>
-              <span className="text-white/80" dangerouslySetInnerHTML={{ __html: line || '&nbsp;' }} />
+              <span className="text-foreground/80" dangerouslySetInnerHTML={{ __html: line || '&nbsp;' }} />
             </div>
           ))}
         </pre>

@@ -150,7 +150,7 @@ export default function CommandPalette() {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
-        className="bg-[#0F1117] border-white/[0.1] rounded-2xl max-w-lg p-0 gap-0 overflow-hidden"
+        className="bg-card t-border-default rounded-2xl max-w-lg p-0 gap-0 overflow-hidden"
         showCloseButton={false}
       >
         <DialogTitle className="sr-only">Command Palette</DialogTitle>
@@ -159,7 +159,7 @@ export default function CommandPalette() {
         </DialogDescription>
 
         {/* Search Input */}
-        <div className="flex items-center border-b border-white/[0.06] px-4">
+        <div className="flex items-center border-b t-border-subtle px-4">
           <Search className="h-4 w-4 text-muted-foreground shrink-0" />
           <input
             ref={inputRef}
@@ -168,9 +168,9 @@ export default function CommandPalette() {
             onChange={handleSearchChange}
             onKeyDown={handleKeyDown}
             placeholder="Type to search sections..."
-            className="flex-1 bg-transparent px-3 py-3.5 text-sm text-white placeholder-muted-foreground outline-none"
+            className="flex-1 bg-transparent px-3 py-3.5 text-sm text-foreground placeholder-muted-foreground outline-none"
           />
-          <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border border-white/[0.1] bg-white/[0.04] px-1.5 text-[10px] font-medium text-muted-foreground">
+          <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border t-border-default bg-[var(--theme-active)] px-1.5 text-[10px] font-medium text-muted-foreground">
             ESC
           </kbd>
         </div>
@@ -194,15 +194,15 @@ export default function CommandPalette() {
                   onMouseEnter={() => setActiveIndex(index)}
                   className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
                     isActive
-                      ? 'bg-white/[0.06] text-cyan-400'
-                      : 'text-white hover:bg-white/[0.04]'
+                      ? 'bg-[var(--theme-active)] text-cyan-400'
+                      : 'text-foreground hover:bg-[var(--theme-active)]'
                   }`}
                 >
                   <Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <span className="flex-1 text-sm">
                     {highlightMatch(item.label, search)}
                   </span>
-                  <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-white/[0.08] bg-white/[0.03] px-1.5 text-[10px] font-medium text-muted-foreground">
+                  <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-border bg-[var(--theme-hover)] px-1.5 text-[10px] font-medium text-muted-foreground">
                     ⌘K
                   </kbd>
                 </button>
@@ -212,7 +212,7 @@ export default function CommandPalette() {
         </div>
 
         {/* Footer hint */}
-        <div className="border-t border-white/[0.06] px-4 py-2.5">
+        <div className="border-t t-border-subtle px-4 py-2.5">
           <p className="text-center text-[11px] text-muted-foreground">
             ↑↓ Navigate · ↵ Select · Esc Close
           </p>

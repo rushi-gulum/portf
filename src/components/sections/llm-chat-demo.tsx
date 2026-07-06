@@ -84,18 +84,18 @@ export default function LLMChatDemo() {
 
   return (
     <div
-      className="rounded-2xl border border-white/[0.06] overflow-hidden"
+      className="rounded-2xl border t-border-subtle overflow-hidden"
       style={{ background: '#0D1117' }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between px-4 py-3 border-b t-border-subtle">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
             <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
           </div>
-          <span className="text-sm font-medium text-white/90">LLM Chat</span>
+          <span className="text-sm font-medium text-foreground/90">LLM Chat</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
@@ -129,7 +129,7 @@ export default function LLMChatDemo() {
                 className={`max-w-[75%] rounded-lg px-3 py-2 text-sm leading-relaxed ${
                   msg.role === 'user'
                     ? 'bg-cyan-500/10 border border-cyan-500/20 text-cyan-200 rounded-tr-none'
-                    : 'bg-white/[0.04] text-white/80 rounded-tl-none'
+                    : 'bg-[var(--theme-active)] text-foreground/80 rounded-tl-none'
                 }`}
               >
                 {msg.content}
@@ -155,7 +155,7 @@ export default function LLMChatDemo() {
               <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <Bot size={12} className="text-purple-400" />
               </div>
-              <div className="bg-white/[0.04] rounded-lg rounded-tl-none px-4 py-3 flex items-center gap-1">
+              <div className="bg-[var(--theme-active)] rounded-lg rounded-tl-none px-4 py-3 flex items-center gap-1">
                 <motion.div
                   animate={{ y: [0, -4, 0] }}
                   transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
@@ -180,14 +180,14 @@ export default function LLMChatDemo() {
       </div>
 
       {/* Input */}
-      <div className="border-t border-white/[0.06] p-3">
+      <div className="border-t t-border-subtle p-3">
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about AI..."
             disabled={isTyping}
-            className="bg-white/[0.04] border-white/[0.06] text-sm text-white placeholder:text-white/30 focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/30 h-9"
+            className="bg-[var(--theme-active)] t-border-subtle text-sm text-foreground placeholder:text-foreground/30 focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/30 h-9"
           />
           <Button
             type="submit"

@@ -22,7 +22,7 @@ function ArticleCard({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
-      className="group cursor-pointer rounded-2xl border border-white/[0.06] bg-[#0F1117] p-6 hover:border-white/[0.12] transition-colors duration-300"
+      className="group cursor-pointer rounded-2xl border t-border-subtle bg-card p-6 hover:t-border-default transition-colors duration-300"
       onClick={() => onRead(article)}
       role="button"
       tabIndex={0}
@@ -39,12 +39,12 @@ function ArticleCard({
           {article.category}
         </span>
         <span>{article.date}</span>
-        <span className="text-white/20">·</span>
+        <span className="text-foreground/20">·</span>
         <span>{article.readTime} read</span>
       </div>
 
       {/* Title */}
-      <h3 className="mt-4 text-lg font-semibold leading-snug text-white group-hover:text-cyan-400 transition-colors">
+      <h3 className="mt-4 text-lg font-semibold leading-snug text-foreground group-hover:text-cyan-400 transition-colors">
         {article.title}
       </h3>
 
@@ -54,7 +54,7 @@ function ArticleCard({
       </p>
 
       {/* Bottom row: content type icons + tags + read link */}
-      <div className="mt-5 flex flex-col gap-3 border-t border-white/[0.06] pt-4">
+      <div className="mt-5 flex flex-col gap-3 border-t t-border-subtle pt-4">
         {/* Content type icons */}
         <div className="flex items-center gap-3">
           {article.hasCode && (
@@ -82,7 +82,7 @@ function ArticleCard({
           {article.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-white/[0.05] px-2.5 py-0.5 text-xs text-muted-foreground"
+              className="rounded-full bg-[var(--theme-hover)] px-2.5 py-0.5 text-xs text-muted-foreground"
             >
               {tag}
             </span>
@@ -140,10 +140,10 @@ export default function Research() {
           <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
             RESEARCH &amp; WRITING
           </span>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Technical Deep Dives
           </h2>
-          <p className="mt-4 text-lg text-slate-400 max-w-2xl leading-relaxed">
+          <p className="mt-4 text-lg text-[var(--theme-text-2)] max-w-2xl leading-relaxed">
             In-depth technical articles covering production AI systems, from attention
             optimization to multi-agent architecture. Click any article to read the full content.
           </p>
@@ -168,7 +168,7 @@ export default function Research() {
                   className={`shrink-0 rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-200 cursor-pointer ${
                     isActive
                       ? 'border-cyan-500/20 bg-cyan-500/10 text-cyan-400'
-                      : 'border-transparent bg-white/[0.03] text-muted-foreground hover:bg-white/[0.06] hover:text-white'
+                      : 'border-transparent bg-[var(--theme-hover)] text-muted-foreground hover:bg-[var(--theme-active)] hover:text-foreground'
                   }`}
                 >
                   {cat}

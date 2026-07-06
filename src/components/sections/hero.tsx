@@ -86,7 +86,7 @@ export function Hero() {
         <motion.div variants={item} className="mb-8 flex justify-center">
           <Badge
             variant="outline"
-            className="border-white/[0.1] bg-white/[0.03] px-3.5 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-sm"
+            className="t-border-default bg-[var(--theme-hover)] px-3.5 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-sm"
           >
             <span className="status-dot mr-2 inline-block size-2" />
             {personalInfo.role}
@@ -100,7 +100,7 @@ export function Hero() {
           className="mb-4 text-center"
           style={{ x: springX, y: springY }}
         >
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
             Building Production
             <span className="typing-cursor" />
           </h1>
@@ -139,7 +139,7 @@ export function Hero() {
           {STATUS_CARDS.map((card, i) => (
             <div
               key={card.label}
-              className={`glass rounded-xl p-4 transition-colors hover:bg-white/[0.03] ${card.glowClass}`}
+              className={`glass rounded-xl p-4 transition-colors hover:bg-[var(--theme-hover)] ${card.glowClass}`}
               style={{ animationDelay: `${i * 0.4}s` }}
             >
               <div className="mb-1.5 flex items-center gap-2">
@@ -150,7 +150,7 @@ export function Hero() {
                   {card.label}
                 </span>
               </div>
-              <p className="truncate text-sm font-medium text-white">
+              <p className="truncate text-sm font-medium text-foreground">
                 {card.value}
               </p>
             </div>
@@ -165,7 +165,7 @@ export function Hero() {
           <div className="cta-gradient-border rounded-lg">
             <Button
               size="lg"
-              className="relative z-10 rounded-lg bg-cyan-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.25)] transition-all hover:bg-cyan-400 hover:shadow-[0_0_30px_rgba(6,182,212,0.35)]"
+              className="relative z-10 rounded-lg bg-cyan-500 text-foreground shadow-[0_0_20px_rgba(6,182,212,0.25)] transition-all hover:bg-cyan-400 hover:shadow-[0_0_30px_rgba(6,182,212,0.35)]"
               onClick={() => {
                 const target = document.querySelector('#projects');
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -180,7 +180,7 @@ export function Hero() {
             <Button
               size="lg"
               variant="outline"
-              className="relative z-10 rounded-lg border-white/[0.12] bg-transparent text-white hover:bg-white/[0.06] hover:text-white"
+              className="relative z-10 rounded-lg t-border-default bg-transparent text-foreground hover:bg-[var(--theme-active)] hover:text-foreground"
               onClick={() => {
                 const target = document.querySelector('#blog');
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -199,7 +199,7 @@ export function Hero() {
             <Button
               size="lg"
               variant="ghost"
-              className="text-muted-foreground hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
               <Github className="size-4" />
               GitHub

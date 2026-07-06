@@ -56,13 +56,13 @@ export function ScrollToTop() {
               }}
               onClick={scrollToTop}
               className="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full
-                bg-white/[0.05] backdrop-blur-xl border border-white/[0.1]
-                hover:bg-white/[0.1] hover:border-cyan-500/30
+                bg-[var(--theme-hover)] backdrop-blur-xl border t-border-default
+                hover:bg-[var(--theme-active)] hover:border-cyan-500/30
                 transition-all duration-300 cursor-pointer group"
               style={{ boxShadow: glowShadow }}
               aria-label="Scroll to top"
             >
-              <ArrowUp size={16} className="text-white/70 group-hover:text-cyan-400 transition-colors" />
+              <ArrowUp size={16} className="text-foreground/70 group-hover:text-cyan-400 transition-colors" />
               {/* Scroll percentage ring */}
               <svg
                 className="absolute inset-0 -rotate-90 pointer-events-none"
@@ -95,7 +95,7 @@ export function ScrollToTop() {
           <TooltipContent
             side="left"
             sideOffset={8}
-            className="bg-[#1A1D2E] border-white/[0.1] text-white text-xs rounded-lg px-3 py-1.5"
+            className="bg-[#1A1D2E] t-border-default text-foreground text-xs rounded-lg px-3 py-1.5"
           >
             Back to top
           </TooltipContent>

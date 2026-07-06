@@ -39,7 +39,7 @@ export function SectionDivider({ variant }: SectionDividerProps) {
         {[0, 1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className={`rounded-full bg-white/[0.12] ${
+            className={`rounded-full bg-[var(--theme-active)] ${
               i === 2 ? 'w-2 h-2 bg-cyan-400/50' : 'w-1 h-1'
             }`}
           />
@@ -51,7 +51,7 @@ export function SectionDivider({ variant }: SectionDividerProps) {
   // 'line' variant
   return (
     <div className="max-w-5xl mx-auto py-2">
-      <div className="border-t border-white/[0.06]" />
+      <div className="border-t t-border-subtle" />
     </div>
   );
 }

@@ -46,20 +46,20 @@ function ArticleCodeBlock({ code, language, caption }: { code: string; language:
   }, [code]);
 
   return (
-    <div className="my-6 rounded-xl overflow-hidden border border-white/[0.06]">
+    <div className="my-6 rounded-xl overflow-hidden border t-border-subtle">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-[#161B22] border-b border-white/[0.06]">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--theme-surface-code)] border-b t-border-subtle">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
             <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
             <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
           </div>
-          <span className="ml-2 text-[11px] font-medium text-slate-500 uppercase tracking-wider">{language}</span>
+          <span className="ml-2 text-[11px] font-medium text-muted-foreground uppercase tracking-wider">{language}</span>
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs text-slate-400 hover:text-white hover:bg-white/[0.06] transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs text-[var(--theme-text-2)] hover:text-foreground hover:bg-[var(--theme-active)] transition-all cursor-pointer"
         >
           {copied ? (
             <>
@@ -75,15 +75,15 @@ function ArticleCodeBlock({ code, language, caption }: { code: string; language:
         </button>
       </div>
       {/* Code */}
-      <div className="bg-[#0D1117] p-4 overflow-x-auto">
+      <div className="bg-[var(--theme-surface-code)] p-4 overflow-x-auto">
         <pre className="text-[13px] leading-relaxed">
-          <code className="text-slate-300 font-mono">{code}</code>
+          <code className="text-[var(--theme-text-2)] font-mono">{code}</code>
         </pre>
       </div>
       {/* Caption */}
       {caption && (
-        <div className="px-4 py-2.5 bg-[#0D1117] border-t border-white/[0.04]">
-          <p className="text-[11px] text-slate-500 italic">{caption}</p>
+        <div className="px-4 py-2.5 bg-[var(--theme-surface-code)] border-t border-white/[0.04]">
+          <p className="text-[11px] text-muted-foreground italic">{caption}</p>
         </div>
       )}
     </div>
@@ -104,7 +104,7 @@ function ArticleCallout({ type, text }: { type: 'tip' | 'warning' | 'info'; text
         <span className={`text-xs font-semibold uppercase tracking-wider ${config.labelColor} block mb-1`}>
           {config.label}
         </span>
-        <p className="text-sm leading-relaxed text-slate-300">{text}</p>
+        <p className="text-sm leading-relaxed text-[var(--theme-text-2)]">{text}</p>
       </div>
     </div>
   );
@@ -115,7 +115,7 @@ function KeyTakeaway({ text }: { text: string }) {
   return (
     <div className="my-8 relative rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/[0.06] to-purple-500/[0.06] p-6">
       <div className="absolute -top-3 left-6">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0A0A0A] border border-cyan-500/20 text-xs font-semibold text-cyan-400 uppercase tracking-wider">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-background border border-cyan-500/20 text-xs font-semibold text-cyan-400 uppercase tracking-wider">
           <Zap className="size-3" />
           Key Takeaway
         </span>
@@ -137,10 +137,10 @@ function TableOfContents({
 }) {
   return (
     <nav className="hidden lg:block sticky top-24 w-56 flex-shrink-0" aria-label="Table of Contents">
-      <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-4">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-4">
         On this page
       </p>
-      <ul className="space-y-1 border-l border-white/[0.06] pl-4">
+      <ul className="space-y-1 border-l t-border-subtle pl-4">
         {sections.map((section) => {
           const isActive = activeSection === section.id;
           return (
@@ -150,7 +150,7 @@ function TableOfContents({
                 className={`block w-full text-left text-[13px] leading-snug py-1.5 pr-2 transition-all duration-200 cursor-pointer ${
                   isActive
                     ? 'text-cyan-400 font-medium border-l-2 border-cyan-400 -ml-[5px] pl-3'
-                    : 'text-slate-500 hover:text-slate-300 border-l-2 border-transparent -ml-[5px] pl-3'
+                    : 'text-muted-foreground hover:text-[var(--theme-text-2)] border-l-2 border-transparent -ml-[5px] pl-3'
                 }`}
               >
                 {section.heading}
@@ -308,24 +308,24 @@ export default function ArticleReaderModal({
             transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
           >
             {/* Sticky header */}
-            <header className="flex-shrink-0 border-b border-white/[0.06] bg-[#0A0A0A]/95 backdrop-blur-xl z-10">
+            <header className="flex-shrink-0 border-b t-border-subtle bg-background/95 backdrop-blur-xl z-10">
               <div className="mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
                 <button
                   onClick={onClose}
-                  className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group cursor-pointer"
+                  className="flex items-center gap-2 text-sm text-[var(--theme-text-2)] hover:text-foreground transition-colors group cursor-pointer"
                 >
                   <ArrowLeft className="size-4 group-hover:-translate-x-0.5 transition-transform" />
                   <span>Back</span>
                 </button>
 
-                <div className="hidden sm:flex items-center gap-2 text-xs text-slate-500">
+                <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
                   <BookOpen className="size-3.5" />
                   <span>{readingProgress.toFixed(0)}% read</span>
                 </div>
 
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.06] transition-all cursor-pointer"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--theme-text-2)] hover:text-foreground hover:bg-[var(--theme-active)] transition-all cursor-pointer"
                   aria-label="Close article"
                 >
                   <X className="size-4" />
@@ -359,29 +359,29 @@ export default function ArticleReaderModal({
                     >
                       {article.category}
                     </span>
-                    <span className="flex items-center gap-1.5 text-xs text-slate-500">
+                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Calendar className="size-3" />
                       {formattedDate}
                     </span>
-                    <span className="flex items-center gap-1.5 text-xs text-slate-500">
+                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Clock className="size-3" />
                       {article.readTime} read
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight max-w-4xl">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight tracking-tight max-w-4xl">
                     {article.title}
                   </h1>
 
                   {/* Excerpt */}
-                  <p className="mt-6 text-lg text-slate-400 leading-relaxed max-w-3xl">
+                  <p className="mt-6 text-lg text-[var(--theme-text-2)] leading-relaxed max-w-3xl">
                     {article.excerpt}
                   </p>
 
                   {/* Content type indicators + tags */}
                   <div className="mt-6 flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-3 text-xs text-slate-500">
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
                       {article.hasCode && (
                         <span className="flex items-center gap-1.5">
                           <Code2 className="size-3.5" />
@@ -407,7 +407,7 @@ export default function ArticleReaderModal({
                     {article.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-slate-400 bg-white/[0.04] border border-white/[0.06]"
+                        className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-[var(--theme-text-2)] bg-[var(--theme-active)] border t-border-subtle"
                       >
                         {tag}
                       </span>
@@ -442,7 +442,7 @@ export default function ArticleReaderModal({
                         transition={{ duration: 0.4, delay: 0.05 * idx }}
                       >
                         {/* Section heading */}
-                        <h2 className="text-xl sm:text-2xl font-bold text-white mb-5 tracking-tight">
+                        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-5 tracking-tight">
                           {section.heading}
                         </h2>
 
@@ -450,7 +450,7 @@ export default function ArticleReaderModal({
                         {section.content.map((paragraph, pIdx) => (
                           <p
                             key={pIdx}
-                            className="text-[15px] leading-[1.8] text-slate-300 mb-4 last:mb-0"
+                            className="text-[15px] leading-[1.8] text-[var(--theme-text-2)] mb-4 last:mb-0"
                           >
                             {paragraph}
                           </p>
@@ -486,7 +486,7 @@ export default function ArticleReaderModal({
                         {article.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-slate-500 bg-white/[0.03] border border-white/[0.05]"
+                            className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-muted-foreground bg-[var(--theme-hover)] border border-white/[0.05]"
                           >
                             #{tag}
                           </span>
@@ -494,7 +494,7 @@ export default function ArticleReaderModal({
                       </div>
                       <button
                         onClick={onClose}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white border border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.03] transition-all cursor-pointer"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[var(--theme-text-2)] hover:text-foreground border t-border-subtle hover:t-border-default hover:bg-[var(--theme-hover)] transition-all cursor-pointer"
                       >
                         <ArrowLeft className="size-3.5" />
                         Back to articles

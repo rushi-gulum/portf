@@ -187,7 +187,7 @@ export default function AIPlayground() {
           <span className="text-xs tracking-[0.2em] text-cyan-400 font-medium uppercase mb-4 block">
             AI PLAYGROUND
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
             Interactive Demos
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl">
@@ -220,7 +220,7 @@ export default function AIPlayground() {
                   openDemo(featuredDemo.id);
                 }
               }}
-              className="relative h-full bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6
+              className="relative h-full bg-card border t-border-subtle rounded-2xl p-6
                 transition-all duration-500 cursor-pointer
                 hover:border-cyan-500/40
                 hover:shadow-[0_0_30px_rgba(6,182,212,0.1),0_0_60px_rgba(6,182,212,0.05)]"
@@ -276,7 +276,7 @@ export default function AIPlayground() {
               </div>
 
               {/* Content */}
-              <h3 className="text-xl font-semibold text-white mb-3">
+              <h3 className="text-xl font-semibold text-foreground mb-3">
                 {featuredDemo.title}
               </h3>
               <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
@@ -294,7 +294,7 @@ export default function AIPlayground() {
                     <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-[10px] text-cyan-400">U</span>
                     </div>
-                    <div className="bg-white/[0.04] rounded-lg rounded-tl-none px-3 py-2 text-xs text-muted-foreground">
+                    <div className="bg-[var(--theme-active)] rounded-lg rounded-tl-none px-3 py-2 text-xs text-muted-foreground">
                       How does attention mechanism work in transformers?
                     </div>
                   </div>
@@ -339,7 +339,7 @@ export default function AIPlayground() {
                       openDemo(demo.id);
                     }
                   }}
-                  className="relative bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6
+                  className="relative bg-card border t-border-subtle rounded-2xl p-6
                     transition-all duration-500 cursor-pointer h-full flex flex-col
                     hover:border-white/10"
                   style={{
@@ -387,7 +387,7 @@ export default function AIPlayground() {
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     {demo.title}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-1 leading-relaxed">
@@ -426,12 +426,12 @@ export default function AIPlayground() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="relative w-full max-w-4xl bg-[#0D1117] border border-white/[0.06] rounded-2xl overflow-hidden flex flex-col"
+              className="relative w-full max-w-4xl bg-[var(--theme-surface-code)] border t-border-subtle rounded-2xl overflow-hidden flex flex-col"
               style={{ maxHeight: '85vh' }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
+              <div className="flex items-center justify-between px-6 py-4 border-b t-border-subtle flex-shrink-0">
                 <div className="flex items-center gap-3">
                   <div
                     className="w-9 h-9 rounded-lg flex items-center justify-center"
@@ -448,7 +448,7 @@ export default function AIPlayground() {
                     })()}
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-white">
+                    <h3 className="text-base font-semibold text-foreground">
                       {activeDemoData.title}
                     </h3>
                     <p className="text-xs text-muted-foreground">
@@ -458,7 +458,7 @@ export default function AIPlayground() {
                 </div>
                 <button
                   onClick={closeDemo}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/[0.04] border border-white/[0.08] text-muted-foreground hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all cursor-pointer"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center bg-[var(--theme-active)] border border-border text-muted-foreground hover:text-foreground hover:bg-[var(--theme-active)] hover:border-white/20 transition-all cursor-pointer"
                   aria-label="Close demo"
                 >
                   <X size={16} />

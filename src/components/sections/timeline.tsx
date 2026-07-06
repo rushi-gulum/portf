@@ -133,7 +133,7 @@ function TimelineCardContent({
 }) {
   return (
     <div
-      className="group bg-[#0F1117] border border-white/[0.06] rounded-2xl p-6
+      className="group bg-card border t-border-subtle rounded-2xl p-6
         transition-all duration-500
         hover:border-white/10 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)]"
     >
@@ -162,7 +162,7 @@ function TimelineCardContent({
       </div>
 
       {/* Role */}
-      <h3 className="text-xl font-semibold text-white mb-1 leading-tight">
+      <h3 className="text-xl font-semibold text-foreground mb-1 leading-tight">
         {item.role}
       </h3>
 
@@ -192,7 +192,7 @@ function TimelineCardContent({
 
       {/* Metrics */}
       {item.metrics && item.metrics.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-white/[0.06] flex flex-wrap gap-2">
+        <div className="mt-4 pt-4 border-t t-border-subtle flex flex-wrap gap-2">
           {item.metrics.map((metric) => (
             <span
               key={metric}
@@ -227,7 +227,7 @@ export default function Timeline() {
           <span className="text-xs tracking-[0.2em] text-green-400 font-medium uppercase mb-4 block">
             EXPERIENCE
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
             Journey
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl">
@@ -272,7 +272,7 @@ export default function Timeline() {
         >
           <a
             href="#"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-white transition-colors duration-300 group"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 group"
           >
             <span>View full resume</span>
             <ChevronRight

@@ -97,18 +97,18 @@ function TechPill({ item, categoryColor }: { item: TechItem; categoryColor: stri
         >
           <div className="flex items-center gap-2.5">
             <span className="text-base flex-shrink-0">{item.icon}</span>
-            <span className="text-sm font-medium text-white/90">{item.name}</span>
+            <span className="text-sm font-medium text-foreground/90">{item.name}</span>
           </div>
         </motion.div>
       </TooltipTrigger>
       <TooltipContent
         side="bottom"
         sideOffset={8}
-        className="bg-[#1a1b26] border border-white/10 text-white/80 max-w-[240px]"
+        className="bg-[#1a1b26] border border-white/10 text-foreground/80 max-w-[240px]"
       >
         <div className="text-xs">
-          <div className="font-semibold text-white mb-1">{item.name}</div>
-          <div className="text-white/50 mb-1.5">Connected with:</div>
+          <div className="font-semibold text-foreground mb-1">{item.name}</div>
+          <div className="text-foreground/50 mb-1.5">Connected with:</div>
           <div className="flex flex-wrap gap-1">
             {item.connections.map((conn) => (
               <span
@@ -163,7 +163,7 @@ export default function TechStack() {
           <span className="text-xs tracking-[0.2em] text-purple-400 font-medium uppercase mb-4 block">
             TECH STACK
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
             Engineering Ecosystem
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl">

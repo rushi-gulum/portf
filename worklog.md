@@ -441,3 +441,90 @@ Stage Summary:
 7. Scroll-triggered animations on more elements
 8. Newsletter integration with actual email service
 9. Contact form backend (Prisma + email)
+
+---
+Task ID: 3c
+Agent: full-stack-developer
+Task: Update demo components and article reader modal for theme support
+
+Work Log:
+- Updated article-reader-modal, home-page-content, 5 demo components, 2 inline demos
+- Ran bulk sed replacements across all 9 files: bg-[#0A0A0A]→bg-background, bg-[#0F1117]→bg-card, bg-[#0D1117]/bg-[#161B22]→bg-[var(--theme-surface-code)]
+- Replaced text colors: text-white→text-foreground, text-slate-400/300→text-[var(--theme-text-2)], text-slate-500/600→text-muted-foreground
+- Replaced borders: border-white/[0.06-0.12]→border-border / border-t-border-subtle
+- Replaced subtle backgrounds: bg-white/[0.03-0.15]→bg-[var(--theme-hover/active)]
+- Replaced hover states: hover:text-white→hover:text-foreground, hover:bg-white/*→hover:bg-[var(--theme-hover/active)]
+- Kept bg-black/90 backdrop overlay in article-reader-modal (intentional dark overlay)
+- Accent colors (cyan, purple, amber, green) left unchanged
+
+Stage Summary:
+- 9 components updated for light/dark theme
+- ESLint: zero errors
+
+---
+Task ID: 3a
+Agent: full-stack-developer
+Task: Update section components batch 1 for theme support
+
+Work Log:
+- Updated hero.tsx, stats-bar.tsx, projects.tsx, case-studies.tsx, open-source.tsx, research.tsx, blog.tsx, ai-playground.tsx
+- Applied bulk sed replacements for bg, text, border, hover color patterns
+- Replaced hardcoded dark theme colors (bg-[#0A0A0A], text-white, border-white/[0.06], etc.) with CSS custom property references (bg-background, text-foreground, border-t-border-subtle, etc.)
+- Preserved accent colors (cyan-400, purple-500, amber-500, green-500) and colorMap system unchanged
+- Preserved bg-black/90 modal overlays unchanged
+
+Stage Summary:
+- 8 section components updated for light/dark theme
+- ESLint: zero errors
+
+---
+Task ID: 3b
+Agent: full-stack-developer
+Task: Update utility and section components batch 2 for theme support
+
+Work Log:
+- Updated tech-stack, timeline, newsletter, contact, footer, command-palette, section-divider, scroll-progress, scroll-to-top, cursor-glow, code-block, neural-network-bg
+- Ran bulk sed replacements across all 12 files: bg-[#0A0A0A]→bg-background, bg-[#0F1117]→bg-card, bg-[#0D1117]/bg-[#161B22]→bg-[var(--theme-surface-code)]
+- Replaced text colors: text-white→text-foreground, text-slate-400/300→text-[var(--theme-text-2)], text-slate-500/600→text-muted-foreground
+- Replaced borders: border-white/[0.06-0.12]→border-border / border-t-border-subtle
+- Replaced subtle backgrounds: bg-white/[0.03-0.15]→bg-[var(--theme-hover/active)]
+- Replaced hover states: hover:text-white→hover:text-foreground, hover:bg-white/*→hover:bg-[var(--theme-hover/active)]
+- Fixed lint error in theme-toggle.tsx: replaced useState+useEffect mounted pattern with useSyncExternalStore
+
+Stage Summary:
+- 12 components updated for light/dark theme
+- ESLint: zero errors
+
+---
+Task ID: 4
+Agent: main
+Task: Add Dark/Light Mode Toggle to the AI Engineer Portfolio
+
+Work Log:
+- Checked next-themes v0.4.6 already installed in package.json
+- Updated layout.tsx: Wrapped app with ThemeProvider (attribute="class", defaultTheme="dark"), removed hardcoded bg-[#0A0A0A] text-[#F8FAFC] from body, uses bg-background text-foreground from CSS vars
+- Extended globals.css with comprehensive light mode CSS variables:
+  - :root defines light mode: background #F8FAFC, foreground #0F172A, card #FFFFFF, muted #F1F5F9, etc.
+  - .dark defines dark mode: background #0A0A0A, foreground #F8FAFC, card #0F1117, etc.
+  - Added 20+ custom theme tokens: --theme-surface-1/2/3, --theme-text-1/2/3, --theme-border-1/2, --theme-hover/active, --theme-glass-bg/border, --theme-overlay, --theme-scrollbar/hover, --theme-surface-code
+- Updated CSS utilities: glass, glass-light, code-block, scrollbar, selection, hover-lift, blog-card-lift, shimmer, animated-grid all use theme variables
+- Created /src/components/theme-toggle.tsx: Sun/Moon toggle with AnimatePresence rotation animation, mounted state hydration guard, aria-labels
+- Added ThemeToggle to navbar (desktop: between GitHub and ⌘K; mobile: in Sheet with "Theme" label)
+- Updated navbar.tsx: Logo text-foreground, nav links text-foreground, active indicator bg-[var(--theme-active)], ⌘K button uses theme vars, Sheet uses theme vars
+- Created @layer utilities in globals.css: .t-border-subtle, .t-border-default, .t-bg-hover, .t-bg-active, .t-text-secondary, .t-bg-code, .t-bg-elevated
+- Dispatched 3 parallel subagents to update all 29 component files:
+  - Batch 1 (8 files): hero, stats-bar, projects, case-studies, open-source, research, blog, ai-playground
+  - Batch 2 (12 files): tech-stack, timeline, newsletter, contact, footer, command-palette, section-divider, scroll-progress, scroll-to-top, cursor-glow, code-block, neural-network-bg
+  - Batch 3 (9 files): article-reader-modal, home-page-content, 5 demo components, 2 inline demos
+- Applied bulk sed replacements across all files: bg-[#0A0A0A]→bg-background, bg-[#0F1117]→bg-card, text-white→text-foreground, text-slate-400→text-[var(--theme-text-2)], border-white/[0.06]→border-t-border-subtle, bg-white/[0.03-0.15]→bg-[var(--theme-hover/active)], hover states updated
+- Fixed critical CSS compilation bug: Tailwind CSS 4 scans ALL project files (including .md) for class names. The worklog.md contained literal `border-[var(--theme-border-1/2)]` text which Tailwind tried to compile, generating invalid CSS `var(--theme-border-1/2)`. Fixed by replacing the text in worklog.md and replacing all `border-[var(--theme-border-X)]` with proper utility classes (.t-border-subtle/.t-border-default)
+- Fixed Turbopack crash: Deep-cleaned .next, node_modules/.cache, node_modules/.turbo after corrupted SST database
+
+Stage Summary:
+- Full dark/light mode toggle implemented across entire 30+ component portfolio
+- ThemeToggle component with animated Sun/Moon icons in navbar (desktop + mobile)
+- Light mode: clean white/slate palette (#F8FAFC bg, #0F172A text, #FFFFFF cards)
+- Dark mode: original premium dark palette (#0A0A0A bg, #F8FAFC text, #0F1117 cards)
+- All CSS utilities (glass, scrollbar, code-block, hover-lift, etc.) theme-aware
+- ESLint: zero errors
+- Dev server: compiles cleanly, HTTP 200, zero runtime errors
