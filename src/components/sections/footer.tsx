@@ -12,7 +12,7 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="mt-auto bg-[#080808]">
+    <footer className="mt-auto bg-[var(--theme-surface-base)]">
       {/* Animated 2px gradient top line */}
       <div className="footer-gradient-line" />
 

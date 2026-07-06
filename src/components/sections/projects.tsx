@@ -32,7 +32,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     >
       <div
         className={cn(
-          'card-shimmer group relative overflow-hidden rounded-2xl border t-border-subtle bg-card transition-all duration-300',
+          'card-shimmer group relative overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300',
           'hover:-translate-y-1 hover:shadow-lg'
         )}
         style={{
@@ -99,7 +99,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="mt-4 border-t t-border-subtle pt-4">
+            <div className="mt-4 border-t border-border pt-4">
               <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Architecture Pipeline
               </p>
@@ -126,7 +126,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex items-center justify-between border-t t-border-subtle px-6 py-3">
+        <div className="flex items-center justify-between border-t border-border px-6 py-3">
           <div className="flex items-center gap-1">
             <a
               href={project.github}

@@ -99,7 +99,7 @@ function RepoCard({
         className={`rounded-2xl border bg-card p-6 transition-all duration-300 ${
           isHovered
             ? 'border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.08)]'
-            : 't-border-subtle'
+            : 'border-border'
         }`}
       >
         {/* Top row: name + language */}
@@ -142,7 +142,7 @@ function RepoCard({
         </div>
 
         {/* Bottom stats row */}
-        <div className="mt-4 flex items-center justify-between border-t t-border-subtle pt-3">
+        <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <Star className="h-3.5 w-3.5" />

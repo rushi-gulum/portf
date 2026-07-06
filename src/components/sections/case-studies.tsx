@@ -85,8 +85,8 @@ function CaseStudyAccordionItem({
         value={caseStudy.id}
         className={cn(
           'mb-4 overflow-hidden rounded-2xl border bg-card transition-colors duration-300',
-          't-border-subtle',
-          'data-[state=open]:border-white/10'
+          'border-border',
+          'data-[state=open]:border-foreground/10'
         )}
       >
         <AccordionTrigger

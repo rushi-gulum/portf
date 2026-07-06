@@ -84,11 +84,11 @@ export default function LLMChatDemo() {
 
   return (
     <div
-      className="rounded-2xl border t-border-subtle overflow-hidden"
+      className="rounded-2xl border border-border overflow-hidden"
       style={{ background: '#0D1117' }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b t-border-subtle">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
@@ -180,14 +180,14 @@ export default function LLMChatDemo() {
       </div>
 
       {/* Input */}
-      <div className="border-t t-border-subtle p-3">
+      <div className="border-t border-border p-3">
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about AI..."
             disabled={isTyping}
-            className="bg-[var(--theme-active)] t-border-subtle text-sm text-foreground placeholder:text-foreground/30 focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/30 h-9"
+            className="bg-[var(--theme-active)] border-border text-sm text-foreground placeholder:text-foreground/30 focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/30 h-9"
           />
           <Button
             type="submit"

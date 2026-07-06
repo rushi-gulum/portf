@@ -56,7 +56,7 @@ export function ScrollToTop() {
               }}
               onClick={scrollToTop}
               className="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full
-                bg-[var(--theme-hover)] backdrop-blur-xl border t-border-default
+                bg-[var(--theme-hover)] backdrop-blur-xl border border-border
                 hover:bg-[var(--theme-active)] hover:border-cyan-500/30
                 transition-all duration-300 cursor-pointer group"
               style={{ boxShadow: glowShadow }}
@@ -95,7 +95,7 @@ export function ScrollToTop() {
           <TooltipContent
             side="left"
             sideOffset={8}
-            className="bg-[#1A1D2E] t-border-default text-foreground text-xs rounded-lg px-3 py-1.5"
+            className="bg-secondary border-border text-foreground text-xs rounded-lg px-3 py-1.5"
           >
             Back to top
           </TooltipContent>

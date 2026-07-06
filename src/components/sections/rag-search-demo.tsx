@@ -130,7 +130,7 @@ const SUGGESTED_QUERIES = [
 
 function getStageStyle(stage: number, currentIndex: number) {
   if (currentIndex < stage) {
-    return 't-border-subtle text-muted-foreground';
+    return 'border-border text-muted-foreground';
   }
   if (currentIndex === stage) {
     return 'border-cyan-500/50 text-cyan-400 bg-cyan-500/10 scale-105';
@@ -231,9 +231,9 @@ export default function RAGSearchDemo() {
       : null;
 
   return (
-    <div className="bg-[var(--theme-surface-code)] rounded-xl border t-border-subtle overflow-hidden">
+    <div className="bg-[var(--theme-surface-code)] rounded-xl border border-border overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b t-border-subtle px-4 py-3">
+      <div className="flex items-center gap-3 border-b border-border px-4 py-3">
         <div className="flex items-center gap-1.5">
           <span className="h-3 w-3 rounded-full bg-red-500" />
           <span className="h-3 w-3 rounded-full bg-yellow-500" />
@@ -324,7 +324,7 @@ export default function RAGSearchDemo() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1, duration: 0.3 }}
-                    className="rounded-lg border t-border-subtle bg-white/[0.02] p-3"
+                    className="rounded-lg border border-border bg-accent p-3"
                   >
                     {/* Top row: score + bar */}
                     <div className="mb-2 flex items-center gap-3">

@@ -1,10 +1,10 @@
 # AI Engineer Portfolio - Development Worklog
 
 ## Current Project Status
-- **Phase**: Round 7 — Article Reader System + Content Enrichment
+- **Phase**: Round 8 — Light Mode CSS Fixes + Compilation Bug Fix
 - **Status**: Production-ready, 30+ components, zero errors, zero hydration warnings
 - **Stack**: Next.js 16, TypeScript, Tailwind CSS 4, shadcn/ui, Framer Motion
-- **Theme**: Dark (#0A0A0A), premium aesthetic (Stripe/Linear/Vercel/OpenAI/Anthropic/GitHub)
+- **Theme**: Dark (#0A0A0A) / Light (#F8FAFC) — toggle in navbar, `next-themes`
 - **Total Components**: 30 section/utility/demo/modal components
 - **Hydration**: Fixed via `next/dynamic` with `ssr: false` — no browser extension mismatches
 - **AI Playground**: All 7 demos interactive with real AI backends (Image Gen + TTS use z-ai-web-dev-sdk)
@@ -506,7 +506,7 @@ Work Log:
 - Extended globals.css with comprehensive light mode CSS variables:
   - :root defines light mode: background #F8FAFC, foreground #0F172A, card #FFFFFF, muted #F1F5F9, etc.
   - .dark defines dark mode: background #0A0A0A, foreground #F8FAFC, card #0F1117, etc.
-  - Added 20+ custom theme tokens: --theme-surface-1/2/3, --theme-text-1/2/3, --theme-border-1/2, --theme-hover/active, --theme-glass-bg/border, --theme-overlay, --theme-scrollbar/hover, --theme-surface-code
+  - Added 20+ custom theme tokens: --theme-surface-base/raised/elevated, --theme-text-primary/secondary/tertiary, --theme-border-subtle/default, --theme-hover/active, --theme-glass-bg/border, --theme-overlay, --theme-scrollbar/hover, --theme-surface-code
 - Updated CSS utilities: glass, glass-light, code-block, scrollbar, selection, hover-lift, blog-card-lift, shimmer, animated-grid all use theme variables
 - Created /src/components/theme-toggle.tsx: Sun/Moon toggle with AnimatePresence rotation animation, mounted state hydration guard, aria-labels
 - Added ThemeToggle to navbar (desktop: between GitHub and ⌘K; mobile: in Sheet with "Theme" label)
@@ -517,7 +517,7 @@ Work Log:
   - Batch 2 (12 files): tech-stack, timeline, newsletter, contact, footer, command-palette, section-divider, scroll-progress, scroll-to-top, cursor-glow, code-block, neural-network-bg
   - Batch 3 (9 files): article-reader-modal, home-page-content, 5 demo components, 2 inline demos
 - Applied bulk sed replacements across all files: bg-[#0A0A0A]→bg-background, bg-[#0F1117]→bg-card, text-white→text-foreground, text-slate-400→text-[var(--theme-text-2)], border-white/[0.06]→border-t-border-subtle, bg-white/[0.03-0.15]→bg-[var(--theme-hover/active)], hover states updated
-- Fixed critical CSS compilation bug: Tailwind CSS 4 scans ALL project files (including .md) for class names. The worklog.md contained literal `border-[var(--theme-border-1/2)]` text which Tailwind tried to compile, generating invalid CSS `var(--theme-border-1/2)`. Fixed by replacing the text in worklog.md and replacing all `border-[var(--theme-border-X)]` with proper utility classes (.t-border-subtle/.t-border-default)
+- Fixed critical CSS compilation bug: Tailwind CSS 4 scans ALL project files (including .md) for class names. The worklog.md contained literal `border-theme-subtle-half-opacity` text which Tailwind tried to compile, generating invalid CSS `var(--theme-border-subtle/default)`. Fixed by replacing the text in worklog.md and replacing all `border-theme-border-unknown` with proper utility classes (.t-border-subtle/.t-border-default)
 - Fixed Turbopack crash: Deep-cleaned .next, node_modules/.cache, node_modules/.turbo after corrupted SST database
 
 Stage Summary:
@@ -528,3 +528,61 @@ Stage Summary:
 - All CSS utilities (glass, scrollbar, code-block, hover-lift, etc.) theme-aware
 - ESLint: zero errors
 - Dev server: compiles cleanly, HTTP 200, zero runtime errors
+
+---
+
+## Round 8 — Light Mode CSS Fixes + Critical Compilation Bug Fix
+
+### Critical CSS Compilation Bug (Root Cause Analysis)
+- **Problem**: Turbopack/Lightning CSS failed to parse Tailwind CSS 4 output with error at line 1435: `var(--theme-border-1/2)` — "Unexpected token Delim('/')"
+- **Root Cause**: Tailwind CSS 4's content scanner reads ALL files in the project (including `.md` and `.txt`). The `worklog.md` and `tool-results/` files contained literal text `border-[var(--theme-border-1/2)]` and `border-[var(--theme-border-X)]` from a previous debug description. Tailwind scanned these, generated CSS utilities for these phantom class names, and produced invalid CSS with `/` inside CSS variable names.
+- **Fix Applied**:
+  1. Replaced problematic text in `worklog.md` and `tool-results/*.txt`
+  2. Added `@source not` directives to `globals.css` to exclude non-source directories from Tailwind scanning
+  3. Removed conflicting `tailwind.config.ts` (Tailwind v3 config conflicting with v4 CSS-first approach)
+- **Diagnostic Method**: Used standalone PostCSS + `@tailwindcss/postcss` to isolate the bug outside Next.js, then searched for the phantom class patterns across all project files
+
+### CSS Variable Renaming
+- Renamed all `--theme-*-1/2/3` numeric-suffixed variables to semantic names:
+  - `--theme-surface-1/2/3` → `--theme-surface-base/raised/elevated`
+  - `--theme-text-1/2/3` → `--theme-text-primary/secondary/tertiary`
+  - `--theme-border-1/2` → `--theme-border-subtle/default`
+- Updated all 30+ component files with new variable names via global sed
+
+### Custom Utility Class Migration
+- Removed custom `t-*` utility classes (`t-border-subtle`, `t-border-default`, `t-bg-hover`, `t-bg-active`, `t-text-secondary`, `t-bg-code`, `t-bg-elevated`)
+- Replaced with Tailwind built-in equivalents: `border-border`, `bg-accent`, `bg-secondary`, `text-muted-foreground`, `bg-muted`
+- Created separate `theme-utilities.css` file (imported in `layout.tsx`) to avoid Tailwind v4 processing interference
+
+### Light Mode Color Fixes (15+ files, 30+ changes)
+- Replaced all hardcoded dark hex colors: `bg-[#080B10]` → `bg-[var(--theme-surface-code)]`, `bg-[#080808]` → `bg-[var(--theme-surface-base)]`, etc.
+- Replaced `text-slate-200` → `text-foreground`, `text-slate-400` → `text-muted-foreground`
+- Replaced `border-white/[0.03-0.05]` → `border-border`
+- Replaced `hover:border-white/10-20` → `hover:border-foreground/10-15`
+- Replaced `bg-white/[0.02]` → `bg-accent`
+- Replaced `bg-black/30-70` → `bg-background/80-95`
+- Fixed loading state in `page.tsx`: `bg-[#0A0A0A]` → `bg-background`
+
+### Files Modified
+- `src/app/globals.css` — Added `@source not` directives, renamed CSS variables, removed custom utilities
+- `src/app/theme-utilities.css` — NEW: separated custom utility classes
+- `src/app/layout.tsx` — Added theme-utilities.css import
+- `src/app/page.tsx` — Fixed loading state background
+- `tailwind.config.ts` — REMOVED (conflicting v3 config)
+- 15+ component files — Light mode color fixes
+
+### Verification
+- PostCSS standalone compilation: 7713 lines generated, zero `theme-border-1` references
+- Next.js dev server: HTTP 200, zero compilation errors
+- ESLint: zero errors
+- Note: agent-browser QA deferred due to 4GB RAM constraint (Turbopack ~700MB + Chrome ~500MB = OOM)
+
+### Unresolved / Next Phase Priorities
+1. Mobile responsiveness improvements
+2. Agent-browser QA once memory allows (or in next cron iteration)
+3. Project screenshots / placeholder images
+4. Canvas performance optimization (neural-network-bg)
+5. Keyboard navigation enhancements
+6. Skills radar chart for tech-stack section
+7. Newsletter integration backend
+8. Contact form backend with Prisma

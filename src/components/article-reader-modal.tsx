@@ -46,9 +46,9 @@ function ArticleCodeBlock({ code, language, caption }: { code: string; language:
   }, [code]);
 
   return (
-    <div className="my-6 rounded-xl overflow-hidden border t-border-subtle">
+    <div className="my-6 rounded-xl overflow-hidden border border-border">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--theme-surface-code)] border-b t-border-subtle">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--theme-surface-code)] border-b border-border">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
@@ -59,7 +59,7 @@ function ArticleCodeBlock({ code, language, caption }: { code: string; language:
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs text-[var(--theme-text-2)] hover:text-foreground hover:bg-[var(--theme-active)] transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs text-[var(--theme-text-secondary)] hover:text-foreground hover:bg-[var(--theme-active)] transition-all cursor-pointer"
         >
           {copied ? (
             <>
@@ -77,12 +77,12 @@ function ArticleCodeBlock({ code, language, caption }: { code: string; language:
       {/* Code */}
       <div className="bg-[var(--theme-surface-code)] p-4 overflow-x-auto">
         <pre className="text-[13px] leading-relaxed">
-          <code className="text-[var(--theme-text-2)] font-mono">{code}</code>
+          <code className="text-[var(--theme-text-secondary)] font-mono">{code}</code>
         </pre>
       </div>
       {/* Caption */}
       {caption && (
-        <div className="px-4 py-2.5 bg-[var(--theme-surface-code)] border-t border-white/[0.04]">
+        <div className="px-4 py-2.5 bg-[var(--theme-surface-code)] border-t border-border">
           <p className="text-[11px] text-muted-foreground italic">{caption}</p>
         </div>
       )}
@@ -104,7 +104,7 @@ function ArticleCallout({ type, text }: { type: 'tip' | 'warning' | 'info'; text
         <span className={`text-xs font-semibold uppercase tracking-wider ${config.labelColor} block mb-1`}>
           {config.label}
         </span>
-        <p className="text-sm leading-relaxed text-[var(--theme-text-2)]">{text}</p>
+        <p className="text-sm leading-relaxed text-[var(--theme-text-secondary)]">{text}</p>
       </div>
     </div>
   );
@@ -120,7 +120,7 @@ function KeyTakeaway({ text }: { text: string }) {
           Key Takeaway
         </span>
       </div>
-      <p className="mt-2 text-[15px] leading-relaxed text-slate-200 font-medium">{text}</p>
+      <p className="mt-2 text-[15px] leading-relaxed text-foreground font-medium">{text}</p>
     </div>
   );
 }
@@ -140,7 +140,7 @@ function TableOfContents({
       <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-4">
         On this page
       </p>
-      <ul className="space-y-1 border-l t-border-subtle pl-4">
+      <ul className="space-y-1 border-l border-border pl-4">
         {sections.map((section) => {
           const isActive = activeSection === section.id;
           return (
@@ -150,7 +150,7 @@ function TableOfContents({
                 className={`block w-full text-left text-[13px] leading-snug py-1.5 pr-2 transition-all duration-200 cursor-pointer ${
                   isActive
                     ? 'text-cyan-400 font-medium border-l-2 border-cyan-400 -ml-[5px] pl-3'
-                    : 'text-muted-foreground hover:text-[var(--theme-text-2)] border-l-2 border-transparent -ml-[5px] pl-3'
+                    : 'text-muted-foreground hover:text-[var(--theme-text-secondary)] border-l-2 border-transparent -ml-[5px] pl-3'
                 }`}
               >
                 {section.heading}
@@ -308,11 +308,11 @@ export default function ArticleReaderModal({
             transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
           >
             {/* Sticky header */}
-            <header className="flex-shrink-0 border-b t-border-subtle bg-background/95 backdrop-blur-xl z-10">
+            <header className="flex-shrink-0 border-b border-border bg-background/95 backdrop-blur-xl z-10">
               <div className="mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
                 <button
                   onClick={onClose}
-                  className="flex items-center gap-2 text-sm text-[var(--theme-text-2)] hover:text-foreground transition-colors group cursor-pointer"
+                  className="flex items-center gap-2 text-sm text-[var(--theme-text-secondary)] hover:text-foreground transition-colors group cursor-pointer"
                 >
                   <ArrowLeft className="size-4 group-hover:-translate-x-0.5 transition-transform" />
                   <span>Back</span>
@@ -325,7 +325,7 @@ export default function ArticleReaderModal({
 
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--theme-text-2)] hover:text-foreground hover:bg-[var(--theme-active)] transition-all cursor-pointer"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--theme-text-secondary)] hover:text-foreground hover:bg-[var(--theme-active)] transition-all cursor-pointer"
                   aria-label="Close article"
                 >
                   <X className="size-4" />
@@ -375,7 +375,7 @@ export default function ArticleReaderModal({
                   </h1>
 
                   {/* Excerpt */}
-                  <p className="mt-6 text-lg text-[var(--theme-text-2)] leading-relaxed max-w-3xl">
+                  <p className="mt-6 text-lg text-[var(--theme-text-secondary)] leading-relaxed max-w-3xl">
                     {article.excerpt}
                   </p>
 
@@ -407,7 +407,7 @@ export default function ArticleReaderModal({
                     {article.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-[var(--theme-text-2)] bg-[var(--theme-active)] border t-border-subtle"
+                        className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-[var(--theme-text-secondary)] bg-[var(--theme-active)] border border-border"
                       >
                         {tag}
                       </span>
@@ -450,7 +450,7 @@ export default function ArticleReaderModal({
                         {section.content.map((paragraph, pIdx) => (
                           <p
                             key={pIdx}
-                            className="text-[15px] leading-[1.8] text-[var(--theme-text-2)] mb-4 last:mb-0"
+                            className="text-[15px] leading-[1.8] text-[var(--theme-text-secondary)] mb-4 last:mb-0"
                           >
                             {paragraph}
                           </p>
@@ -486,7 +486,7 @@ export default function ArticleReaderModal({
                         {article.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-muted-foreground bg-[var(--theme-hover)] border border-white/[0.05]"
+                            className="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-muted-foreground bg-[var(--theme-hover)] border border-border"
                           >
                             #{tag}
                           </span>
@@ -494,7 +494,7 @@ export default function ArticleReaderModal({
                       </div>
                       <button
                         onClick={onClose}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[var(--theme-text-2)] hover:text-foreground border t-border-subtle hover:t-border-default hover:bg-[var(--theme-hover)] transition-all cursor-pointer"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[var(--theme-text-secondary)] hover:text-foreground border border-border hover:border-border hover:bg-[var(--theme-hover)] transition-all cursor-pointer"
                       >
                         <ArrowLeft className="size-3.5" />
                         Back to articles

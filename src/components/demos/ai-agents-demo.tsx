@@ -155,7 +155,7 @@ export default function AIAgentsDemo() {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
               selectedTask === i
                 ? 'bg-purple-500/15 border border-purple-500/30 text-purple-400'
-                : 'bg-[var(--theme-active)] border border-border text-muted-foreground hover:border-white/20'
+                : 'bg-[var(--theme-active)] border border-border text-muted-foreground hover:border-foreground/15'
             } disabled:opacity-50`}
           >
             {task.label}
@@ -178,7 +178,7 @@ export default function AIAgentsDemo() {
           variant="outline"
           size="sm"
           onClick={reset}
-          className="bg-[var(--theme-active)] border-border hover:border-white/20"
+          className="bg-[var(--theme-active)] border-border hover:border-foreground/15"
         >
           <RotateCcw size={14} className="mr-1.5" />
           Reset
@@ -219,7 +219,7 @@ export default function AIAgentsDemo() {
                     ? 'border-emerald-500/20 bg-emerald-500/[0.03]'
                     : step.status === 'error'
                     ? 'border-red-500/20 bg-red-500/[0.03]'
-                    : 't-border-subtle bg-white/[0.02] opacity-50'
+                    : 'border-border bg-accent opacity-50'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -259,7 +259,7 @@ export default function AIAgentsDemo() {
                     )}
                     {step.status === 'done' && <CheckCircle2 size={16} className="text-emerald-400" />}
                     {step.status === 'error' && <AlertCircle size={16} className="text-red-400" />}
-                    {step.status === 'pending' && <div className="w-4 h-4 rounded-full border border-white/10" />}
+                    {step.status === 'pending' && <div className="w-4 h-4 rounded-full border border-foreground/10" />}
                   </div>
                 </div>
 
@@ -282,7 +282,7 @@ export default function AIAgentsDemo() {
 
       {/* Empty State */}
       {steps.length === 0 && (
-        <div className="text-center py-8 border border-dashed t-border-subtle rounded-xl">
+        <div className="text-center py-8 border border-dashed border-border rounded-xl">
           <Bot size={32} className="text-foreground/20 mx-auto mb-3" />
           <p className="text-sm text-muted-foreground">Select a task and click &quot;Run Task&quot; to see multi-agent orchestration</p>
           <p className="text-xs text-foreground/20 mt-1">Agents will execute sequentially with status updates</p>

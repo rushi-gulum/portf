@@ -82,7 +82,7 @@ function FeaturedArticle({
         }
       }}
     >
-      <div className="bg-card border t-border-subtle rounded-2xl overflow-hidden group-hover:t-border-default transition-colors duration-300">
+      <div className="bg-card border border-border rounded-2xl overflow-hidden group-hover:border-border transition-colors duration-300">
         <div className="flex flex-col md:flex-row">
           {/* Left content (60%) */}
           <div className="w-full md:w-[60%] p-6 md:p-8 flex flex-col justify-between">
@@ -96,7 +96,7 @@ function FeaturedArticle({
                 {article.title}
               </h3>
 
-              <p className="text-[var(--theme-text-2)] text-sm leading-relaxed line-clamp-3">
+              <p className="text-[var(--theme-text-secondary)] text-sm leading-relaxed line-clamp-3">
                 {article.excerpt}
               </p>
 
@@ -104,7 +104,7 @@ function FeaturedArticle({
                 {article.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2 py-0.5 rounded text-[11px] font-medium text-muted-foreground bg-[var(--theme-hover)] border border-white/[0.05]"
+                    className="px-2 py-0.5 rounded text-[11px] font-medium text-muted-foreground bg-[var(--theme-hover)] border border-border"
                   >
                     {tag}
                   </span>
@@ -112,7 +112,7 @@ function FeaturedArticle({
               </div>
             </div>
 
-            <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/[0.05]">
+            <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="size-3" />
@@ -213,7 +213,7 @@ function ArticleCard({
         }
       }}
     >
-      <div className="blog-card-lift bg-card border t-border-subtle rounded-2xl p-6 h-full flex flex-col transition-colors duration-300 group-hover:t-border-default">
+      <div className="blog-card-lift bg-card border border-border rounded-2xl p-6 h-full flex flex-col transition-colors duration-300 group-hover:border-border">
         <div className="space-y-3 flex-1">
           <div className="flex items-center justify-between">
             <CategoryBadge category={article.category} />
@@ -224,7 +224,7 @@ function ArticleCard({
             {article.title}
           </h4>
 
-          <p className="text-[var(--theme-text-2)] text-sm leading-relaxed line-clamp-2">
+          <p className="text-[var(--theme-text-secondary)] text-sm leading-relaxed line-clamp-2">
             {article.excerpt}
           </p>
         </div>
@@ -241,7 +241,7 @@ function ArticleCard({
           />
         </div>
 
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.05]">
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <Calendar className="size-3" />
@@ -310,7 +310,7 @@ export default function BlogSection() {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Technical Writing
           </h2>
-          <p className="text-[var(--theme-text-2)] text-lg max-w-2xl leading-relaxed">
+          <p className="text-[var(--theme-text-secondary)] text-lg max-w-2xl leading-relaxed">
             In-depth articles on AI engineering, from production architecture to
             research insights. Writing that bridges theory and practice.
           </p>

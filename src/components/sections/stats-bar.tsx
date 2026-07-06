@@ -150,7 +150,7 @@ export function StatsBar() {
     <div className="mt-8 px-4">
       <div
         ref={ref}
-        className="stats-container-border relative mx-auto max-w-5xl overflow-hidden rounded-2xl border t-border-subtle py-6"
+        className="stats-container-border relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-border py-6"
         style={{ backgroundColor: 'rgba(15,17,23,0.6)', backdropFilter: 'blur(24px)' }}
       >
         {/* 2px gradient accent line at top */}

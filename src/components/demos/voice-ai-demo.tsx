@@ -125,7 +125,7 @@ export default function VoiceAIDemo() {
               className={`relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                 voice === v.id
                   ? 'bg-green-500/15 border border-green-500/30 text-green-400'
-                  : 'bg-[var(--theme-active)] border border-border text-muted-foreground hover:border-white/20'
+                  : 'bg-[var(--theme-active)] border border-border text-muted-foreground hover:border-foreground/15'
               }`}
               title={v.desc}
             >
@@ -210,7 +210,7 @@ export default function VoiceAIDemo() {
               onClick={stopPlayback}
               variant="outline"
               size="sm"
-              className="bg-[var(--theme-active)] border-border hover:border-white/20"
+              className="bg-[var(--theme-active)] border-border hover:border-foreground/15"
             >
               <Square size={12} />
             </Button>
@@ -220,7 +220,7 @@ export default function VoiceAIDemo() {
           onClick={clearAll}
           variant="outline"
           size="sm"
-          className="ml-auto bg-[var(--theme-active)] border-border hover:border-white/20"
+          className="ml-auto bg-[var(--theme-active)] border-border hover:border-foreground/15"
         >
           <RotateCcw size={14} className="mr-1.5" />
           Reset
@@ -298,7 +298,7 @@ export default function VoiceAIDemo() {
           {history.map((item, i) => (
             <div
               key={i}
-              className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04]"
+              className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-accent border border-border"
             >
               <Volume2 size={10} className="text-green-400/60" />
               <span className="text-foreground/50 flex-1 truncate">{item.text}...</span>

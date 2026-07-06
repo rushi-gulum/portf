@@ -133,9 +133,9 @@ function TimelineCardContent({
 }) {
   return (
     <div
-      className="group bg-card border t-border-subtle rounded-2xl p-6
+      className="group bg-card border border-border rounded-2xl p-6
         transition-all duration-500
-        hover:border-white/10 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)]"
+        hover:border-foreground/10 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)]"
     >
       {/* Top row: year badge + type */}
       <div className="flex items-center gap-2 mb-4 flex-wrap">
@@ -192,7 +192,7 @@ function TimelineCardContent({
 
       {/* Metrics */}
       {item.metrics && item.metrics.length > 0 && (
-        <div className="mt-4 pt-4 border-t t-border-subtle flex flex-wrap gap-2">
+        <div className="mt-4 pt-4 border-t border-border flex flex-wrap gap-2">
           {item.metrics.map((metric) => (
             <span
               key={metric}

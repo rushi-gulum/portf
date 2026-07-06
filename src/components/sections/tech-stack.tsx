@@ -104,7 +104,7 @@ function TechPill({ item, categoryColor }: { item: TechItem; categoryColor: stri
       <TooltipContent
         side="bottom"
         sideOffset={8}
-        className="bg-[#1a1b26] border border-white/10 text-foreground/80 max-w-[240px]"
+        className="bg-secondary border border-border text-foreground/80 max-w-[240px]"
       >
         <div className="text-xs">
           <div className="font-semibold text-foreground mb-1">{item.name}</div>

@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@source not "../tool-results/**";
+@source not "../../worklog.md";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -84,15 +87,15 @@
   --sidebar-border: rgba(0, 0, 0, 0.08);
   --sidebar-ring: #0891B2;
   /* Theme tokens for components */
-  --theme-surface-1: #F8FAFC;
-  --theme-surface-2: #FFFFFF;
-  --theme-surface-3: #F1F5F9;
+  --theme-surface-base: #F8FAFC;
+  --theme-surface-raised: #FFFFFF;
+  --theme-surface-elevated: #F1F5F9;
   --theme-surface-code: #F1F5F9;
-  --theme-text-1: #0F172A;
-  --theme-text-2: #334155;
-  --theme-text-3: #64748B;
-  --theme-border-1: rgba(0, 0, 0, 0.06);
-  --theme-border-2: rgba(0, 0, 0, 0.1);
+  --theme-text-primary: #0F172A;
+  --theme-text-secondary: #334155;
+  --theme-text-tertiary: #64748B;
+  --theme-border-subtle: rgba(0, 0, 0, 0.06);
+  --theme-border-default: rgba(0, 0, 0, 0.1);
   --theme-hover: rgba(0, 0, 0, 0.04);
   --theme-active: rgba(0, 0, 0, 0.06);
   --theme-glass-bg: rgba(255, 255, 255, 0.7);
@@ -134,15 +137,15 @@
   --sidebar-accent-foreground: #F8FAFC;
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-ring: #06B6D4;
-  --theme-surface-1: #0A0A0A;
-  --theme-surface-2: #0F1117;
-  --theme-surface-3: #1E293B;
+  --theme-surface-base: #0A0A0A;
+  --theme-surface-raised: #0F1117;
+  --theme-surface-elevated: #1E293B;
   --theme-surface-code: #0D1117;
-  --theme-text-1: #F8FAFC;
-  --theme-text-2: #94A3B8;
-  --theme-text-3: #64748B;
-  --theme-border-1: rgba(255, 255, 255, 0.06);
-  --theme-border-2: rgba(255, 255, 255, 0.08);
+  --theme-text-primary: #F8FAFC;
+  --theme-text-secondary: #94A3B8;
+  --theme-text-tertiary: #64748B;
+  --theme-border-subtle: rgba(255, 255, 255, 0.06);
+  --theme-border-default: rgba(255, 255, 255, 0.08);
   --theme-hover: rgba(255, 255, 255, 0.04);
   --theme-active: rgba(255, 255, 255, 0.06);
   --theme-glass-bg: rgba(15, 17, 23, 0.6);
@@ -167,16 +170,7 @@
   }
 }
 
-/* Theme-aware utility classes for components */
-@layer utilities {
-  .t-border-subtle { border-color: var(--theme-border-1); }
-  .t-border-default { border-color: var(--theme-border-2); }
-  .t-bg-hover { background-color: var(--theme-hover); }
-  .t-bg-active { background-color: var(--theme-active); }
-  .t-text-secondary { color: var(--theme-text-2); }
-  .t-bg-code { background-color: var(--theme-surface-code); }
-  .t-bg-elevated { background-color: var(--theme-surface-3); }
-}
+
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -196,7 +190,7 @@
 /* Selection */
 ::selection {
   background: rgba(6, 182, 212, 0.3);
-  color: var(--theme-text-1);
+  color: var(--theme-text-primary);
 }
 
 /* Gradient text utility */
@@ -252,8 +246,8 @@
 /* Animated grid background */
 .animated-grid {
   background-image:
-    linear-gradient(var(--theme-border-1) 1px, transparent 1px),
-    linear-gradient(90deg, var(--theme-border-1) 1px, transparent 1px);
+    linear-gradient(var(--theme-border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--theme-border-subtle) 1px, transparent 1px);
   background-size: 60px 60px;
   animation: gridMove 20s linear infinite;
 }
@@ -292,7 +286,7 @@
 /* Code block styling */
 .code-block {
   background: var(--theme-surface-code);
-  border: 1px solid var(--theme-border-1);
+  border: 1px solid var(--theme-border-subtle);
   border-radius: 0.75rem;
   font-family: var(--font-geist-mono), 'Fira Code', monospace;
 }

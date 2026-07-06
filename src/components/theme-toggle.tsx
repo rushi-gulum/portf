@@ -13,7 +13,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="h-8 w-8 rounded-lg border t-border-subtle bg-[var(--theme-hover)]" />
+      <div className="h-8 w-8 rounded-lg border border-border bg-[var(--theme-hover)]" />
     );
   }
 
@@ -22,7 +22,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      className="relative h-8 w-8 rounded-lg border t-border-subtle bg-[var(--theme-hover)] flex items-center justify-center cursor-pointer transition-colors hover:bg-[var(--theme-active)]"
+      className="relative h-8 w-8 rounded-lg border border-border bg-[var(--theme-hover)] flex items-center justify-center cursor-pointer transition-colors hover:bg-[var(--theme-active)]"
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -34,7 +34,7 @@ export function ThemeToggle() {
             exit={{ rotate: 90, scale: 0 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
-            <Moon className="size-4 text-slate-400" />
+            <Moon className="size-4 text-muted-foreground" />
           </motion.div>
         ) : (
           <motion.div

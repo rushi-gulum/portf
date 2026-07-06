@@ -220,7 +220,7 @@ export default function AIPlayground() {
                   openDemo(featuredDemo.id);
                 }
               }}
-              className="relative h-full bg-card border t-border-subtle rounded-2xl p-6
+              className="relative h-full bg-card border border-border rounded-2xl p-6
                 transition-all duration-500 cursor-pointer
                 hover:border-cyan-500/40
                 hover:shadow-[0_0_30px_rgba(6,182,212,0.1),0_0_60px_rgba(6,182,212,0.05)]"
@@ -284,7 +284,7 @@ export default function AIPlayground() {
               </p>
 
               {/* Interactive preview area */}
-              <div className="bg-black/30 rounded-xl p-4 mb-6 border border-white/[0.04]">
+              <div className="bg-background/80 rounded-xl p-4 mb-6 border border-border">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 rounded-full bg-cyan-400" />
                   <span className="text-xs text-muted-foreground">Live Preview</span>
@@ -339,9 +339,9 @@ export default function AIPlayground() {
                       openDemo(demo.id);
                     }
                   }}
-                  className="relative bg-card border t-border-subtle rounded-2xl p-6
+                  className="relative bg-card border border-border rounded-2xl p-6
                     transition-all duration-500 cursor-pointer h-full flex flex-col
-                    hover:border-white/10"
+                    hover:border-foreground/10"
                   style={{
                     // @ts-expect-error CSS custom property
                     '--hover-color': colors.text,
@@ -426,12 +426,12 @@ export default function AIPlayground() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="relative w-full max-w-4xl bg-[var(--theme-surface-code)] border t-border-subtle rounded-2xl overflow-hidden flex flex-col"
+              className="relative w-full max-w-4xl bg-[var(--theme-surface-code)] border border-border rounded-2xl overflow-hidden flex flex-col"
               style={{ maxHeight: '85vh' }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b t-border-subtle flex-shrink-0">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-border flex-shrink-0">
                 <div className="flex items-center gap-3">
                   <div
                     className="w-9 h-9 rounded-lg flex items-center justify-center"
@@ -458,7 +458,7 @@ export default function AIPlayground() {
                 </div>
                 <button
                   onClick={closeDemo}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center bg-[var(--theme-active)] border border-border text-muted-foreground hover:text-foreground hover:bg-[var(--theme-active)] hover:border-white/20 transition-all cursor-pointer"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center bg-[var(--theme-active)] border border-border text-muted-foreground hover:text-foreground hover:bg-[var(--theme-active)] hover:border-foreground/15 transition-all cursor-pointer"
                   aria-label="Close demo"
                 >
                   <X size={16} />

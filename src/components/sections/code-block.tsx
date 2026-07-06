@@ -76,11 +76,11 @@ export default function CodeBlock({ code, language, filename }: CodeBlockProps) 
 
   return (
     <div
-      className="rounded-xl border t-border-subtle overflow-hidden"
+      className="rounded-xl border border-border overflow-hidden"
       style={{ background: '#0D1117' }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b t-border-subtle">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border">
         <div className="flex items-center gap-2">
           <FileCode size={14} className="text-foreground/40" />
           {filename && (

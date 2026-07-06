@@ -1,0 +1,13 @@
+/* Theme-aware utility classes
+ * This file is intentionally kept SEPARATE from globals.css to prevent
+ * Tailwind CSS 4 from generating invalid dark: variant expansions for
+ * CSS variable-based utilities.
+ */
+
+.t-border-subtle { border-color: var(--theme-border-subtle); }
+.t-border-default { border-color: var(--theme-border-default); }
+.t-bg-hover { background-color: var(--theme-hover); }
+.t-bg-active { background-color: var(--theme-active); }
+.t-text-secondary { color: var(--theme-text-secondary); }
+.t-bg-code { background-color: var(--theme-surface-code); }
+.t-bg-elevated { background-color: var(--theme-surface-elevated); }

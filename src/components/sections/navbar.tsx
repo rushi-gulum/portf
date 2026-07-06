@@ -166,12 +166,12 @@ export function Navbar() {
             {/* ⌘K command palette hint - desktop */}
             <button
               onClick={openCommandPalette}
-              className="hidden h-8 items-center gap-1.5 rounded-lg border t-border-subtle bg-[var(--theme-hover)] px-2 text-[11px] text-muted-foreground transition-colors hover:bg-[var(--theme-active)] hover:text-foreground md:inline-flex"
+              className="hidden h-8 items-center gap-1.5 rounded-lg border border-border bg-[var(--theme-hover)] px-2 text-[11px] text-muted-foreground transition-colors hover:bg-[var(--theme-active)] hover:text-foreground md:inline-flex"
               aria-label="Open command palette"
             >
               <Search className="size-3" />
               <span className="hidden lg:inline">Search</span>
-              <kbd className="ml-1 hidden h-4 items-center rounded border t-border-subtle bg-[var(--theme-hover)] px-1 text-[10px] font-medium text-muted-foreground lg:inline-flex">
+              <kbd className="ml-1 hidden h-4 items-center rounded border border-border bg-[var(--theme-hover)] px-1 text-[10px] font-medium text-muted-foreground lg:inline-flex">
                 ⌘K
               </kbd>
             </button>
@@ -202,7 +202,7 @@ export function Navbar() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-72 t-border-subtle bg-[var(--theme-surface-2)]/95 backdrop-blur-xl"
+                className="w-72 border-border bg-[var(--theme-surface-raised)]/95 backdrop-blur-xl"
               >
                 <SheetHeader className="mt-8">
                   <SheetTitle className="text-left text-foreground">

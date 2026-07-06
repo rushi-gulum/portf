@@ -187,7 +187,7 @@ export default function ImageGenDemo() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            className="relative group rounded-xl overflow-hidden border t-border-subtle hover:border-blue-500/30 transition-all cursor-pointer"
+            className="relative group rounded-xl overflow-hidden border border-border hover:border-blue-500/30 transition-all cursor-pointer"
             onClick={() => setSelectedImage(img)}
           >
             <img
@@ -217,7 +217,7 @@ export default function ImageGenDemo() {
 
       {/* Empty State */}
       {images.length === 0 && !isGenerating && (
-        <div className="text-center py-10 border border-dashed t-border-subtle rounded-xl">
+        <div className="text-center py-10 border border-dashed border-border rounded-xl">
           <ImageIcon size={36} className="text-foreground/15 mx-auto mb-3" />
           <p className="text-sm text-muted-foreground">Enter a prompt or click a preset to generate</p>
           <p className="text-xs text-foreground/20 mt-1">Powered by AI diffusion models</p>
@@ -238,13 +238,13 @@ export default function ImageGenDemo() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-3xl w-full bg-[var(--theme-surface-code)] border t-border-subtle rounded-2xl overflow-hidden"
+              className="relative max-w-3xl w-full bg-[var(--theme-surface-code)] border border-border rounded-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close button */}
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-lg bg-black/50 border border-white/10 flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-black/70 transition-all cursor-pointer"
+                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-lg bg-background/90 border border-foreground/10 flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-background/95 transition-all cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -253,7 +253,7 @@ export default function ImageGenDemo() {
                 alt={selectedImage.prompt}
                 className="w-full h-auto max-h-[70vh] object-contain bg-black/40"
               />
-              <div className="p-4 border-t t-border-subtle">
+              <div className="p-4 border-t border-border">
                 <p className="text-sm text-foreground/80 mb-2">{selectedImage.prompt}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">{selectedImage.size}</span>

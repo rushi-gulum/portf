@@ -86,7 +86,7 @@ export function Hero() {
         <motion.div variants={item} className="mb-8 flex justify-center">
           <Badge
             variant="outline"
-            className="t-border-default bg-[var(--theme-hover)] px-3.5 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-sm"
+            className="border-border bg-[var(--theme-hover)] px-3.5 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-sm"
           >
             <span className="status-dot mr-2 inline-block size-2" />
             {personalInfo.role}
@@ -180,7 +180,7 @@ export function Hero() {
             <Button
               size="lg"
               variant="outline"
-              className="relative z-10 rounded-lg t-border-default bg-transparent text-foreground hover:bg-[var(--theme-active)] hover:text-foreground"
+              className="relative z-10 rounded-lg border-border bg-transparent text-foreground hover:bg-[var(--theme-active)] hover:text-foreground"
               onClick={() => {
                 const target = document.querySelector('#blog');
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -209,7 +209,7 @@ export function Hero() {
       </motion.div>
 
       {/* Bottom fade */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-32 bg-gradient-to-t from-[#0A0A0A] to-transparent" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
   );
 }

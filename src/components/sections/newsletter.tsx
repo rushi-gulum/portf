@@ -63,7 +63,7 @@ export default function NewsletterSection() {
 
           {/* Subtitle */}
           <motion.p
-            className="text-[var(--theme-text-2)] text-base mb-8 max-w-md mx-auto leading-relaxed"
+            className="text-[var(--theme-text-secondary)] text-base mb-8 max-w-md mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}

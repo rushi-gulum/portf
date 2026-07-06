@@ -106,7 +106,7 @@ export default function VectorSearchDemo() {
             className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
               selectedCategory === cat
                 ? 'bg-amber-500/15 border border-amber-500/30 text-amber-400'
-                : 'bg-[var(--theme-active)] border border-border text-muted-foreground hover:border-white/20'
+                : 'bg-[var(--theme-active)] border border-border text-muted-foreground hover:border-foreground/15'
             }`}
           >
             {cat}
@@ -118,7 +118,7 @@ export default function VectorSearchDemo() {
       </div>
 
       {/* Vector Space Visualization */}
-      <div className="bg-white/[0.02] border t-border-subtle rounded-xl p-4">
+      <div className="bg-accent border border-border rounded-xl p-4">
         <div className="flex items-center gap-2 mb-3">
           <Database size={14} className="text-amber-400" />
           <span className="text-xs font-medium text-foreground/80">Vector Space (5D projected)</span>
@@ -127,7 +127,7 @@ export default function VectorSearchDemo() {
           {/* Grid lines */}
           <div className="absolute inset-0 grid grid-cols-5 grid-rows-3">
             {Array.from({ length: 15 }).map((_, i) => (
-              <div key={i} className="border border-white/[0.03]" />
+              <div key={i} className="border border-border" />
             ))}
           </div>
           {/* Document points */}
@@ -200,7 +200,7 @@ export default function VectorSearchDemo() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.08 }}
-                className="rounded-lg border t-border-subtle bg-white/[0.02] p-3"
+                className="rounded-lg border border-border bg-accent p-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">

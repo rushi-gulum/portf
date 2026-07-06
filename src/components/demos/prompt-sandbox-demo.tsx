@@ -137,7 +137,7 @@ While LLM-assisted diagnostics show significant accuracy improvements in healthc
 
 function TerminalHeader({ title }: { title: string }) {
   return (
-    <div className="flex items-center gap-2 border-b t-border-subtle px-4 py-3">
+    <div className="flex items-center gap-2 border-b border-border px-4 py-3">
       <div className="flex gap-1.5">
         <div className="h-3 w-3 rounded-full bg-red-500/70" />
         <div className="h-3 w-3 rounded-full bg-yellow-500/70" />
@@ -237,10 +237,10 @@ export default function PromptSandboxDemo() {
               Template
             </label>
             <Select value={templateId} onValueChange={handleTemplateChange}>
-              <SelectTrigger className="h-10 w-full t-border-subtle bg-[var(--theme-hover)] text-foreground">
+              <SelectTrigger className="h-10 w-full border-border bg-[var(--theme-hover)] text-foreground">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-[var(--theme-surface-code)] t-border-subtle">
+              <SelectContent className="bg-[var(--theme-surface-code)] border-border">
                 {TEMPLATES.map((t) => (
                   <SelectItem key={t.id} value={t.id} className="text-foreground focus:bg-[var(--theme-active)]">
                     {t.label}
@@ -279,7 +279,7 @@ export default function PromptSandboxDemo() {
             <Textarea
               value={systemPrompt}
               onChange={(e) => setSystemPrompt(e.target.value)}
-              className="min-h-[140px] resize-none t-border-subtle bg-[var(--theme-hover)] text-foreground text-sm placeholder:text-muted-foreground focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/50"
+              className="min-h-[140px] resize-none border-border bg-[var(--theme-hover)] text-foreground text-sm placeholder:text-muted-foreground focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/50"
             />
           </div>
           <div>
@@ -289,7 +289,7 @@ export default function PromptSandboxDemo() {
             <Textarea
               value={userMessage}
               onChange={(e) => setUserMessage(e.target.value)}
-              className="min-h-[140px] resize-none t-border-subtle bg-[var(--theme-hover)] text-foreground text-sm placeholder:text-muted-foreground focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/50"
+              className="min-h-[140px] resize-none border-border bg-[var(--theme-hover)] text-foreground text-sm placeholder:text-muted-foreground focus-visible:ring-cyan-500/30 focus-visible:border-cyan-500/50"
             />
           </div>
         </div>
@@ -318,10 +318,10 @@ export default function PromptSandboxDemo() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-lg border border-cyan-500/20 bg-[#080B10] overflow-hidden"
+            className="rounded-lg border border-cyan-500/20 bg-[var(--theme-surface-code)] overflow-hidden"
           >
             {/* Output Header */}
-            <div className="flex items-center justify-between border-b t-border-subtle px-4 py-2.5">
+            <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
               <div className="flex items-center gap-2">
                 <Sparkles className="size-4 text-cyan-400" />
                 <span className="text-sm font-medium text-foreground">AI Output</span>
@@ -368,7 +368,7 @@ export default function PromptSandboxDemo() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-1 items-center justify-center rounded-lg border border-dashed t-border-subtle min-h-[160px]"
+            className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-border min-h-[160px]"
           >
             <div className="text-center p-6">
               <Sparkles className="mx-auto mb-3 size-10 text-muted-foreground/40" />
